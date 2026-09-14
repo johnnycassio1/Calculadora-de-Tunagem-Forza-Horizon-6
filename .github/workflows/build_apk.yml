@@ -13,10 +13,10 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v4
 
-      - name: Configurar Python 3.11
+      - name: Configurar Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Instalar Dependências do Python
         run: |
@@ -36,7 +36,7 @@ jobs:
 
       - name: Build APK com Flet
         run: |
-          flet build apk --python-version 3.11 --yes
+          flet build apk --python-version 3.12 --yes
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
