@@ -1,44 +1,45 @@
-name: Build Android APK
+name: Build APK Android
 
 on:
+  push:
+    branches: [ "main", "master" ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout do Código
         uses: actions/checkout@v4
 
-      - name: Set up Java JDK
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar Dependências do Python
+        run: |
+          python -m pip install --upgrade pip
+          pip install flet pillow
+
+      - name: Configurar Java JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Set up Flutter
+      - name: Configurar Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install Flet
+      - name: Build APK com Flet
         run: |
-          pip install flet
+          flet build apk --python-version 3.11
 
-      - name: Build APK with Flet
-        run: |
-          echo "y" | flet build apk
-
-      - name: Upload APK Artifact
+      - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
         with:
-          name: CalculadoraForza-APK
+          name: app-release-apk
           path: build/apk/*.apk
