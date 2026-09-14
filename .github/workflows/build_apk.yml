@@ -47,20 +47,20 @@ jobs:
           pip install flet
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Generate Flet App Shell & Assets
+      - name: Generate Flet App Shell
         run: |
           flet build apk --python-version 3.12 --yes || true
 
-      - name: Package Serious Python Assets Correctly
+      - name: Package Serious Python Assets
         run: |
           cd build/flutter
           flutter pub get
-          dart run serious_python:main package ../.. --platform Android --python-version 3.12 -r "../../requirements.txt"
+          dart run serious_python:main package . --platform Android --python-version 3.12
 
-      - name: Build APK Direct
+      - name: Build APK Direct via Flutter
         run: |
           cd build/flutter
-          export SERIOUS_PYTHON_SITE_PACKAGES="$(pwd)/.dart_tool/serious_python/site-packages"
+          export SERIOUS_PYTHON_SITE_PACKAGES="$(pwd)/build/site-packages/arm64-v8a"
           mkdir -p "$SERIOUS_PYTHON_SITE_PACKAGES"
           flutter build apk --release
 
