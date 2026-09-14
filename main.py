@@ -26,9 +26,8 @@ def main(page: ft.Page):
     garagem_list = carregar_garagem()
 
     # --- CAMPOS DE ENTRADA ---
-    txt_nome_carro = ft.TextField(label="Nome do Carro / Projeto", hint_text="Ex: Nissan Skyline GT-R - Drift", icon=ft.icons.DIRECTIONS_CAR)
-    
-    dropdown_modalidade = ft.Dropdown(
+txt_nome_carro = ft.TextField(label="Nome do Carro / Projeto", hint_text="Ex: Nissan Skyline GT-R - Drift") 
+dropdown_modalidade = ft.Dropdown(
         label="Modalidade de Corrida",
         value="Pista / Asfalto (Grip)",
         options=[
