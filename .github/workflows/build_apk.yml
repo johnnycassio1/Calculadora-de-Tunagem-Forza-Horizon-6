@@ -46,15 +46,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install flet
 
-      - name: Build APK com Flet
+      - name: Create Flet Flutter Template
         run: |
-          flet build apk --python-version 3.12 -v --yes
-        env:
-          ANDROID_HOME: ${{ env.ANDROID_HOME }}
-          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
+          flet build apk --python-version 3.12 --yes || true
+
+      - name: Build APK Direct with Flutter
+        run: |
+          cd build/flutter
+          flutter build apk --release -v
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
-          path: build/apk/*.apk
+          path: build/flutter/build/app/outputs/flutter-apk/app-release.apk
