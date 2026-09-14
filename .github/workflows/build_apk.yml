@@ -23,6 +23,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Install Linux Dependencies
         run: |
           sudo apt-get update
@@ -33,8 +36,9 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Accept Android Licenses
+      - name: Configure Flutter & Android
         run: |
+          flutter config --android-sdk "$ANDROID_HOME"
           yes | flutter doctor --android-licenses || true
 
       - name: Install Flet
@@ -43,11 +47,11 @@ jobs:
           pip install flet
 
       - name: Build APK com Flet
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
-          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
         run: |
           flet build apk --python-version 3.12 --yes
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
