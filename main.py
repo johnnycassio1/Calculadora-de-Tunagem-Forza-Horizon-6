@@ -22,6 +22,7 @@ def main(page: ft.Page):
     page.window.icon = "icon.png"  # <--- Adicione exatamente essa linha aqui!
     page.theme_mode = ft.ThemeMode.DARK
     page.padding = 0
+    page.scroll = ft.ScrollMode.AUTO
 
     garagem_list = carregar_garagem()
 
@@ -370,8 +371,7 @@ def main(page: ft.Page):
             ft.Divider(),
             aba_calculadora,
             aba_garagem
-        ], scroll=ft.ScrollMode.AUTO)
-    )
+        ])
 
     page.add(conteudo_principal)
 
