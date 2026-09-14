@@ -55,7 +55,7 @@ jobs:
         run: |
           cd build/flutter
           flutter pub get
-          dart run serious_python:main package . --platform Android --python-version 3.12
+          dart run serious_python:main package ../.. --platform Android --python-version 3.12 --exclude build
 
       - name: Build APK Direct via Flutter
         run: |
