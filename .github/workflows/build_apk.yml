@@ -35,7 +35,7 @@ jobs:
 
       - name: Accept Android Licenses
         run: |
-          flutter doctor --android-licenses <<< $'y\ny\ny\ny\ny\ny\ny\n' || true
+          yes | flutter doctor --android-licenses || true
 
       - name: Install Flet
         run: |
@@ -43,7 +43,8 @@ jobs:
           pip install flet
 
       - name: Build APK com Flet
-        run: flet build apk --python-version 3.12 --yes
+        run: |
+          flet build apk --python-version 3.12 --yes --no-interactive
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
