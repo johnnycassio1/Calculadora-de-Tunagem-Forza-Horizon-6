@@ -51,18 +51,21 @@ jobs:
         run: |
           flet build apk --python-version 3.12 --yes || true
 
-      - name: Package Serious Python Assets
+      - name: Package Serious Python Assets & Link Directories
         run: |
           cd build/flutter
           flutter pub get
           dart run serious_python:main package ../.. --platform Android --python-version 3.12 --exclude build
+          
+          # Garante que a pasta de site-packages exista e seja vinculada ao ambiente
+          mkdir -p build/site-packages/arm64-v8a
+          mkdir -p assets/app
 
       - name: Build APK Direct via Flutter
         run: |
           cd build/flutter
           export SERIOUS_PYTHON_SITE_PACKAGES="$(pwd)/build/site-packages/arm64-v8a"
-          mkdir -p "$SERIOUS_PYTHON_SITE_PACKAGES"
-          flutter build apk --release
+          flutter build apk --release --target-platform android-arm64
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
