@@ -55,20 +55,23 @@ jobs:
         run: |
           if [ -f requirements.txt ]; then mv requirements.txt requirements.txt.bak; fi
 
-      - name: Build APK com Flet
+      - name: Prepare Flet Flutter Project
         run: |
-          flet build apk --python-version 3.12 --yes -v
-        env:
-          ANDROID_HOME: ${{ env.ANDROID_HOME }}
-          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
+          flet build apk --python-version 3.12 --yes || true
 
       - name: Restore requirements.txt
         if: always()
         run: |
           if [ -f requirements.txt.bak ]; then mv requirements.txt.bak requirements.txt; fi
 
+      - name: Build APK Directly with Native Flutter
+        run: |
+          cd build/flutter/android
+          chmod +x gradlew
+          ./gradlew assembleRelease --stacktrace
+
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
-          path: build/apk/*.apk
+          path: build/flutter/build/app/outputs/flutter-apk/app-release.apk
