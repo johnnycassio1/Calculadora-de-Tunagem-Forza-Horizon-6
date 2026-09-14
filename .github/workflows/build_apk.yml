@@ -41,7 +41,7 @@ jobs:
           flutter config --android-sdk "$ANDROID_HOME"
           yes | flutter doctor --android-licenses || true
 
-      - name: Install Dependencies
+      - name: Install Flet
         run: |
           python -m pip install --upgrade pip
           pip install flet
@@ -49,7 +49,7 @@ jobs:
 
       - name: Build APK com Flet
         run: |
-          flet build apk --yes
+          flet build apk --python-version 3.12 --yes -v
         env:
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
           ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
