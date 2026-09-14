@@ -53,6 +53,8 @@ jobs:
       - name: Compile APK via Flutter Native
         run: |
           cd build/flutter
+          export SERIOUS_PYTHON_SITE_PACKAGES="$(pwd)/app/site-packages"
+          mkdir -p "$SERIOUS_PYTHON_SITE_PACKAGES"
           flutter build apk --release
 
       - name: Upload do APK Gerado
