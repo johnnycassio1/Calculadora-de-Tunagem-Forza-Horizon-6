@@ -28,8 +28,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install flet
 
+      - name: Accept Android Licenses
+        run: |
+          mkdir -p $ANDROID_HOME/licenses
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
       - name: Build APK com Flet
-        run: flet build apk --python-version 3.12 --yes --accept-licenses
+        run: flet build apk --python-version 3.12 --yes
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
