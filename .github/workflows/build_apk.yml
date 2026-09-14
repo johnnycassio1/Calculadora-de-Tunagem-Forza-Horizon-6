@@ -41,11 +41,15 @@ jobs:
           flutter config --android-sdk "$ANDROID_HOME"
           yes | flutter doctor --android-licenses || true
 
-      - name: Install Flet
+      - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install flet
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Temporarily Hide requirements.txt for Flet
+        run: |
+          if [ -f requirements.txt ]; then mv requirements.txt requirements.txt.bak; fi
 
       - name: Build APK com Flet
         run: |
@@ -53,6 +57,11 @@ jobs:
         env:
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
           ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
+
+      - name: Restore requirements.txt
+        if: always()
+        run: |
+          if [ -f requirements.txt.bak ]; then mv requirements.txt.bak requirements.txt; fi
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
