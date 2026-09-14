@@ -11,7 +11,7 @@ st.set_page_config(
 page_bg_img = """
 <style>
 [data-testid="stAppViewContainer"] {
-    background-image: url("https://images.alphacoders.com/118/1183204.jpg");
+    background-image: url("https://raw.githubusercontent.com/johnnycassio1/Calculadora-de-Tunagem-Forza-Horizon-6/main/Fundo_FH6.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
