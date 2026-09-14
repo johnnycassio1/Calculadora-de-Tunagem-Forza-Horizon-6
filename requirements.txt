@@ -1,5 +1,3 @@
 flet
-certifi
-urllib3
 requests
 pillow
