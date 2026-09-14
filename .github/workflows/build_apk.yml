@@ -15,7 +15,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.11'
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -48,7 +48,7 @@ jobs:
 
       - name: Build APK com Flet
         run: |
-          flet build apk --python-version 3.12 --yes
+          flet build apk --python-version 3.11 -v --yes
         env:
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
           ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
