@@ -19,6 +19,7 @@ def salvar_garagem(dados):
 
 def main(page: ft.Page):
     page.title = "Calculadora de Tunagem Forza - Safira Spec"
+    page.window.icon = "icon.png"  # <--- Adicione exatamente essa linha aqui!
     page.theme_mode = ft.ThemeMode.DARK
     page.padding = 0
 
