@@ -36,7 +36,7 @@ jobs:
 
       - name: Build APK com Flet
         run: |
-          flet build apk --python-version 3.11
+          flet build apk --python-version 3.11 --yes
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
