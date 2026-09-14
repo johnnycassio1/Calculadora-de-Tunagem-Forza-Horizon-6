@@ -7,6 +7,41 @@ st.set_page_config(
     layout="centered"
 )
 
+# --- APLICAÇÃO DE IMAGEM DE FUNDO E ESTILO CSS ---
+page_bg_img = """
+<style>
+[data-testid="stAppViewContainer"] {
+    background-image: url("https://images.alphacoders.com/118/1183204.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+[data-testid="stHeader"] {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* Deixa o conteúdo principal com fundo escuro elegante e semitransparente */
+[data-testid="stMainBlockContainer"] {
+    background-color: rgba(15, 23, 42, 0.85);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(8px);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Cor dos textos e títulos */
+h1, h2, h3, p, label, span {
+    color: #ffffff !important;
+}
+</style>
+"""
+
+st.markdown(page_bg_img, unsafe_allow_html=True)
+
 st.title("🏎️ Calculadora de Tunagem Forza")
 st.caption("Ajustes precisos de performance para o seu carro")
 
