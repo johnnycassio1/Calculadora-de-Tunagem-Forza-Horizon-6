@@ -26,7 +26,7 @@ jobs:
       - name: Install Linux Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libgtk-3-dev ninja-build clang cmake pkg-config
+          sudo apt-get install -y build-essential libgtk-3-dev ninja-build clang cmake pkg-config mesa-utils
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -44,8 +44,10 @@ jobs:
 
       - name: Build APK com Flet
         env:
-          CI: "true"
-        run: flet build apk --python-version 3.12 --yes
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+        run: |
+          flet build apk --python-version 3.12 --yes
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
