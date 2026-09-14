@@ -24,7 +24,9 @@ jobs:
           java-version: '17'
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          accept-android-sdk-licenses: true
 
       - name: Install Linux Dependencies
         run: |
@@ -57,7 +59,7 @@ jobs:
           flutter pub get
           dart run serious_python:main package ../.. --platform Android --python-version 3.12 --exclude build
           
-          # Garante que a pasta de site-packages exista e seja vinculada ao ambiente
+          # Garante que as pastas de site-packages e assets existam
           mkdir -p build/site-packages/arm64-v8a
           mkdir -p assets/app
 
