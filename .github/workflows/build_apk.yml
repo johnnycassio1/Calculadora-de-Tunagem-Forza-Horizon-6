@@ -43,8 +43,9 @@ jobs:
           pip install flet
 
       - name: Build APK com Flet
-        run: |
-          flet build apk --python-version 3.12 --yes --no-interactive
+        env:
+          CI: "true"
+        run: flet build apk --python-version 3.12 --yes
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
