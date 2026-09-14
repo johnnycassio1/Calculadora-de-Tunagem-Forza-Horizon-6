@@ -23,55 +23,28 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK & NDK
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: 'latest'
-          build-tools-version: '34.0.0'
-          ndk-version: '25.2.9519653'
 
       - name: Install Linux Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libgtk-3-dev ninja-build clang cmake pkg-config mesa-utils
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - name: Configure Flutter & Permissions
-        run: |
-          flutter config --android-sdk "$ANDROID_HOME"
-          yes | flutter doctor --android-licenses || true
-
-      - name: Install Dependencies
+      - name: Install Flet
         run: |
           python -m pip install --upgrade pip
           pip install flet
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Temporarily Hide requirements.txt for Flet
+      - name: Build APK com Flet CLI
         run: |
-          if [ -f requirements.txt ]; then mv requirements.txt requirements.txt.bak; fi
-
-      - name: Prepare Flet Flutter Project
-        run: |
-          flet build apk --python-version 3.12 --yes || true
-
-      - name: Restore requirements.txt
-        if: always()
-        run: |
-          if [ -f requirements.txt.bak ]; then mv requirements.txt.bak requirements.txt; fi
-
-      - name: Build APK Directly with Native Flutter
-        run: |
-          cd build/flutter/android
-          chmod +x gradlew
-          ./gradlew assembleRelease --stacktrace
+          flet build apk --python-version 3.12 --yes
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
-          path: build/flutter/build/app/outputs/flutter-apk/app-release.apk
+          path: build/apk/*.apk
