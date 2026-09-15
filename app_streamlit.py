@@ -1,153 +1,249 @@
 import streamlit as st
+import json
+import os
 
-# --- CONFIGURAÇÃO DA PÁGINA ---
+DB_FILE = "garagem_setups.json"
+
+def carregar_garagem():
+    if os.path.exists(DB_FILE):
+        try:
+            with open(DB_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return []
+    return []
+
+def salvar_garagem(setups):
+    with open(DB_FILE, "w", encoding="utf-8") as f:
+        json.dump(setups, f, ensure_ascii=False, indent=4)
+
+# Configuração visual do Streamlit
 st.set_page_config(
-    page_title="Calculadora Forza",
-    page_icon="🏎️",
-    layout="centered"
+    page_title="Calculadora de Tunagem Forza - Safira Spec",
+    page_icon="⚡",
+    layout="wide"
 )
 
-# --- APLICAÇÃO DE IMAGEM DE FUNDO E ESTILO CSS ---
-page_bg_img = """
-<style>
-[data-testid="stAppViewContainer"] {
-    background-image: url("https://raw.githubusercontent.com/johnnycassio1/Calculadora-de-Tunagem-Forza-Horizon-6/main/Fundo_FH6.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
-[data-testid="stHeader"] {
-    background-color: rgba(0, 0, 0, 0);
-}
-
-/* Deixa o conteúdo principal com fundo escuro elegante e semitransparente */
-[data-testid="stMainBlockContainer"] {
-    background-color: rgba(15, 23, 42, 0.85);
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    backdrop-filter: blur(8px);
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-}
-
-/* Cor dos textos e títulos */
-h1, h2, h3, p, label, span {
-    color: #ffffff !important;
-}
-</style>
-"""
-
-st.markdown(page_bg_img, unsafe_allow_html=True)
-
-st.title("🏎️ Calculadora de Tunagem Forza")
+st.title("⚡ Calculadora de Tunagem Forza - Safira Spec")
 st.caption("Ajustes precisos de performance para o seu carro")
 
-# --- LÓGICA DE CÁLCULO ---
-def calcular_transmissao(opcao_trans, potencia_cv):
-    if opcao_trans in ["Original", "Rua"]:
-        return "Transmissão Bloqueada para ajustes no jogo."
-    elif opcao_trans == "Esportiva":
-        return "Ajuste apenas a Relação Final (Final Drive): ~3.70"
+# Inicialização da garagem na sessão
+if "setups_salvos" not in st.session_state:
+    st.session_state.setups_salvos = carregar_garagem()
+
+# Abas iguais ao aplicativo Flet
+tab_calc, tab_garagem = st.tabs(["⚡ Calculadora", "🏎️ Garagem de Setups"])
+
+# ---------------------------------------------------------
+# ABA 1: CALCULADORA
+# ---------------------------------------------------------
+with tab_calc:
+    st.subheader("📋 Dados do Veículo")
     
-    mapa_marchas = {"Corrida (6v)": 6, "7v": 7, "8v": 8, "9v": 9, "10v": 10}
-    num_marchas = mapa_marchas.get(opcao_trans, 6)
-    final_drive = max(2.8, 4.2 - (num_marchas * 0.12))
-    
-    marchas = []
-    v_inicio, v_fim = 2.80, 0.75
-    passo = (v_inicio - v_fim) / (num_marchas - 1)
-    for i in range(num_marchas):
-        val_marcha = v_inicio - (passo * i)
-        marchas.append(f"**{i+1}ª:** {val_marcha:.2f}")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        car_name = st.text_input("Nome do Carro / Projeto (Opcional)", value="", placeholder="Ex: Nissan Skyline GT-R")
+        weight_input = st.number_input("Peso Total (kg)", value=1350.0, step=10.0)
+        power_input = st.number_input("Potência (CV/HP)", value=450.0, step=10.0)
+        front_bias_input = st.number_input("Distribuição Dianteira (%)", value=52.00, step=0.5, min_value=10.0, max_value=90.0)
         
-    return f"**Relação Final:** {final_drive:.2f}\n\n" + " | ".join(marchas)
+        modality = st.selectbox(
+            "Modalidade",
+            ["Pista / Asfalto (Grip)", "Drift", "Rally / Off-road", "Arrancada (Drag)"]
+        )
 
-# --- ENTRADA DE DADOS (INTERFACE) ---
-st.header("📋 Dados do Veículo")
+        has_aero = st.selectbox("Possui Kit Aerodinâmico?", ["Não", "Sim"])
+        
+        front_bumper = "Não"
+        rear_wing = "Não"
+        if has_aero == "Sim":
+            front_bumper = st.selectbox("Para-choque Dianteiro de Corrida", ["Sim", "Não"])
+            rear_wing = st.selectbox("Aerofólio de Corrida", ["Sim", "Não"])
 
-col1, col2 = st.columns(2)
+    with col2:
+        drivetrain = st.selectbox("Tração", ["RWD (Traseira)", "FWD (Dianteira)", "AWD (Integral)"])
+        transmission = st.selectbox(
+            "Transmissão",
+            [
+                "Original", 
+                "Rua", 
+                "Esporte", 
+                "Corrida (6V)", 
+                "Corrida (7V)", 
+                "Corrida (8V)", 
+                "Corrida (9V)", 
+                "Corrida (10V)"
+            ]
+        )
+        brakes = st.selectbox("Freios", ["Original", "Corrida"])
+        suspension = st.selectbox("Suspensão", ["Original", "Rua", "Esporte", "Corrida", "Drift", "Rally"])
 
-with col1:
-    peso = st.number_input("Peso Total (kg)", min_value=500, max_value=3000, value=1350, step=10)
-    potencia = st.number_input("Potência (CV/HP)", min_value=50, max_value=2000, value=450, step=10)
-    dist_dianteira_pct = st.number_input("Distribuição Dianteira (%)", min_value=30.0, max_value=70.0, value=52.0, step=0.5)
+    st.write("")
+    if st.button("⚡ CALCULAR TUNAGEM", type="primary", use_container_width=True):
+        peso = float(weight_input)
+        potencia = float(power_input)
+        pct_dian = float(front_bias_input)
+        bias = pct_dian / 100.0
+        bias_tras = 1.0 - bias
+        relacao_peso_pot = peso / potencia if potencia > 0 else 0
 
-with col2:
-    tracao = st.selectbox("Tração", ["RWD (Traseira)", "FWD (Dianteira)", "AWD (4x4)"])
-    transmissao_nome = st.selectbox("Transmissão", ["Original", "Rua", "Esportiva", "Corrida (6v)", "7v", "8v", "9v", "10v"], index=3)
-    freio_nome = st.selectbox("Freios", ["Original", "Rua", "Esportivo", "Corrida"], index=3)
-    susp_nome = st.selectbox("Suspensão", ["Original", "Rua", "Esportivo", "Corrida", "Rally", "Drift"], index=3)
+        pneu_diant = 1.95
+        pneu_tras = 1.90 if "RWD" in drivetrain else 1.95
 
-# --- BOTÃO DE CÁLCULO ---
-if st.button("🚀 CALCULAR TUNAGEM", use_container_width=True, type="primary"):
-    dist_dianteira = dist_dianteira_pct / 100.0
-    dist_traseira = 1.0 - dist_dianteira
+        # ---------------------------------------------------------
+        # CÁLCULO DE TRANSMISSÃO E ESCALONAMENTO DE MARCHAS
+        # ---------------------------------------------------------
+        if relacao_peso_pot < 2.0:
+            final_drive = 3.20
+        elif relacao_peso_pot < 3.0:
+            final_drive = 3.55
+        elif relacao_peso_pot < 4.0:
+            final_drive = 3.80
+        else:
+            final_drive = 4.10
 
-    # 1. Pneus
-    pneu_f = 1.9 + (peso / 2000.0) * dist_dianteira
-    pneu_t = 1.9 + (peso / 2000.0) * dist_traseira
-    if "RWD" in tracao: pneu_t -= 0.1
-    elif "FWD" in tracao: pneu_f -= 0.1
+        if "Arrancada" in modality:
+            final_drive -= 0.30
+        elif "Drift" in modality:
+            final_drive += 0.20
 
-    # 2. Suspensão e Alinhamento
-    if "Rally" in susp_nome:
-        mola_b = peso * 0.28
-        mola_f, mola_t = mola_b * dist_dianteira, mola_b * dist_traseira
-        reb_f, reb_t = 7.0 * dist_dianteira + 1.0, 7.0 * dist_traseira + 1.0
-        bmp_f, bmp_t = reb_f * 0.5, reb_t * 0.5
-        camb_f, camb_t, toe_f, toe_t, caster = -1.2, -0.5, 0.0, 0.0, 6.0
-        susp_info = f"**Molas:** F {mola_f:.1f} / T {mola_t:.1f} kgf/mm | **Altura:** Elevada\n\n**Rebound:** F {reb_f:.1f} / T {reb_t:.1f} | **Bump:** F {bmp_f:.1f} / T {bmp_t:.1f}"
-    elif "Drift" in susp_nome:
-        mola_b = peso * 0.42
-        mola_f, mola_t = mola_b * dist_dianteira, mola_b * dist_traseira
-        reb_f, reb_t = 11.0 * dist_dianteira + 1.0, 10.0 * dist_traseira + 1.0
-        bmp_f, bmp_t = reb_f * 0.6, reb_t * 0.6
-        camb_f, camb_t, toe_f, toe_t, caster = -3.5, -1.0, 0.2, -0.1, 7.0
-        susp_info = f"**Molas:** F {mola_f:.1f} / T {mola_t:.1f} kgf/mm | **Altura:** Baixa\n\n**Rebound:** F {reb_f:.1f} / T {reb_t:.1f} | **Bump:** F {bmp_f:.1f} / T {bmp_t:.1f}"
-    elif "Original" in susp_nome or "Rua" in susp_nome:
-        camb_f, camb_t, toe_f, toe_t, caster = -1.0, -0.8, 0.0, 0.0, 5.5
-        susp_info = "Molas e Amortecedores Bloqueados no jogo."
+        if transmission in ["Original", "Rua"]:
+            gear_setting = "🔒 Bloqueado (Sem ajustes disponíveis)"
+        elif transmission == "Esporte":
+            gear_setting = f"Marcha Final (Final Drive): {final_drive:.2f} | Marchas Individuais: 🔒 Bloqueadas"
+        else:
+            num_marchas = 6
+            if "7V" in transmission: num_marchas = 7
+            elif "8V" in transmission: num_marchas = 8
+            elif "9V" in transmission: num_marchas = 9
+            elif "10V" in transmission: num_marchas = 10
+
+            first_gear = 3.30
+            last_gear = 0.75 if num_marchas <= 7 else 0.65
+
+            gears = []
+            for i in range(num_marchas):
+                if num_marchas > 1:
+                    ratio = first_gear - (i * (first_gear - last_gear) / (num_marchas - 1))
+                else:
+                    ratio = first_gear
+                gears.append(f"{i+1}ª: {ratio:.2f}")
+
+            gears_str = " | ".join(gears)
+            gear_setting = (
+                f"Marcha Final (Final Drive): {final_drive:.2f}\n"
+                f"    - Escalonamento ({num_marchas} Marchas): {gears_str}"
+            )
+
+        # ---------------------------------------------------------
+        # OUTROS CÁLCULOS
+        # ---------------------------------------------------------
+        if "Drift" in modality:
+            cambagem = "Dianteira: -5.0° | Traseira: -1.0°"
+            convergencia = "Dianteira: 0.2° (Out) | Traseira: -0.1° (In)"
+            caster = "7.0°"
+        elif "Rally" in modality:
+            cambagem = "Dianteira: -1.0° | Traseira: -0.8°"
+            convergencia = "Dianteira: 0.0° | Traseira: 0.0°"
+            caster = "6.0°"
+        elif "Arrancada" in modality:
+            cambagem = "Dianteira: 0.0° | Traseira: 0.0°"
+            convergencia = "Dianteira: 0.0° | Traseira: 0.0°"
+            caster = "5.0°"
+        else:
+            cambagem = "Dianteira: -2.0° | Traseira: -1.5°"
+            convergencia = "Dianteira: 0.0° | Traseira: -0.1° (In)"
+            caster = "6.0°"
+
+        arb_diant = 1.0 + (64.0 * bias)
+        arb_tras = 1.0 + (64.0 * bias_tras)
+
+        mola_min = peso * 0.05
+        mola_max = peso * 0.25
+        mola_diant = mola_min + ((mola_max - mola_min) * bias)
+        mola_tras = mola_min + ((mola_max - mola_min) * bias_tras)
+
+        rebound_diant = 3.0 + (10.0 * bias)
+        rebound_tras = 3.0 + (10.0 * bias_tras)
+        bump_diant = rebound_diant * 0.6
+        bump_tras = rebound_tras * 0.6
+
+        if has_aero == "Sim":
+            downforce_dian_val = peso * 0.08
+            downforce_tras_val = peso * 0.12
+            f_val = f"{downforce_dian_val:.1f} kgf" if front_bumper == "Sim" else "🔒 Bloqueado"
+            r_val = f"{downforce_tras_val:.1f} kgf" if rear_wing == "Sim" else "🔒 Bloqueado"
+            aero_summary = f"Dianteira [{f_val}] | Traseira [{r_val}]"
+            aero_setting = f"Dianteira: {f_val} | Traseira: {r_val}"
+        else:
+            aero_summary = "🔒 Bloqueado (Sem Kit Aerodinâmico instalado)"
+            aero_setting = "Dianteira: 🔒 Bloqueado | Traseira: 🔒 Bloqueado"
+
+        freio_bal = pct_dian
+        freio_press = 100
+
+        if "RWD" in drivetrain:
+            diff_text = "Aceleração: 65% | Desaceleração: 15%"
+        elif "FWD" in drivetrain:
+            diff_text = "Aceleração: 45% | Desaceleração: 10%"
+        else:
+            diff_text = "Dianteira (Acc: 30% / Desacc: 0%) | Traseira (Acc: 50% / Desacc: 10%) | Balanço Central: 65% Traseira"
+
+        car_label = car_name if car_name else "Carro sem nome"
+
+        detalhes_str = (
+            f"📊 RESUMO DE PERFORMANCE:\n"
+            f"• Relação Peso/Potência: {relacao_peso_pot:.2f} kg/CV | Tração: {drivetrain}\n"
+            f"• Aerodinâmica (Downforce): {aero_summary}\n\n"
+            f"⚙️ AJUSTES RECOMENDADOS DE TUNAGEM:\n"
+            f"------------------------------------------------------------------------\n"
+            f"🔹 Pressão dos Pneus: Dianteira {pneu_diant:.2f} bar | Traseira {pneu_tras:.2f} bar\n"
+            f"🔹 Transmissão:\n"
+            f"    - {gear_setting}\n"
+            f"🔹 Alinhamento:\n"
+            f"    - Cambagem: {cambagem}\n"
+            f"    - Convergência: {convergencia}\n"
+            f"    - Caster Dianteiro: {caster}\n"
+            f"🔹 Barras Estabilizadoras: Dianteira {arb_diant:.2f} | Traseira {arb_tras:.2f}\n"
+            f"🔹 Molas: Dianteira {mola_diant:.1f} kgf/mm | Traseira {mola_tras:.1f} kgf/mm\n"
+            f"🔹 Amortecimento (Rebound): Dianteira {rebound_diant:.1f} | Traseira {rebound_tras:.1f}\n"
+            f"🔹 Amortecimento (Bump/Carga): Dianteira {bump_diant:.1f} | Traseira {bump_tras:.1f}\n"
+            f"🔹 Aerodinâmica (Downforce): {aero_setting}\n"
+            f"🔹 Freios: Balanço {freio_bal:.1f}% | Pressão {freio_press}%\n"
+            f"🔹 Diferencial: {diff_text}"
+        )
+
+        st.session_state["ultimo_setup"] = {
+            "nome": car_label,
+            "modalidade": modality,
+            "tracao": drivetrain,
+            "detalhes": detalhes_str
+        }
+
+    if "ultimo_setup" in st.session_state:
+        setup = st.session_state["ultimo_setup"]
+        st.success(f"💾 Setup Calculado: {setup['nome']}")
+        st.code(setup["detalhes"], language="text")
+
+        if st.button("💾 SALVAR NA GARAGEM", use_container_width=True):
+            st.session_state.setups_salvos.append(dict(setup))
+            salvar_garagem(st.session_state.setups_salvos)
+            st.toast("Setup salvo com sucesso na garagem! ✅")
+
+# ---------------------------------------------------------
+# ABA 2: GARAGEM
+# ---------------------------------------------------------
+with tab_garagem:
+    st.subheader("🏎️ Garagem de Setups Salvos")
+    
+    if not st.session_state.setups_salvos:
+        st.info("Nenhum setup salvo na garagem ainda.")
     else:
-        mola_b = peso * 0.40
-        mola_f, mola_t = mola_b * dist_dianteira, mola_b * dist_traseira
-        reb_f, reb_t = 12.0 * dist_dianteira + 1.0, 12.0 * dist_traseira + 1.0
-        bmp_f, bmp_t = reb_f * 0.6, reb_t * 0.6
-        camb_f, camb_t, toe_f, toe_t, caster = -1.8, -1.2, 0.0, 0.0, 6.0
-        susp_info = f"**Molas:** F {mola_f:.1f} / T {mola_t:.1f} kgf/mm | **Altura:** Mínima\n\n**Rebound:** F {reb_f:.1f} / T {reb_t:.1f} | **Bump:** F {bmp_f:.1f} / T {bmp_t:.1f}"
-
-    # 3. ARB
-    arb_min, arb_max = 1.0, 65.0
-    if "FWD" in tracao:
-        arb_f = (arb_max - arb_min) * dist_dianteira * 0.75
-        arb_t = (arb_max - arb_min) * dist_traseira * 1.25
-    else:
-        arb_f = (arb_max - arb_min) * dist_dianteira + arb_min
-        arb_t = (arb_max - arb_min) * dist_traseira + arb_min
-
-    # 4. Outros componentes
-    trans_info = calcular_transmissao(transmissao_nome, potencia)
-    freio_info = "Ajustes Bloqueados" if "Original" in freio_nome or "Rua" in freio_nome else f"**Equilíbrio:** {int(dist_dianteira_pct)}% | **Pressão:** 100%"
-    
-    if "RWD" in tracao: diff_info = f"**Aceleração:** {min(80, 35 + int(potencia / 12))}% | **Desaceleração:** 15%"
-    elif "FWD" in tracao: diff_info = "**Aceleração:** 40% | **Desaceleração:** 10%"
-    else: diff_info = "**Dianteiro:** 40%/0% | **Traseiro:** 65%/15% | **Balanço Central:** 65%"
-
-    # --- RESULTADOS EXIBIDOS EM CARDS ---
-    st.divider()
-    st.subheader("🛠️ Ficha de Tunagem Resultante")
-
-    st.markdown(f"**1. PNEUS:** Frente `{pneu_f:.1f} BAR` | Trás `{pneu_t:.1f} BAR`")
-    st.markdown(f"**2. ALINHAMENTO:** Cambagem F `{camb_f}°` / T `{camb_t}°` | Convergência F `{toe_f}°` / T `{toe_t}°` | Caster `{caster}°`")
-    st.markdown(f"**3. BARRAS ESTABILIZADORAS:** Frente `{arb_f:.1f}` | Trás `{arb_t:.1f}`")
-    
-    with st.expander("4. SUSPENSÃO E AMORTECIMENTO", expanded=True):
-        st.markdown(susp_info)
-        
-    with st.expander("5. TRANSMISSÃO", expanded=True):
-        st.markdown(trans_info)
-        
-    st.markdown(f"**6. FREIOS:** {freio_info}")
-    st.markdown(f"**7. DIFERENCIAL:** {diff_info}")
+        for idx, item in enumerate(st.session_state.setups_salvos):
+            with st.expander(f"🏎️ {item['nome']} - ({item['modalidade']} | {item['tracao']})"):
+                st.code(item['detalhes'], language="text")
+                if st.button(f"🗑️ Remover {item['nome']}", key=f"del_{idx}"):
+                    st.session_state.setups_salvos.pop(idx)
+                    salvar_garagem(st.session_state.setups_salvos)
+                    st.rerun()
