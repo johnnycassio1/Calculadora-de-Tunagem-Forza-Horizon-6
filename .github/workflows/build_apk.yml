@@ -37,34 +37,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libgtk-3-dev ninja-build clang cmake pkg-config mesa-utils
 
-      - name: Install Flet & Dependencies
+      - name: Install Flet
         run: |
           python -m pip install --upgrade pip
-          pip install flet serious_python
+          pip install flet
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Generate Flet App Shell
+      - name: Build APK via Flet CLI
         run: |
-          flet build apk --python-version 3.12 --yes || true
-
-      - name: Bundle Python Code (Serious Python)
-        run: |
-          cd build/flutter
-          flutter pub get
-          
-          # Garante a criação do diretório de assets
-          mkdir -p assets/app
-
-          # Empacota o código-fonte da raiz no zip que o Serious Python consome
-          dart run serious_python:main package ../.. --platform Android --python-version 3.12 --exclude build
-
-      - name: Build APK Direct via Flutter
-        run: |
-          cd build/flutter
-          flutter build apk --release --target-platform android-arm64
+          flet build apk --python-version 3.12 --target-arch arm64 --yes
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
-          path: build/flutter/build/app/outputs/flutter-apk/app-release.apk
+          path: build/apk/*.apk
