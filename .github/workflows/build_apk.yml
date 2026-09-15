@@ -40,12 +40,12 @@ jobs:
       - name: Install Flet
         run: |
           python -m pip install --upgrade pip
-          pip install flet
+          pip install "flet[cli]"
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Build APK via Flet CLI
         run: |
-          flet build apk --python-version 3.12 --target-arch arm64 --yes
+          flet build apk --python-version 3.12 --arch arm64 --yes
 
       - name: Upload do APK Gerado
         uses: actions/upload-artifact@v4
