@@ -166,14 +166,14 @@ def main(page: ft.Page):
                         drivetrain_dd.value = "AWD (Integral)"
                 page.update()
 
+    # MAX MENU HEIGHT REMOVIDO DAQUI
     veiculo_dropdown = ft.Dropdown(
         label="🔍 Selecionar Carro da Planilha",
         width=320,
         border_radius=8,
-        options=opcoes_veiculos,
-        max_menu_height=300
+        options=opcoes_veiculos
     )
-    veiculo_dropdown.on_change = on_veiculo_change  # Atribuído corretamente aqui fora
+    veiculo_dropdown.on_change = on_veiculo_change
 
     modality_dd = ft.Dropdown(
         label="Modalidade",
