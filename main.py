@@ -1,10 +1,10 @@
 import flet as ft
-import json
 import os
 import sqlite3
+import csv
 
 # ---------------------------------------------------------
-# CONFIGURAÇÃO DO BANCO DE DADOS SQLite (Substitui o JSON antigo)
+# CONFIGURAÇÃO DO BANCO DE DADOS SQLite & IMPORTAÇÃO DO CSV
 # ---------------------------------------------------------
 DB_NAME = "veiculos.db"
 
@@ -14,7 +14,8 @@ def conectar_banco():
 def inicializar_banco():
     conn = conectar_banco()
     cursor = conn.cursor()
-    # Tabela para os veículos da lista geral (638 carros)
+    
+    # Tabela principal para os 638 veículos
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS veiculos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,6 +29,7 @@ def inicializar_banco():
             tracao TEXT
         )
     """)
+    
     # Tabela para a Garagem de Setups Salvos pelo usuário
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS garagem_setups (
@@ -39,9 +41,26 @@ def inicializar_banco():
         )
     """)
     conn.commit()
+    
+    # Importação automática do CSV se a tabela de veículos estiver vazia
+    cursor.execute("SELECT COUNT(*) FROM veiculos")
+    if cursor.fetchone()[0] == 0:
+        csv_path = "veiculos.csv"
+        if os.path.exists(csv_path):
+            with open(csv_path, mode="r", encoding="utf-8") as file:
+                reader = csv.reader(file)
+                next(reader, None)  # Pula o cabeçalho se houver
+                for linha in reader:
+                    if len(linha) >= 8:
+                        cursor.execute("""
+                            INSERT INTO veiculos (marca, modelo, classe, pi_original, peso_fabrica, potencia, distribuicao_dianteira, tracao)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        """, (linha[0], linha[1], linha[2], linha[3], linha[4], linha[5], linha[6], linha[7]))
+            conn.commit()
+            
     conn.close()
 
-# Inicializa o banco assim que o script roda
+# Executa a inicialização e importação assim que o script roda
 inicializar_banco()
 
 def carregar_garagem():
@@ -75,7 +94,6 @@ def salvar_setup_banco(setup):
     conn.close()
 
 def deletar_setup_banco(index):
-    # Como SQLite usa IDs, buscamos todos para pegar o ID correto do item correspondente
     conn = conectar_banco()
     cursor = conn.cursor()
     cursor.execute("SELECT id FROM garagem_setups")
