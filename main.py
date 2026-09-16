@@ -1,21 +1,90 @@
 import flet as ft
 import json
 import os
+import sqlite3
 
-DB_FILE = "garagem_setups.json"
+# ---------------------------------------------------------
+# CONFIGURAÇÃO DO BANCO DE DADOS SQLite (Substitui o JSON antigo)
+# ---------------------------------------------------------
+DB_NAME = "veiculos.db"
+
+def conectar_banco():
+    return sqlite3.connect(DB_NAME)
+
+def inicializar_banco():
+    conn = conectar_banco()
+    cursor = conn.cursor()
+    # Tabela para os veículos da lista geral (638 carros)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS veiculos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            marca TEXT NOT NULL,
+            modelo TEXT NOT NULL,
+            classe TEXT,
+            pi_original INTEGER,
+            peso_fabrica TEXT,
+            potencia TEXT,
+            distribuicao_dianteira TEXT,
+            tracao TEXT
+        )
+    """)
+    # Tabela para a Garagem de Setups Salvos pelo usuário
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS garagem_setups (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            modalidade TEXT,
+            tracao TEXT,
+            detalhes TEXT
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+# Inicializa o banco assim que o script roda
+inicializar_banco()
 
 def carregar_garagem():
-    if os.path.exists(DB_FILE):
-        try:
-            with open(DB_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception:
-            return []
-    return []
+    try:
+        conn = conectar_banco()
+        cursor = conn.cursor()
+        cursor.execute("SELECT nome, modalidade, tracao, detalhes FROM garagem_setups")
+        rows = cursor.fetchall()
+        conn.close()
+        
+        setups = []
+        for row in rows:
+            setups.append({
+                "nome": row[0],
+                "modalidade": row[1],
+                "tracao": row[2],
+                "detalhes": row[3]
+            })
+        return setups
+    except Exception:
+        return []
 
-def salvar_garagem(setups):
-    with open(DB_FILE, "w", encoding="utf-8") as f:
-        json.dump(setups, f, ensure_ascii=False, indent=4)
+def salvar_setup_banco(setup):
+    conn = conectar_banco()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO garagem_setups (nome, modalidade, tracao, detalhes)
+        VALUES (?, ?, ?, ?)
+    """, (setup["nome"], setup["modalidade"], setup["tracao"], setup["detalhes"]))
+    conn.commit()
+    conn.close()
+
+def deletar_setup_banco(index):
+    # Como SQLite usa IDs, buscamos todos para pegar o ID correto do item correspondente
+    conn = conectar_banco()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM garagem_setups")
+    ids = cursor.fetchall()
+    if index < len(ids):
+        target_id = ids[index][0]
+        cursor.execute("DELETE FROM garagem_setups WHERE id = ?", (target_id,))
+        conn.commit()
+    conn.close()
 
 def main(page: ft.Page):
     page.title = "Calculadora de Tunagem Forza - Safira Spec"
@@ -137,6 +206,8 @@ def main(page: ft.Page):
     garagem_list_view = ft.ListView(expand=True, spacing=10, padding=10)
 
     def atualizar_view_garagem():
+        nonlocal setups_salvos
+        setups_salvos = carregar_garagem()
         garagem_list_view.controls.clear()
         if not setups_salvos:
             garagem_list_view.controls.append(
@@ -145,8 +216,7 @@ def main(page: ft.Page):
         else:
             for idx, item in enumerate(setups_salvos):
                 def remover_item(e, index=idx):
-                    setups_salvos.pop(index)
-                    salvar_garagem(setups_salvos)
+                    deletar_setup_banco(index)
                     atualizar_view_garagem()
                     page.update()
 
@@ -171,11 +241,10 @@ def main(page: ft.Page):
 
     def salvar_na_garagem_click(e):
         if ultimo_setup_calculado:
-            setups_salvos.append(dict(ultimo_setup_calculado))
-            salvar_garagem(setups_salvos)
+            salvar_setup_banco(ultimo_setup_calculado)
             atualizar_view_garagem()
             save_btn.visible = False
-            result_title.value += " (Salvo com sucesso! ✅)"
+            result_title.value += " (Salvo com sucesso no Banco de Dados! ✅)"
             page.update()
 
     save_btn = ft.Container(
