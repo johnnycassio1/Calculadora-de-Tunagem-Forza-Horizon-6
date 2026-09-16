@@ -157,8 +157,9 @@ def main(page: ft.Page):
                             ft.Row([
                                 ft.Text(f"🏎️ {item['nome']}", size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300),
                                 ft.Container(
-                                    content=ft.Icon(name=ft.Icons.DELETE_OUTLINED, color=ft.Colors.RED_400),
-                                    on_click=remover_item
+                                    content=ft.Text("🗑️", size=18),
+                                    on_click=remover_item,
+                                    padding=5
                                 )
                             ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                             ft.Text(f"Modalidade: {item['modalidade']} | Tração: {item['tracao']}", size=12, color=ft.Colors.WHITE_70),
