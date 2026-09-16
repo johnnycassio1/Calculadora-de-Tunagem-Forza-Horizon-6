@@ -133,11 +133,6 @@ def main(page: ft.Page):
     # ---------------------------------------------------------
     result_title = ft.Text(value="💾 Setup Calculado: Aguardando cálculo...", size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300)
     result_details = ft.Text(value="Preencha os dados acima e clique em Calcular Tunagem.", size=13, color=ft.Colors.WHITE_70)
-    save_btn = ft.ElevatedButton(
-        content=ft.Text("💾 SALVAR NA GARAGEM", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
-        visible=False,
-        style=ft.ButtonStyle(bgcolor=ft.Colors.GREEN_600, shape=ft.RoundedRectangleBorder(radius=20))
-    )
 
     garagem_list_view = ft.ListView(expand=True, spacing=10, padding=10)
 
@@ -161,7 +156,10 @@ def main(page: ft.Page):
                         content=ft.Column([
                             ft.Row([
                                 ft.Text(f"🏎️ {item['nome']}", size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300),
-                                ft.IconButton(icon=ft.Icons.DELETE_OUTLINED, icon_color=ft.Colors.RED_400, on_click=remover_item)
+                                ft.Container(
+                                    content=ft.Icon(name=ft.Icons.DELETE_OUTLINED, color=ft.Colors.RED_400),
+                                    on_click=remover_item
+                                )
                             ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                             ft.Text(f"Modalidade: {item['modalidade']} | Tração: {item['tracao']}", size=12, color=ft.Colors.WHITE_70),
                             ft.Text(item['detalhes'], size=12, color=ft.Colors.WHITE_90)
@@ -179,7 +177,15 @@ def main(page: ft.Page):
             result_title.value += " (Salvo com sucesso! ✅)"
             page.update()
 
-    save_btn.on_click = salvar_na_garagem_click
+    save_btn = ft.Container(
+        content=ft.Text("💾 SALVAR NA GARAGEM", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
+        on_click=salvar_na_garagem_click,
+        bgcolor=ft.Colors.GREEN_600,
+        border_radius=20,
+        padding=ft.padding.symmetric(horizontal=20, vertical=12),
+        visible=False,
+        alignment=ft.alignment.center
+    )
 
     def calcular_tunagem(e):
         nonlocal ultimo_setup_calculado
@@ -340,14 +346,13 @@ def main(page: ft.Page):
         
         page.update()
 
-    calc_btn = ft.ElevatedButton(
+    calc_btn = ft.Container(
         content=ft.Text("⚡ CALCULAR TUNAGEM", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
         on_click=calcular_tunagem,
-        style=ft.ButtonStyle(
-            bgcolor=ft.Colors.RED_ACCENT_400,
-            shape=ft.RoundedRectangleBorder(radius=20),
-            padding=ft.Padding(30, 15, 30, 15)
-        )
+        bgcolor=ft.Colors.RED_ACCENT_400,
+        border_radius=20,
+        padding=ft.padding.symmetric(horizontal=30, vertical=15),
+        alignment=ft.alignment.center
     )
 
     # ---------------------------------------------------------
@@ -399,22 +404,35 @@ def main(page: ft.Page):
 
     content_area = ft.Container(content=container_calculadora, expand=True)
 
-    btn_calc = ft.OutlinedButton("⚡ Calculadora", on_click=lambda e: trocar_view(0))
-    btn_garagem = ft.OutlinedButton("🏎️ Garagem", on_click=lambda e: trocar_view(1))
+    btn_calc = ft.Container(
+        content=ft.Text("⚡ Calculadora", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
+        on_click=lambda e: trocar_view(0),
+        bgcolor=ft.Colors.CYAN_800,
+        border_radius=10,
+        padding=ft.padding.symmetric(horizontal=15, vertical=10),
+        alignment=ft.alignment.center
+    )
+
+    btn_garagem = ft.Container(
+        content=ft.Text("🏎️ Garagem", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
+        on_click=lambda e: trocar_view(1),
+        bgcolor=ft.Colors.TRANSPARENT,
+        border_radius=10,
+        padding=ft.padding.symmetric(horizontal=15, vertical=10),
+        alignment=ft.alignment.center
+    )
 
     def trocar_view(index):
         if index == 0:
             content_area.content = container_calculadora
-            btn_calc.style = ft.ButtonStyle(bgcolor=ft.Colors.CYAN_800)
-            btn_garagem.style = ft.ButtonStyle(bgcolor=ft.Colors.TRANSPARENT)
+            btn_calc.bgcolor = ft.Colors.CYAN_800
+            btn_garagem.bgcolor = ft.Colors.TRANSPARENT
         else:
             atualizar_view_garagem()
             content_area.content = container_garagem
-            btn_calc.style = ft.ButtonStyle(bgcolor=ft.Colors.TRANSPARENT)
-            btn_garagem.style = ft.ButtonStyle(bgcolor=ft.Colors.CYAN_800)
+            btn_calc.bgcolor = ft.Colors.TRANSPARENT
+            btn_garagem.bgcolor = ft.Colors.CYAN_800
         page.update()
-
-    btn_calc.style = ft.ButtonStyle(bgcolor=ft.Colors.CYAN_800)
 
     page.add(
         ft.Column([
