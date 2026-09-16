@@ -163,7 +163,7 @@ def main(page: ft.Page):
                                 )
                             ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                             ft.Text(f"Modalidade: {item['modalidade']} | Tração: {item['tracao']}", size=12, color=ft.Colors.WHITE_70),
-                            ft.Text(item['detalhes'], size=12, color=ft.Colors.WHITE_90)
+                            ft.Text(item['detalhes'], size=12, color=ft.Colors.WHITE)
                         ])
                     )
                 )
