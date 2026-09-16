@@ -1,131 +1,431 @@
 import flet as ft
+import json
+import os
 
+DB_FILE = "garagem_setups.json"
+
+def carregar_garagem():
+    if os.path.exists(DB_FILE):
+        try:
+            with open(DB_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return []
+    return []
+
+def salvar_garagem(setups):
+    with open(DB_FILE, "w", encoding="utf-8") as f:
+        json.dump(setups, f, ensure_ascii=False, indent=4)
 
 def main(page: ft.Page):
-    page.title = "Calculadora de Tunagem - Forza Horizon 6"
+    page.title = "Calculadora de Tunagem Forza - Safira Spec"
     page.theme_mode = ft.ThemeMode.DARK
     page.padding = 20
     page.scroll = ft.ScrollMode.AUTO
 
-    # ---------- Campos de entrada ----------
-    weight_input = ft.TextField(
-        label="Peso Total do Carro (kg)",
-        hint_text="Ex: 1300",
-        keyboard_type=ft.KeyboardType.NUMBER,
+    setups_salvos = carregar_garagem()
+    ultimo_setup_calculado = {}
+
+    # ---------------------------------------------------------
+    # CAMPOS DE ENTRADA (CALCULADORA)
+    # ---------------------------------------------------------
+    car_name = ft.TextField(label="Nome do Carro / Projeto (Opcional)", width=320, border_radius=8)
+    weight_input = ft.TextField(label="Peso Total (kg)", value="1350", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
+    power_input = ft.TextField(label="Potência (CV/HP)", value="450", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
+    front_bias_input = ft.TextField(label="Distribuição Dianteira (%)", value="52.00", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
+    
+    modality_dd = ft.Dropdown(
+        label="Modalidade",
+        value="Pista / Asfalto (Grip)",
         width=320,
+        border_radius=8,
+        options=[
+            ft.dropdown.Option("Pista / Asfalto (Grip)"),
+            ft.dropdown.Option("Drift"),
+            ft.dropdown.Option("Rally / Off-road"),
+            ft.dropdown.Option("Arrancada (Drag)")
+        ]
     )
-    front_bias_input = ft.TextField(
-        label="Distribuição Dianteira (%)",
-        hint_text="Ex: 52",
-        keyboard_type=ft.KeyboardType.NUMBER,
+
+    front_bumper_dd = ft.Dropdown(
+        label="Para-choque Dianteiro de Corrida",
+        value="Sim",
         width=320,
+        visible=False,
+        border_radius=8,
+        options=[ft.dropdown.Option("Sim"), ft.dropdown.Option("Não")]
+    )
+    rear_wing_dd = ft.Dropdown(
+        label="Aerofólio de Corrida",
+        value="Sim",
+        width=320,
+        visible=False,
+        border_radius=8,
+        options=[ft.dropdown.Option("Sim"), ft.dropdown.Option("Não")]
     )
 
-    # ---------- Painel de resultado ----------
-    result_text = ft.Text(
-        value="Preencha os dados e clique em calcular.",
-        size=16,
-        weight=ft.FontWeight.BOLD,
-        color=ft.Colors.LIGHT_BLUE_200,
-        selectable=True,
+    def on_aero_kit_change(e):
+        has_aero = (aero_kit_dd.value == "Sim")
+        front_bumper_dd.visible = has_aero
+        rear_wing_dd.visible = has_aero
+        page.update()
+
+    aero_kit_dd = ft.Dropdown(
+        label="Possui Kit Aerodinâmico?",
+        value="Não",
+        width=320,
+        border_radius=8,
+        options=[ft.dropdown.Option("Sim"), ft.dropdown.Option("Não")]
+    )
+    aero_kit_dd.on_change = on_aero_kit_change
+
+    drivetrain_dd = ft.Dropdown(
+        label="Tração",
+        value="RWD (Traseira)",
+        width=320,
+        border_radius=8,
+        options=[
+            ft.dropdown.Option("RWD (Traseira)"),
+            ft.dropdown.Option("FWD (Dianteira)"),
+            ft.dropdown.Option("AWD (Integral)")
+        ]
+    )
+    transmission_dd = ft.Dropdown(
+        label="Transmissão",
+        value="Corrida (6V)",
+        width=320,
+        border_radius=8,
+        options=[
+            ft.dropdown.Option("Original"),
+            ft.dropdown.Option("Rua"),
+            ft.dropdown.Option("Esporte"),
+            ft.dropdown.Option("Corrida (6V)"),
+            ft.dropdown.Option("Corrida (7V)"),
+            ft.dropdown.Option("Corrida (8V)"),
+            ft.dropdown.Option("Corrida (9V)"),
+            ft.dropdown.Option("Corrida (10V)")
+        ]
+    )
+    brakes_dd = ft.Dropdown(
+        label="Freios",
+        value="Corrida",
+        width=320,
+        border_radius=8,
+        options=[ft.dropdown.Option("Original"), ft.dropdown.Option("Corrida")]
+    )
+    suspension_dd = ft.Dropdown(
+        label="Suspensão",
+        value="Corrida",
+        width=320,
+        border_radius=8,
+        options=[
+            ft.dropdown.Option("Original"),
+            ft.dropdown.Option("Rua"),
+            ft.dropdown.Option("Esporte"),
+            ft.dropdown.Option("Corrida"),
+            ft.dropdown.Option("Drift"),
+            ft.dropdown.Option("Rally")
+        ]
     )
 
-    painel_resultado = ft.Container(
-        content=result_text,
-        padding=15,
-        border_radius=10,
-        border=ft.border.all(1, ft.Colors.BLUE_GREY_700),
-        bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.WHITE),
+    # ---------------------------------------------------------
+    # EXIBIÇÃO DE RESULTADOS & BOTÕES
+    # ---------------------------------------------------------
+    result_title = ft.Text(value="💾 Setup Calculado: Aguardando cálculo...", size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300)
+    result_details = ft.Text(value="Preencha os dados acima e clique em Calcular Tunagem.", size=13, color=ft.Colors.WHITE_70)
+    save_btn = ft.ElevatedButton(
+        content=ft.Text("💾 SALVAR NA GARAGEM", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
+        visible=False,
+        style=ft.ButtonStyle(bgcolor=ft.Colors.GREEN_600, shape=ft.RoundedRectangleBorder(radius=20))
     )
 
-    # ---------- Funções auxiliares ----------
-    def converter_para_float(valor, nome_campo):
-        try:
-            return float(valor)
-        except (TypeError, ValueError):
-            raise ValueError(f"O campo '{nome_campo}' precisa de um número válido.")
+    garagem_list_view = ft.ListView(expand=True, spacing=10, padding=10)
 
-    # ---------- Função de cálculo ----------
-    def calcular(e):
-        try:
-            peso = converter_para_float(weight_input.value, "Peso Total")
-            bias = converter_para_float(front_bias_input.value, "Distribuição Dianteira")
-
-            if peso <= 0:
-                raise ValueError("O peso total deve ser maior que zero.")
-            if not 1 <= bias <= 99:
-                raise ValueError("A distribuição dianteira deve ficar entre 1% e 99%.")
-
-            frac_dianteira = bias / 100
-            frac_traseira = 1.0 - frac_dianteira
-
-            peso_dianteiro = peso * frac_dianteira
-            peso_traseiro = peso * frac_traseira
-
-            # Fórmula-base de exemplo — substitua pelos seus cálculos reais
-            mola_dianteira = peso_dianteiro * 0.1
-            mola_traseira = peso_traseiro * 0.1
-
-            result_text.value = (
-                "--- RESULTADOS DA TUNAGEM ---\n"
-                f"Peso eixo dianteiro: {peso_dianteiro:.0f} kg\n"
-                f"Peso eixo traseiro:  {peso_traseiro:.0f} kg\n"
-                f"Mola dianteira: {mola_dianteira:.1f} kgf/mm\n"
-                f"Mola traseira:  {mola_traseira:.1f} kgf/mm"
+    def atualizar_view_garagem():
+        garagem_list_view.controls.clear()
+        if not setups_salvos:
+            garagem_list_view.controls.append(
+                ft.Text("Nenhum setup salvo na garagem ainda.", color=ft.Colors.WHITE_54, size=14)
             )
-            result_text.color = ft.Colors.GREEN_400
-        except ValueError as erro:
-            result_text.value = str(erro)
-            result_text.color = ft.Colors.RED_400
+        else:
+            for idx, item in enumerate(setups_salvos):
+                def remover_item(e, index=idx):
+                    setups_salvos.pop(index)
+                    salvar_garagem(setups_salvos)
+                    atualizar_view_garagem()
+                    page.update()
 
+                card = ft.Card(
+                    content=ft.Container(
+                        padding=15,
+                        content=ft.Column([
+                            ft.Row([
+                                ft.Text(f"🏎️ {item['nome']}", size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300),
+                                ft.IconButton(icon=ft.Icons.DELETE_OUTLINED, icon_color=ft.Colors.RED_400, on_click=remover_item)
+                            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                            ft.Text(f"Modalidade: {item['modalidade']} | Tração: {item['tracao']}", size=12, color=ft.Colors.WHITE_70),
+                            ft.Text(item['detalhes'], size=12, color=ft.Colors.WHITE_90)
+                        ])
+                    )
+                )
+                garagem_list_view.controls.append(card)
+
+    def salvar_na_garagem_click(e):
+        if ultimo_setup_calculado:
+            setups_salvos.append(dict(ultimo_setup_calculado))
+            salvar_garagem(setups_salvos)
+            atualizar_view_garagem()
+            save_btn.visible = False
+            result_title.value += " (Salvo com sucesso! ✅)"
+            page.update()
+
+    save_btn.on_click = salvar_na_garagem_click
+
+    def calcular_tunagem(e):
+        nonlocal ultimo_setup_calculado
+        try:
+            peso = float(weight_input.value)
+            potencia = float(power_input.value)
+            pct_dian = float(front_bias_input.value)
+            bias = pct_dian / 100.0
+            bias_tras = 1.0 - bias
+            relacao_peso_pot = peso / potencia if potencia > 0 else 0
+
+            pneu_diant = 1.95
+            pneu_tras = 1.90 if "RWD" in drivetrain_dd.value else 1.95
+
+            # ---------------------------------------------------------
+            # CÁLCULO DE TRANSMISSÃO E ESCALONAMENTO DE MARCHAS
+            # ---------------------------------------------------------
+            trans_val = transmission_dd.value
+            
+            if relacao_peso_pot < 2.0:
+                final_drive = 3.20
+            elif relacao_peso_pot < 3.0:
+                final_drive = 3.55
+            elif relacao_peso_pot < 4.0:
+                final_drive = 3.80
+            else:
+                final_drive = 4.10
+
+            mod = modality_dd.value
+            if "Arrancada" in mod:
+                final_drive -= 0.30
+            elif "Drift" in mod:
+                final_drive += 0.20
+
+            if trans_val in ["Original", "Rua"]:
+                gear_setting = "🔒 Bloqueado (Sem ajustes disponíveis)"
+            elif trans_val == "Esporte":
+                gear_setting = f"Marcha Final (Final Drive): {final_drive:.2f} | Marchas Individuais: 🔒 Bloqueadas"
+            else:
+                num_marchas = 6
+                if "7V" in trans_val: num_marchas = 7
+                elif "8V" in trans_val: num_marchas = 8
+                elif "9V" in trans_val: num_marchas = 9
+                elif "10V" in trans_val: num_marchas = 10
+
+                first_gear = 3.30
+                last_gear = 0.75 if num_marchas <= 7 else 0.65
+
+                gears = []
+                for i in range(num_marchas):
+                    if num_marchas > 1:
+                        ratio = first_gear - (i * (first_gear - last_gear) / (num_marchas - 1))
+                    else:
+                        ratio = first_gear
+                    gears.append(f"{i+1}ª: {ratio:.2f}")
+
+                gears_str = " | ".join(gears)
+                gear_setting = (
+                    f"Marcha Final (Final Drive): {final_drive:.2f}\n"
+                    f"    - Escalonamento ({num_marchas} Marchas): {gears_str}"
+                )
+
+            # ---------------------------------------------------------
+            # OUTROS CÁLCULOS DE TUNAGEM
+            # ---------------------------------------------------------
+            if "Drift" in mod:
+                cambagem = "Dianteira: -5.0° | Traseira: -1.0°"
+                convergencia = "Dianteira: 0.2° (Out) | Traseira: -0.1° (In)"
+                caster = "7.0°"
+            elif "Rally" in mod:
+                cambagem = "Dianteira: -1.0° | Traseira: -0.8°"
+                convergencia = "Dianteira: 0.0° | Traseira: 0.0°"
+                caster = "6.0°"
+            elif "Arrancada" in mod:
+                cambagem = "Dianteira: 0.0° | Traseira: 0.0°"
+                convergencia = "Dianteira: 0.0° | Traseira: 0.0°"
+                caster = "5.0°"
+            else:
+                cambagem = "Dianteira: -2.0° | Traseira: -1.5°"
+                convergencia = "Dianteira: 0.0° | Traseira: -0.1° (In)"
+                caster = "6.0°"
+
+            arb_diant = 1.0 + (64.0 * bias)
+            arb_tras = 1.0 + (64.0 * bias_tras)
+
+            mola_min = peso * 0.05
+            mola_max = peso * 0.25
+            mola_diant = mola_min + ((mola_max - mola_min) * bias)
+            mola_tras = mola_min + ((mola_max - mola_min) * bias_tras)
+
+            rebound_diant = 3.0 + (10.0 * bias)
+            rebound_tras = 3.0 + (10.0 * bias_tras)
+            bump_diant = rebound_diant * 0.6
+            bump_tras = rebound_tras * 0.6
+
+            if aero_kit_dd.value == "Sim":
+                downforce_dian_val = peso * 0.08
+                downforce_tras_val = peso * 0.12
+                f_val = f"{downforce_dian_val:.1f} kgf" if front_bumper_dd.value == "Sim" else "🔒 Bloqueado"
+                r_val = f"{downforce_tras_val:.1f} kgf" if rear_wing_dd.value == "Sim" else "🔒 Bloqueado"
+                aero_summary = f"Dianteira [{f_val}] | Traseira [{r_val}]"
+                aero_setting = f"Dianteira: {f_val} | Traseira: {r_val}"
+            else:
+                aero_summary = "🔒 Bloqueado (Sem Kit Aerodinâmico instalado)"
+                aero_setting = "Dianteira: 🔒 Bloqueado | Traseira: 🔒 Bloqueado"
+
+            freio_bal = pct_dian
+            freio_press = 100
+
+            if "RWD" in drivetrain_dd.value:
+                diff_text = "Aceleração: 65% | Desaceleração: 15%"
+            elif "FWD" in drivetrain_dd.value:
+                diff_text = "Aceleração: 45% | Desaceleração: 10%"
+            else:
+                diff_text = "Dianteira (Acc: 30% / Desacc: 0%) | Traseira (Acc: 50% / Desacc: 10%) | Balanço Central: 65% Traseira"
+
+            car_label = car_name.value if car_name.value else "Carro sem nome"
+            result_title.value = f"💾 Setup Calculado: {car_label} ({peso}kg)"
+            
+            detalhes_str = (
+                f"📊 RESUMO DE PERFORMANCE:\n"
+                f"• Relação Peso/Potência: {relacao_peso_pot:.2f} kg/CV | Tração: {drivetrain_dd.value}\n"
+                f"• Aerodinâmica (Downforce): {aero_summary}\n\n"
+                f"⚙️ AJUSTES RECOMENDADOS DE TUNAGEM:\n"
+                f"------------------------------------------------------------------------\n"
+                f"🔹 Pressão dos Pneus: Dianteira {pneu_diant:.2f} bar | Traseira {pneu_tras:.2f} bar\n"
+                f"🔹 Transmissão:\n"
+                f"    - {gear_setting}\n"
+                f"🔹 Alinhamento:\n"
+                f"    - Cambagem: {cambagem}\n"
+                f"    - Convergência: {convergencia}\n"
+                f"    - Caster Dianteiro: {caster}\n"
+                f"🔹 Barras Estabilizadoras: Dianteira {arb_diant:.2f} | Traseira {arb_tras:.2f}\n"
+                f"🔹 Molas: Dianteira {mola_diant:.1f} kgf/mm | Traseira {mola_tras:.1f} kgf/mm\n"
+                f"🔹 Amortecimento (Rebound): Dianteira {rebound_diant:.1f} | Traseira {rebound_tras:.1f}\n"
+                f"🔹 Amortecimento (Bump/Carga): Dianteira {bump_diant:.1f} | Traseira {bump_tras:.1f}\n"
+                f"🔹 Aerodinâmica (Downforce): {aero_setting}\n"
+                f"🔹 Freios: Balanço {freio_bal:.1f}% | Pressão {freio_press}%\n"
+                f"🔹 Diferencial: {diff_text}"
+            )
+
+            result_details.value = detalhes_str
+            result_title.color = ft.Colors.CYAN_300
+
+            ultimo_setup_calculado = {
+                "nome": car_label,
+                "modalidade": modality_dd.value,
+                "tracao": drivetrain_dd.value,
+                "detalhes": detalhes_str
+            }
+            save_btn.visible = True
+
+        except ValueError:
+            result_title.value = "⚠️ Erro no Cálculo"
+            result_details.value = "Por favor, insira valores numéricos válidos para Peso, Potência e Distribuição."
+            result_title.color = ft.Colors.RED_400
+            save_btn.visible = False
+        
         page.update()
 
-    # ---------- Botão limpar ----------
-    def limpar(e):
-        weight_input.value = ""
-        front_bias_input.value = ""
-        result_text.value = "Preencha os dados e clique em calcular."
-        result_text.color = ft.Colors.LIGHT_BLUE_200
+    calc_btn = ft.ElevatedButton(
+        content=ft.Text("⚡ CALCULAR TUNAGEM", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
+        on_click=calcular_tunagem,
+        style=ft.ButtonStyle(
+            bgcolor=ft.Colors.RED_ACCENT_400,
+            shape=ft.RoundedRectangleBorder(radius=20),
+            padding=ft.Padding(30, 15, 30, 15)
+        )
+    )
+
+    # ---------------------------------------------------------
+    # LAYOUT DAS TELAS
+    # ---------------------------------------------------------
+    left_column = ft.Column(
+        controls=[
+            ft.Text("📋 Dados do Veículo", size=15, weight=ft.FontWeight.BOLD),
+            car_name, weight_input, power_input, front_bias_input, modality_dd, aero_kit_dd, front_bumper_dd, rear_wing_dd
+        ],
+        spacing=10
+    )
+
+    right_column = ft.Column(
+        controls=[
+            ft.Container(height=25),
+            drivetrain_dd, transmission_dd, brakes_dd, suspension_dd
+        ],
+        spacing=10
+    )
+
+    container_calculadora = ft.Container(
+        padding=10,
+        content=ft.Column([
+            ft.Row(
+                alignment=ft.MainAxisAlignment.START,
+                vertical_alignment=ft.CrossAxisAlignment.START,
+                spacing=40,
+                controls=[left_column, right_column]
+            ),
+            ft.Container(height=15),
+            ft.Row([calc_btn, save_btn], alignment=ft.MainAxisAlignment.CENTER, spacing=20),
+            ft.Container(height=15),
+            ft.Divider(color=ft.Colors.WHITE_24),
+            result_title,
+            result_details
+        ])
+    )
+
+    atualizar_view_garagem()
+    container_garagem = ft.Container(
+        padding=10,
+        content=ft.Column([
+            ft.Text("🏎️ Garagem de Setups Salvos", size=18, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300),
+            ft.Divider(color=ft.Colors.WHITE_24),
+            garagem_list_view
+        ])
+    )
+
+    content_area = ft.Container(content=container_calculadora, expand=True)
+
+    btn_calc = ft.OutlinedButton("⚡ Calculadora", on_click=lambda e: trocar_view(0))
+    btn_garagem = ft.OutlinedButton("🏎️ Garagem", on_click=lambda e: trocar_view(1))
+
+    def trocar_view(index):
+        if index == 0:
+            content_area.content = container_calculadora
+            btn_calc.style = ft.ButtonStyle(bgcolor=ft.Colors.CYAN_800)
+            btn_garagem.style = ft.ButtonStyle(bgcolor=ft.Colors.TRANSPARENT)
+        else:
+            atualizar_view_garagem()
+            content_area.content = container_garagem
+            btn_calc.style = ft.ButtonStyle(bgcolor=ft.Colors.TRANSPARENT)
+            btn_garagem.style = ft.ButtonStyle(bgcolor=ft.Colors.CYAN_800)
         page.update()
 
-    # Enter também dispara o cálculo
-    weight_input.on_submit = calcular
-    front_bias_input.on_submit = calcular
+    btn_calc.style = ft.ButtonStyle(bgcolor=ft.Colors.CYAN_800)
 
-    botao_calcular = ft.ElevatedButton(
-        text="Calcular Tunagem",
-        icon=ft.Icons.CALCULATE,
-        on_click=calcular,
-        style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8)),
-    )
-    botao_limpar = ft.OutlinedButton(
-        text="Limpar",
-        icon=ft.Icons.CLEAR,
-        on_click=limpar,
-        style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8)),
-    )
-
-    # ---------- Tela ----------
     page.add(
-        ft.Text("Calculadora de Tunagem FH6", size=24, weight=ft.FontWeight.BOLD),
-        ft.Text(
-            "Suspensão calculada a partir do peso e da distribuição do carro",
-            size=13,
-            color=ft.Colors.BLUE_GREY_300,
-        ),
-        ft.Divider(),
-        weight_input,
-        front_bias_input,
-        ft.Container(height=10),
-        ft.Row([botao_calcular, botao_limpar], spacing=10),
-        ft.Container(height=15),
-        painel_resultado,
+        ft.Column([
+            ft.Text("⚡ Calculadora de Tunagem Forza - Safira Spec", size=22, weight=ft.FontWeight.BOLD),
+            ft.Text("Ajustes precisos de performance para o seu carro", size=12, color=ft.Colors.WHITE_54),
+            ft.Container(height=10),
+            ft.Row([btn_calc, btn_garagem], spacing=10),
+            ft.Divider(color=ft.Colors.WHITE_24),
+            content_area
+        ], expand=True)
     )
-
 
 if __name__ == "__main__":
-    # Flet 1.0+ usa ft.run(); versões anteriores usam ft.app()
-    if hasattr(ft, "run"):
-        ft.run(main)
-    else:
-        ft.app(main)
+    ft.run(main)
