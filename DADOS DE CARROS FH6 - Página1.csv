@@ -1,0 +1,638 @@
+Marca,Modelo / Ano,Classe & IP Original,Peso de Fábrica (kg),Potência de Fábrica (CV/HP),Distribuição Dianteira (%),opção 2 
+Abarth,Abarth Fiat 131 de 1980,D 399,1010,140 cv,53%,RWD
+Abarth,Abarth 695 Biposto 2016,B 540,997,190 cv,64%,FWD
+Abarth,Abarth 124 Spider 2017,C 450,1060,170 cv,51%,RWD
+Abarth,1968 Abarth 595 esseesse,D 100,535,32 cv,38%,RWD
+Acura,Acura RSX Type S 2002,C 462,1256,200 cv,61%,FWD
+Acura,Acura NSX Tipo S 2022,S1 734,1754,600 cv,42%,AWD
+Acura,Acura Integra Type R 2001,C 471,1180,195 cv,62%,FWD
+Acura,Acura Integra A-Spec 2023,C 484,1394,200 cv,60%,FWD
+Alfa Romeo,Alfa Romeo SE 048SP de 1990,R 978,820,600 cv,43%,RWD
+Alfa Romeo,Alfa Romeo Giulia TZ2 de 1965,B 532,620,170 cv,48%,RWD
+Alfa Romeo,Alfa Romeo Giulia Sprint GTA Stradale 1965,D 379,740,113 cv,53%,RWD
+Alfa Romeo,Alfa Romeo Giulia Quadrifoglio 2017,A 667,1580,505 cv,53%,RWD
+Alfa Romeo,Alfa Romeo Giulia GTAm 2021,S1 711,1520,532 cv,50%,RWD
+Alfa Romeo,Alfa Romeo Autodelta Tipo 33/2 Daytona 1968,A 696,580,270 cv,42%,RWD
+Alfa Romeo,Alfa Romeo 4C 2014,A 644,1020,237 cv,41%,RWD
+Alfa Romeo,Alfa Romeo 33 Stradale 1968,B 593,700,230 cv,48%,RWD
+Alfa Romeo,Alfa Romeo 155 Q4 de 1992,C 439,1370,187 cv,60%,AWD
+Alfa Romeo,2007 Alfa Romeo 8C Competizione,A 635,1585,444 cv,52%,RWD
+Alumicraft,Carro de Corrida Alumicraft Classe 10 2015,B 532,975,195 cv,42%,RWD
+Alumicraft,Caminhonete Trucada Alumicraft #6165 2022,C 485,2155,525 cv,45%,RWD
+Alumicraft,Alumicraft #122 Buggy Classe 1 2021,B 571,1588,625 cv,38%,RWD
+Apollo,2019 Apollo Intensa Emozione,R 916,1250,780 cv,43%,RWD
+Ariel,Ariel Atom 500 V8 2013,S2 825,650,475 cv,42%,RWD
+Ariel,2016 Ariel Nomad,A 601,670,235 cv,39%,RWD
+Aston Martin,Aston Martin Vulcan AMR Pro 2017,S2 898,1350,820 cv,49%,RWD
+Aston Martin,Aston Martin Vulcan 2016,S2 884,1350,820 cv,49%,RWD
+Aston Martin,Aston Martin Vantage 2019,A 696,1530,503 cv,50%,RWD
+Aston Martin,Aston Martin Valkyrie AMR Pro 2022,R 989,1000,1000 cv,45%,RWD
+Aston Martin,Aston Martin Valkyrie 2023,R 924,1095,1139 cv,44%,RWD
+Aston Martin,Aston Martin Valhalla Concept Car 2019,R 960,1550,986 cv,42%,AWD
+Aston Martin,Aston Martin DBX 2021,A 618,2245,542 cv,54%,AWD
+Aston Martin,Aston Martin DBS Superleggera 2019,S1 736,1693,715 cv,51%,RWD
+Aston Martin,Aston Martin DB7 GT 2003,B 566,1780,435 cv,54%,RWD
+Aston Martin,Aston Martin DB5 de 1964,C 416,1502,282 cv,50%,RWD
+Aston Martin,Aston Martin DB11 2017,A 679,1770,600 cv,51%,RWD
+Audi,Audi R8 V10 Performance 2020,S1 738,1595,612 cv,43%,AWD
+Audi,Audi TT RS Coupé 2010,B 593,1450,335 cv,60%,AWD
+Audi,Audi Sport quattro de 1984,B 526,1298,302 cv,56%,AWD
+Audi,Audi S1 2015,B 527,1315,228 cv,60%,AWD
+Audi,Audi RS e-tron GT 2021,A 677,2347,637 cv,50%,AWD
+Audi,Audi RS 7 Sportback 2021,A 655,2065,591 cv,56%,AWD
+Audi,Audi RS 7 Sportback 2013,A 619,1930,552 cv,56%,AWD
+Audi,Audi RS 6 Avant 2021,A 650,2075,591 cv,56%,AWD
+Audi,Audi RS 6 Avant 2015,A 640,1950,552 cv,56%,AWD
+Audi,Audi RS 6 2009,B 598,1985,572 cv,58%,AWD
+Audi,Audi RS 6 2003,B 556,1840,444 cv,59%,AWD
+Audi,Audi RS 5 Coupé 2011,A 613,1715,444 cv,57%,AWD
+Audi,Audi RS 4 Avant 2018,A 637,1715,444 cv,56%,AWD
+Audi,Audi RS 4 Avant 2013,A 607,1795,444 cv,56%,AWD
+Audi,Audi RS 4 Avant 2001,B 544,1620,375 cv,60%,AWD
+Audi,Audi RS 4 2006,B 593,1650,414 cv,58%,AWD
+Audi,Audi RS 3 Sportback 2011,B 565,1575,335 cv,60%,AWD
+Audi,Audi RS 3 Sedã 2020,A 617,1570,394 cv,59%,AWD
+Audi,Audi R8 V10 Plus 2016,S1 731,1555,602 cv,43%,AWD
+Audi,Audi R8 LMS 2009,S2 810,1290,500 cv,43%,RWD
+Audi,Audi R8 Coupé V10 GT RWD 2023,S1 769,1570,612 cv,42%,RWD
+Audi,Audi R8 Coupé V10 2013 mais 5.2 FSI quattro,A 694,1625,542 cv,44%,AWD
+Audi,1986 Audi #2 Audi Sport quattro S1,S1 726,1090,550 cv,52%,AWD
+Austin-Healey,Austin-Healey 3000 MkIII 1965,D 352,1157,150 cv,52%,RWD
+Autozam,Autozam AZ-1 de 1993,D 342,720,63 cv,44%,RWD
+BAC,BAC Mono 2014,S1 766,540,280 cv,42%,RWD
+BMW,Pacote de Boas-Vindas do BMW M4 Competition Coupé 2021,S1 800,1725,503 cv,52%,RWD
+BMW,BMW iX xDrive50 2022,B 595,2565,516 cv,49%,AWD
+BMW,BMW i8 2015,A 665,1485,357 cv,48%,AWD
+BMW,BMW Z4 Roadster 2019,A 634,1490,382 cv,50%,RWD
+BMW,BMW Z4 M Coupé 2008,B 579,1420,330 cv,50%,RWD
+BMW,BMW X5 M 2011,B 546,2380,550 cv,52%,AWD
+BMW,BMW M8 Competition Coupé 2020,A 684,1885,617 cv,53%,AWD
+BMW,BMW M5 de 1995,B 516,1650,342 cv,51%,RWD
+BMW,BMW M5 de 1988,C 470,1433,256 cv,53%,RWD
+BMW,BMW M5 CS 2022,S1 731,1825,627 cv,54%,AWD
+BMW,BMW M5 2012,A 652,1870,560 cv,52%,RWD
+BMW,BMW M5 2009,B 595,1830,500 cv,52%,RWD
+BMW,BMW M5 2003,B 580,1795,394 cv,52%,RWD
+BMW,BMW M4 GTS 2016,S1 711,1510,493 cv,52%,RWD
+BMW,BMW M4 Coupé 2014,A 679,1497,425 cv,52%,RWD
+BMW,BMW M4 Competition Coupé 2021,A 666,1725,503 cv,52%,RWD
+BMW,BMW M3 de 1997,B 549,1440,321 cv,50%,RWD
+BMW,BMW M3 de 1988,C 474,1200,192 cv,52%,RWD
+BMW,BMW M3 GTS 2010,A 678,1530,444 cv,52%,RWD
+BMW,BMW M3 2008,A 608,1600,414 cv,52%,RWD
+BMW,BMW M3 2005,B 554,1570,333 cv,50%,RWD
+BMW,BMW M2 Cupé de Competição 2020,A 656,1575,405 cv,52%,RWD
+BMW,BMW M1 de 1981,B 510,1300,277 cv,44%,RWD
+BMW,BMW Isetta 300 de 1957 Exportação,D 100,350,13 cv,48%,RWD
+BMW,BMW 850CSi 1995,C 493,1865,375 cv,53%,RWD
+BMW,BMW 2002 Turbo 1973,C 424,1080,170 cv,54%,RWD
+BMW,2024 BMW X6 M Competition,A 672,2370,617 cv,52%,AWD
+BMW,2023 BMW M2 Forza Edition,A 700,1730,453 cv,52%,RWD
+BMW,2023 BMW M2,A 647,1730,453 cv,52%,RWD
+Bentley,Bentley Continental GT Conversível 2021,A 649,2414,626 cv,55%,AWD
+Bentley,Bentley Bentayga 2016,A 612,2440,600 cv,57%,AWD
+Buick,1987 Buick Regal GNX,C 454,1588,276 cv,56%,RWD
+Cadillac,2022 Cadillac CT5-V Blackwing,S1 701,1869,668 cv,54%,RWD
+Cadillac,2022 Cadillac CT4-V Blackwing,A 650,1751,472 cv,53%,RWD
+Cadillac,2016 Cadillac CTS-V Sedan,A 648,1880,640 cv,54%,RWD
+Cadillac,2016 Cadillac ATS-V,A 601,1680,464 cv,53%,RWD
+Cadillac,2013 Cadillac XTS Limousine,D 381,2320,300 cv,59%,FWD
+Can-Am,2018 Can-Am Maverick X RS Turbo R,B 568,720,172 cv,43%,AWD
+Casey Currie Motorsports,2019 Casey Currie Motorsports #4402 Ultra 4 'Trophy Jeep',A 641,2041,850 cv,52%,AWD
+Chevrolet,Chevrolet Nova Super Sport 396 de 1969,C 431,1485,375 cv,57%,RWD
+Chevrolet,Chevrolet K-10 Custom 1972,D 268,1980,175 cv,56%,AWD
+Chevrolet,Chevrolet Impala Super Sport 409 de 1964,C 427,1655,425 cv,55%,RWD
+Chevrolet,Chevrolet El Camino Super Sport 454 de 1970,C 430,1720,450 cv,57%,RWD
+Chevrolet,Chevrolet Corvette ZR-1 de 1970,C 497,1520,370 cv,49%,RWD
+Chevrolet,Chevrolet Corvette Stingray 427 1967,B 510,1420,435 cv,48%,RWD
+Chevrolet,Chevrolet Corvette 1960,C 428,1350,230 cv,52%,RWD
+Chevrolet,Chevrolet Corvette 1953,D 270,1300,150 cv,53%,RWD
+Chevrolet,Chevrolet Chevelle Super Sport 454 de 1970,C 424,1700,450 cv,56%,RWD
+Chevrolet,Chevrolet Camaro Z28 1979,D 364,1610,175 cv,56%,RWD
+Chevrolet,Chevrolet Camaro Z28 1970,C 430,1500,360 cv,56%,RWD
+Chevrolet,Chevrolet Camaro Super Sport Coupe 1969,C 471,1490,300 cv,56%,RWD
+Chevrolet,Chevrolet Bel Air 1957,D 320,1560,283 cv,54%,RWD
+Chevrolet,Chevrolet 150 Sedã Utilitária de 1955,D 221,1450,162 cv,53%,RWD
+Chevrolet,2024 Chevrolet Corvette E-Ray,S1 737,1712,655 cv,40%,AWD
+Chevrolet,2024 Chevrolet Camaro ZL1,S1 718,1761,650 cv,54%,RWD
+Chevrolet,2023 Chevrolet Corvette Z06,S1 763,1561,670 cv,40%,RWD
+Chevrolet,2020 Chevrolet Silverado LT Trail Boss,C 449,2325,355 cv,57%,AWD
+Chevrolet,2020 Chevrolet Corvette Stingray Coupe,A 700,1530,495 cv,40%,RWD
+Chevrolet,2019 Chevrolet Corvette ZR1,S1 778,1614,755 cv,50%,RWD
+Chevrolet,2018 Chevrolet Camaro ZL1 1LE,S1 728,1732,650 cv,54%,RWD
+Chevrolet,2017 Chevrolet Camaro ZL1,S1 727,1761,650 cv,54%,RWD
+Chevrolet,2015 Chevrolet Corvette Z06,S1 755,1598,650 cv,50%,RWD
+Chevrolet,2015 Chevrolet Camaro Z/28,A 695,1732,505 cv,54%,RWD
+Chevrolet,2009 Chevrolet Corvette ZR1,S1 712,1508,638 cv,51%,RWD
+Chevrolet,2002 Chevrolet Corvette Z06,A 602,1414,405 cv,51%,RWD
+Chevrolet,1996 Chevrolet Impala Super Sport,C 407,1840,260 cv,56%,RWD
+Chevrolet,1995 Chevrolet Corvette ZR-1,B 576,1572,405 cv,51%,RWD
+Chevrolet,1988 Chevrolet Monte Carlo Super Sport,D 282,1545,180 cv,57%,RWD
+Datsun,Datsun 510 de 1970,D 143,915,96 cv,52%,RWD
+Datsun,Datsun 2000 Roadster 1969,D 323,930,135 cv,50%,RWD
+Datsun,1972 Datsun #269 atacando o 240Z da Clock Racing 'Fera-Subida de Colina Totalmente em Carbono',R 951,900,750 cv,48%,RWD
+De Tomaso,De Tomaso Pantera GT5 de 1984,B 562,1420,350 cv,43%,RWD
+DeBerti,2019 DeBerti Toyota Tacoma TRD ‘The Performance Truck’,S1 717,1814,900 cv,51%,RWD
+DeBerti,2019 DeBerti Ford Super Duty F-250 Lariat 'Transformer',B 548,3402,450 cv,60%,RWD
+DeBerti,2018 DeBerti Chevrolet Silverado 1500 Drift Truck,S1 707,2041,1000 cv,53%,RWD
+DeBerti,2013 DeBerti Jeep Wrangler Unlimited,A 645,2154,707 cv,51%,AWD
+DeLorean,DeLorean DMC-12 de 1982,D 357,1230,130 cv,35%,RWD
+Dinâmica de Transporte AMG,2554 AMG Transport Dynamics M12S Warthog CST,A 663,3810,820 cv,50%,AWD
+Dodge,Dodge Dart HEMI Super Stock 1968,B 540,1360,425 cv,58%,RWD
+Dodge,Dodge Coronet Super Bee de 1970,C 455,1650,425 cv,56%,RWD
+Dodge,Dodge Charger R/T 1969,C 417,1650,425 cv,56%,RWD
+Dodge,Dodge Charger Daytona HEMI 1969,C 479,1720,425 cv,56%,RWD
+Dodge,Dodge Challenger R/T 1970,C 443,1620,425 cv,56%,RWD
+Dodge,2022 Dodge Challenger SRT Super Stock,A 695,1996,807 cv,57%,RWD
+Dodge,2021 Dodge Durango SRT Hellcat,A 628,2590,710 cv,53%,AWD
+Dodge,2018 Dodge Challenger SRT Demon,A 678,1941,840 cv,58%,RWD
+Dodge,2016 Dodge Viper ACR,S1 786,1530,645 cv,49%,RWD
+Dodge,2015 Dodge Charger SRT Hellcat,A 637,2075,707 cv,56%,RWD
+Dodge,2015 Dodge Challenger SRT Hellcat,A 631,2015,707 cv,57%,RWD
+Dodge,2008 Dodge Viper SRT-10 ACR,S1 735,1508,600 cv,49%,RWD
+Dodge,2006 Dodge Ram SRT-10,B 547,2336,500 cv,56%,RWD
+Dodge,1999 Dodge Viper GTS ACR Forza Edition,A 700,1538,450 cv,49%,RWD
+Dodge,1999 Dodge Viper GTS ACR,B 598,1538,450 cv,49%,RWD
+Exomotive,2018 Exomotive Exocet Sport V8 XP-5,S2 841,703,430 cv,48%,RWD
+Ferrari,Ferrari Dino 246 GT 1969,C 428,1080,195 cv,43%,RWD
+Ferrari,Ferrari 512 S de 1970,S1 774,840,550 cv,41%,RWD
+Ferrari,Ferrari 275 GTB4 Spider de 1967,B 579,1100,300 cv,48%,RWD
+Ferrari,Ferrari 250 GTO de 1962,C 494,880,300 cv,48%,RWD
+Ferrari,Ferrari 250 GT Berlinetta Lusso 1962,C 475,1020,240 cv,49%,RWD
+Ferrari,Ferrari #24 Ferrari Spa 330 P4 de 1967,A 684,792,450 cv,42%,RWD
+Ferrari,2025 Ferrari F80,R 916,1525,1184 cv,42%,AWD
+Ferrari,2022 Ferrari 296 GTB,S2 811,1470,819 cv,41%,RWD
+Ferrari,2020 Ferrari SF90 Stradale,S2 851,1570,986 cv,45%,AWD
+Ferrari,2020 Ferrari Roma,S1 735,1570,612 cv,50%,RWD
+Ferrari,2019 Ferrari Monza SP2,S1 773,1500,799 cv,48%,RWD
+Ferrari,2019 Ferrari F8 Tributo,S2 802,1435,710 cv,42%,RWD
+Ferrari,2019 Ferrari 488 Pista,S2 803,1385,710 cv,42%,RWD
+Ferrari,2018 Ferrari Portofino,S1 714,1664,591 cv,48%,RWD
+Ferrari,2018 Ferrari FXX-K Evo Welcome Pack,R 998,1165,1036 cv,42%,RWD
+Ferrari,2018 Ferrari FXX-K Evo,R 957,1165,1036 cv,42%,RWD
+Ferrari,2017 Ferrari J50 Preorder Car,S1 800,1370,681 cv,42%,RWD
+Ferrari,2017 Ferrari J50,S1 772,1370,681 cv,42%,RWD
+Ferrari,2017 Ferrari 812 Superfast,S1 780,1630,789 cv,47%,RWD
+Ferrari,2015 Ferrari F12tdf,S1 788,1520,769 cv,46%,RWD
+Ferrari,2015 Ferrari 488 GTB,S1 770,1475,661 cv,42%,RWD
+Ferrari,2014 Ferrari FXX K,R 936,1165,1036 cv,42%,RWD
+Ferrari,2013 Ferrari LaFerrari,S2 857,1365,950 cv,41%,RWD
+Ferrari,2013 Ferrari 458 Speciale,S1 768,1395,597 cv,42%,RWD
+Ferrari,2012 Ferrari 599XX Evolution,S2 894,1310,740 cv,47%,RWD
+Ferrari,2010 Ferrari 599XX,S2 840,1310,720 cv,47%,RWD
+Ferrari,2009 Ferrari 458 Italia,S1 721,1485,562 cv,42%,RWD
+Ferrari,2007 Ferrari 430 Scuderia,S1 702,1350,503 cv,43%,RWD
+Ferrari,2005 Ferrari FXX,S2 900,1155,789 cv,42%,RWD
+Ferrari,2002 Ferrari Enzo Ferrari,S1 755,1365,650 cv,44%,RWD
+Ferrari,1996 Ferrari F50 GT,R 949,910,750 cv,42%,RWD
+Ferrari,1995 Ferrari F50,A 678,1230,513 cv,42%,RWD
+Ferrari,1994 Ferrari F355 Berlinetta,B 588,1350,375 cv,43%,RWD
+Ferrari,1992 Ferrari 512 TR,A 615,1473,421 cv,41%,RWD
+Ferrari,1989 Ferrari F40 Competizione,R 948,1050,690 cv,42%,RWD
+Ferrari,1987 Ferrari F40,A 678,1237,471 cv,42%,RWD
+Ferrari,1984 Ferrari 288 GTO,A 643,1160,395 cv,44%,RWD
+Ford,Ford XB Falcon GT 1973,C 422,1587,300 cv,56%,RWD
+Ford,Ford Thunderbird 1957,D 332,1588,245 cv,54%,AWD
+Ford,Ford Mustang GT Coupé 1965,D 388,1295,271 cv,55%,RWD
+Ford,Ford Mustang GT 2+2 Fastback Forza Edition 1968,A 700,1385,325 cv,55%,AWD
+Ford,Ford Mustang GT 2+2 Fastback 1968,D 394,1385,325 cv,55%,AWD
+Ford,Ford Mustang Boss 302 de 1969,C 468,1470,290 cv,56%,RWD
+Ford,Ford De Luxe Cupê de Cinco Janelas de 1932,D 100,1040,85 cv,51%,RWD
+Ford,Ford Capri RS3100 1973,D 394,1050,148 cv,52%,RWD
+Ford,Ford #5 Escort RS1800 MkII 1977,B 544,980,250 cv,52%,RWD
+Ford,Ford #2 GT40 Mk II de 1966,A 666,1085,485 cv,43%,RWD
+Ford,2024 Ford Mustang GT,A 628,1735,486 cv,54%,RWD
+Ford,2024 Ford Mustang Dark Horse,A 669,1755,500 cv,54%,RWD
+Ford,2023 Ford Fiesta ST,C 500,1280,197 cv,61%,FWD
+Ford,2023 Ford F-150 Raptor R Welcome Pack,B 600,2700,700 cv,57%,AWD
+Ford,2023 Ford F-150 Raptor R,B 536,2700,700 cv,57%,AWD
+Ford,2022 Ford Supervan 4,R 919,2000,1972 cv,50%,AWD
+Ford,2022 Ford Focus ST,B 594,1437,276 cv,61%,FWD
+Ford,2022 Ford F-150 Lightning,C 500,2989,580 cv,51%,AWD
+Ford,2022 Ford Bronco Raptor,C 473,2600,418 cv,56%,AWD
+Ford,2020 Ford Super Duty F-450 DRW PLATINUM Forza Edition,A 700,3880,475 cv,59%,AWD
+Ford,2020 Ford Super Duty F-450 DRW PLATINUM,D 379,3880,475 cv,59%,AWD
+Ford,2020 Ford Mustang Shelby GT500,S1 734,1890,760 cv,56%,RWD
+Ford,2020 Ford #2069 Ford Performance Bronco R,C 441,2268,310 cv,53%,AWD
+Ford,2018 Ford Mustang RTR Spec 5,A 648,1680,460 cv,54%,RWD
+Ford,2017 Ford M-Sport Fiesta RS,S1 707,1260,380 cv,54%,AWD
+Ford,2017 Ford GT,S1 757,1385,647 cv,43%,RWD
+Ford,2017 Ford Focus RS,B 588,1550,350 cv,59%,AWD
+Ford,2017 Ford #25 'Brocky' Ultra4 Bronco RTR,A 644,2041,600 cv,50%,AWD
+Ford,2017 Ford #14 Rahal Letterman Lanigan Racing Fiesta,S1 772,1210,600 cv,54%,AWD
+Ford,2016 Ford Mustang Shelby GT350R,S1 721,1658,526 cv,53%,RWD
+Ford,2014 Ford Ranger T6 Rally Raid,B 530,1950,349 cv,51%,AWD
+Ford,2014 Ford FPV Limited Edition Pursuit Ute,B 563,1790,422 cv,55%,RWD
+Ford,2014 Ford #11 Rockstar F-150 Trophy Truck,A 613,2154,850 cv,48%,RWD
+Ford,2013 Ford Mustang Shelby GT500,A 647,1750,662 cv,56%,RWD
+Ford,2011 Ford Transit SuperSportVan,D 235,2040,197 cv,53%,RWD
+Ford,2010 Ford Crown Victoria Police Interceptor,D 354,1840,250 cv,54%,RWD
+Ford,2009 Ford Focus RS,B 551,1467,301 cv,62%,FWD
+Ford,2005 Ford GT,A 676,1538,550 cv,43%,RWD
+Ford,2003 Ford Focus RS,C 484,1280,212 cv,62%,FWD
+Ford,2003 Ford F-150 SVT Lightning,C 474,2120,380 cv,57%,RWD
+Ford,2001 Ford #4 Ford Focus RS,A 639,1230,300 cv,55%,AWD
+Ford,2000 Ford Mustang SVT Cobra R,B 528,1628,385 cv,55%,RWD
+Ford,1999 Ford Racing Puma,C 401,1174,153 cv,61%,FWD
+Ford,1994 Ford Supervan 3,S1 740,890,650 cv,42%,RWD
+Ford,1993 Ford Mustang SVT Cobra R,C 432,1420,235 cv,56%,RWD
+Ford,1992 Ford Escort RS Cosworth,C 456,1275,224 cv,54%,AWD
+Ford,1987 Ford Sierra Cosworth RS500,C 484,1207,221 cv,53%,RWD
+Ford,1986 Ford F-150 XLT Lariat Forza Edition,S2 850,1850,185 cv,56%,RWD
+Ford,1986 Ford F-150 XLT Lariat,D 263,1850,185 cv,56%,RWD
+Ford,1985 Ford RS200 Evolution,S1 710,1050,500 cv,48%,AWD
+Formula Drift,2023 Formula Drift #64 Forsberg Racing Nissan Z,S1 783,1361,1050 cv,53%,RWD
+Formula Drift,2020 Formula Drift #91 BMW M2,S1 748,1361,822 cv,52%,RWD
+Formula Drift,2020 Formula Drift #151 Toyota GR Supra,S1 779,1361,1000 cv,52%,RWD
+Formula Drift,2019 Formula Drift #411 Toyota Corolla Hatchback,S1 754,1361,1000 cv,58%,RWD
+Formula Drift,2016 Formula Drift #530 HSV Maloo GEN-F,S1 710,1497,1000 cv,52%,RWD
+Formula Drift,2015 Formula Drift #13 Ford Mustang,S1 739,1361,1000 cv,54%,RWD
+Formula Drift,2013 Formula Drift #777 Chevrolet Corvette,S1 760,1361,1000 cv,50%,RWD
+Formula Drift,2009 Formula Drift #99 Mazda RX-8,S1 737,1315,1000 cv,50%,RWD
+Formula Drift,2007 Formula Drift #117 599 GTB Fiorano,S1 767,1406,1000 cv,48%,RWD
+Formula Drift,2006 Formula Drift #43 Dodge Viper SRT-10 ACR,S1 748,1406,1000 cv,49%,RWD
+Formula Drift,1997 Formula Drift #777 Nissan 240SX,S1 748,1270,1000 cv,53%,RWD
+Formula Drift,1995 Formula Drift #34 Toyota Supra MkIV,S1 759,1361,1000 cv,53%,RWD
+Formula Drift,1989 Formula Drift #98 BMW 325i,S1 726,1225,800 cv,52%,RWD
+Funco Motorsports,2018 Funco Motorsports F9,S1 752,1338,1750 cv,30%,RWD
+GMC,GMC Jimmy de 1970,C 416,1814,255 cv,56%,AWD
+GMC,2022 GMC HUMMER EV Pickup,A 610,4103,1000 cv,51%,AWD
+GMC,1992 GMC Typhoon,C 435,1734,280 cv,58%,AWD
+GMC,1991 GMC Syclone,C 446,1632,280 cv,62%,AWD
+GR,2025 GR GT Prototype,S1 771,1300,650 cv,48%,RWD
+Gordon Murray Automotive,2020 Gordon Murray Automotive T.50,S2 871,986,654 cv,41%,RWD
+HSV,2014 HSV Limited Edition GEN-F GTS Maloo,A 629,1810,577 cv,53%,RWD
+HSV,2014 HSV GEN-F GTS,A 601,1882,577 cv,54%,RWD
+Hennessey,2021 Hennessey Venom F5,S2 870,1385,1817 cv,42%,RWD
+Hennessey,2019 Hennessey Ford F-150 VelociRaptor 6X6,B 520,3084,600 cv,56%,AWD
+Hennessey,2012 Hennessey Venom GT,S2 845,1244,1200 cv,44%,RWD
+Holden,Holden Torana A9X 1977,C 413,1165,219 cv,55%,RWD
+Honda,Honda Z GT 1972,D 100,595,36 cv,58%,FWD
+Honda,Honda S800 de 1970,D 134,720,70 cv,50%,RWD
+Honda,Honda N600 1970,D 100,550,45 cv,58%,FWD
+Honda,Honda Civic RS 1974,D 254,715,75 cv,60%,FWD
+Honda,2023 Honda Civic Type R,A 620,1447,315 cv,62%,FWD
+Honda,2022 Honda e,D 398,1515,152 cv,47%,RWD
+Honda,2018 Honda Civic Type R,A 608,1380,306 cv,62%,FWD
+Honda,2015 Honda Ridgeline Baja Trophy Truck,B 580,2132,550 cv,48%,AWD
+Honda,2015 Honda Civic Type R,B 585,1382,306 cv,65%,FWD
+Honda,2008 Honda Civic Type R (FD2),B 514,1270,222 cv,61%,FWD
+Honda,2007 Honda Civic Type R,C 454,1267,198 cv,61%,FWD
+Honda,2005 Honda NSX-R GT,A 608,1270,280 cv,42%,RWD
+Honda,2005 Honda NSX-R,B 570,1270,280 cv,42%,RWD
+Honda,2004 Honda Civic Type R,C 480,1204,197 cv,61%,FWD
+Honda,2004 Honda #52 Evasive Motorsports S2000 WTAC,S2 888,1089,650 cv,50%,RWD
+Honda,2003 Honda S2000,B 503,1280,240 cv,50%,RWD
+Honda,2001 Honda #33 Integra WTAC,S2 860,1050,600 cv,62%,FWD
+Honda,1997 Honda Civic Type R,C 430,1050,182 cv,61%,FWD
+Honda,1994 Honda Prelude Si,C 410,1300,160 cv,63%,FWD
+Honda,1994 Honda Acty,D 100,730,38 cv,44%,RWD
+Honda,1992 Honda NSX-R,B 572,1230,274 cv,42%,RWD
+Honda,1992 Honda #21 Hardrace/JDMYard Civic WTAC,R 913,980,650 cv,63%,FWD
+Honda,1991 Honda CR-X SiR,C 465,970,158 cv,62%,FWD
+Honda,1991 Honda Beat,D 283,760,63 cv,44%,RWD
+Honda,1990 Honda #19 101 Motorsport CRX WTAC,S2 877,900,500 cv,62%,FWD
+Honda,1986 Honda Civic Si,D 253,885,91 cv,62%,FWD
+Honda,1984 Honda Civic CRX Mugen,D 390,825,120 cv,62%,FWD
+Honda,1984 Honda City E II,D 203,735,62 cv,61%,FWD
+Hyundai,2023 Hyundai IONIQ 5 N,A 657,2235,641 cv,51%,AWD
+Hyundai,2022 Hyundai N Vision 74,A 692,1950,670 cv,46%,RWD
+Hyundai,2021 Hyundai i20 N,B 564,1190,201 cv,62%,FWD
+Hyundai,2020 Hyundai i30 N,B 553,1429,271 cv,62%,FWD
+Hyundai,2019 Hyundai Veloster N,B 532,1377,275 cv,62%,FWD
+Jaguar,Jaguar Tipo Leve E de 1964,B 568,960,300 cv,49%,RWD
+Jaguar,Jaguar E-type 1961,C 414,1219,265 cv,50%,RWD
+Jaguar,Jaguar D-Type 1956,B 506,875,300 cv,48%,RWD
+Jaguar,2010 Jaguar C-X75,S2 810,1350,778 cv,42%,AWD
+Jaguar,1993 Jaguar XJ220S TWR,S1 750,1080,542 cv,43%,RWD
+Jaguar,1993 Jaguar XJ220,A 676,1470,542 cv,43%,RWD
+Jaguar,1991 Jaguar Sport XJR-15,S1 716,1050,444 cv,45%,RWD
+Jeep,2020 Jeep JT,D 336,2109,285 cv,55%,AWD
+Jeep,2018 Jeep Grand Cherokee Trackhawk,A 631,2433,707 cv,55%,AWD
+Jeep,2016 Jeep Trailcat,A 635,1928,707 cv,54%,AWD
+Jeep,2012 Jeep Wrangler Rubicon,D 350,1870,285 cv,55%,AWD
+Jimco,2020 Jimco #179 Hammerhead Class 1,A 652,1588,850 cv,52%,RWD
+Jimco,2019 Jimco #240 Fastball Racing Class 6100 Spec Trophy Truck,B 511,2268,650 cv,54%,RWD
+KTM,2018 KTM X-Bow GT4,S1 749,999,300 cv,44%,RWD
+Koenigsegg,2024 Koenigsegg Gemera,S2 900,1850,1400 cv,44%,AWD
+Koenigsegg,2020 Koenigsegg Jesko,S2 899,1420,1280 cv,45%,RWD
+Koenigsegg,2017 Koenigsegg Agera RS,S2 890,1395,1160 cv,44%,RWD
+Koenigsegg,2016 Koenigsegg Regera,S2 886,1590,1057 cv,44%,RWD
+Koenigsegg,2015 Koenigsegg One:1,S2 890,1360,1341 cv,44%,RWD
+Koenigsegg,2011 Koenigsegg Agera,S2 810,1435,947 cv,45%,RWD
+Koenigsegg,2008 Koenigsegg CCGT,S2 900,1100,600 cv,46%,RWD
+Lamborghini,Lamborghini Miura P400 de 1967,B 505,1125,350 cv,43%,RWD
+Lamborghini,2024 Lamborghini Temerario,S2 801,1690,907 cv,43%,AWD
+Lamborghini,2024 Lamborghini Revuelto,S2 829,1772,1001 cv,44%,AWD
+Lamborghini,2022 Lamborghini Huracán Tecnica,S1 747,1379,631 cv,41%,RWD
+Lamborghini,2022 Lamborghini Huracán Sterrato,S1 738,1470,602 cv,43%,AWD
+Lamborghini,2022 Lamborghini Huracán EVO Spyder,S1 757,1542,631 cv,43%,AWD
+Lamborghini,2022 Lamborghini Aventador LP 780-4 Ultimae,S1 794,1550,769 cv,43%,AWD
+Lamborghini,2021 Lamborghini Countach LPI 800-4,S1 773,1595,803 cv,44%,AWD
+Lamborghini,2020 Lamborghini Sián Roadster,S1 797,1650,808 cv,43%,AWD
+Lamborghini,2020 Lamborghini Huracán STO,S1 783,1339,631 cv,42%,RWD
+Lamborghini,2020 Lamborghini Huracán EVO,S1 761,1422,631 cv,43%,AWD
+Lamborghini,2020 Lamborghini Essenza SCV12,R 911,1376,820 cv,43%,RWD
+Lamborghini,2019 Lamborghini Urus,A 659,2200,641 cv,52%,AWD
+Lamborghini,2018 Lamborghini Aventador SVJ,S1 794,1525,759 cv,43%,AWD
+Lamborghini,2016 Lamborghini Centenario LP 770-4,S1 792,1520,759 cv,43%,AWD
+Lamborghini,2014 Lamborghini Huracán LP 610-4,S1 738,1422,602 cv,43%,AWD
+Lamborghini,2013 Lamborghini Veneno,S2 834,1490,740 cv,43%,AWD
+Lamborghini,2012 Lamborghini Gallardo LP570-4 Spyder Performante,A 685,1485,562 cv,43%,AWD
+Lamborghini,2012 Lamborghini Aventador LP700-4,S1 753,1575,691 cv,43%,AWD
+Lamborghini,2011 Lamborghini Sesto Elemento,S2 871,999,562 cv,41%,AWD
+Lamborghini,2010 Lamborghini Murciélago LP 670-4 SV,S1 707,1565,661 cv,43%,AWD
+Lamborghini,1999 Lamborghini Diablo GTR,S2 823,1395,592 cv,41%,RWD
+Lamborghini,1997 Lamborghini Diablo SV,A 649,1570,523 cv,41%,RWD
+Lamborghini,1988 Lamborghini Countach LP5000 QV,A 622,1490,449 cv,41%,RWD
+Lancia,Lancia Stratos HF Stradale 1974,C 483,980,190 cv,50%,RWD
+Lancia,1992 Lancia Delta HF Integrale EVO,C 489,1300,210 cv,55%,AWD
+Lancia,1986 Lancia Delta S4,B 564,890,500 cv,54%,AWD
+Lancia,1982 Lancia 037 Stradale,B 555,980,205 cv,54%,RWD
+Land Rover,2020 Land Rover Defender 110 X,C 427,2518,296 cv,55%,AWD
+Land Rover,2015 Land Rover Range Rover Sport SVR,A 604,2335,542 cv,55%,AWD
+Lexus,2021 Lexus LC 500,B 592,1935,467 cv,54%,RWD
+Lexus,2015 Lexus RC F,A 623,1790,467 cv,54%,RWD
+Lexus,2010 Lexus LFA Forza Edition,S2 900,1480,552 cv,48%,RWD
+Lexus,2010 Lexus LFA,A 699,1480,552 cv,48%,RWD
+Lincoln,Lincoln Continental de 1962,D 267,2235,345 cv,55%,RWD
+Lotus,2023 Lotus Emira,A 656,1405,400 cv,39%,RWD
+Lotus,2020 Lotus Evija Forza Edition,S2 900,1680,2000 cv,37%,AWD
+Lotus,2020 Lotus Evija,R 937,1680,2000 cv,37%,AWD
+Lotus,2018 Lotus Scura Motorsports Exige WTAC,R 998,1050,700 cv,42%,RWD
+Lotus,2018 Lotus Exige Cup 430,S1 732,1056,430 cv,40%,RWD
+Lotus,1999 Lotus Elise Series 1 Sport 190,B 589,670,187 cv,41%,RWD
+Lotus,1997 Lotus Elise GT1,S1 709,1050,350 cv,41%,RWD
+Lucid,2024 Lucid Air Sapphire,S2 820,2420,1977 cv,48%,AWD
+MG,1986 MG Metro 6R4,A 627,1030,375 cv,54%,AWD
+MINI,MINI Cooper S de 1965,D 158,660,34 cv,38%,FWD
+MINI,2021 MINI John Cooper Works GP,B 599,1255,301 cv,62%,FWD
+MINI,2018 MINI X-raid John Cooper Works Buggy,B 514,1700,350 cv,54%,RWD
+MINI,2013 MINI X-Raid All4 Racing Countryman,B 523,1900,300 cv,54%,AWD
+MINI,2012 MINI John Cooper Works GP,B 509,1160,215 cv,62%,FWD
+Maserati,2022 Maserati MC20,S1 753,1500,621 cv,40%,RWD
+Maserati,2008 Maserati MC12 Versione Corsa,R 912,1150,755 cv,44%,RWD
+Maserati,2004 Maserati MC12,S1 751,1335,755 cv,44%,RWD
+Maserati,1997 Maserati Ghibli Cup,B 591,1365,241 cv,53%,RWD
+Mazda,Mazda RX-3 de 1973,D 328,885,130 cv,53%,RWD
+Mazda,Mazda RX-3 Forza Edition 1973,B 600,885,130 cv,53%,RWD
+Mazda,Mazda Cosmo 110S Série II de 1972,D 394,960,128 cv,51%,RWD
+Mazda,Mazda #123 Mad Mike 808 Wagon 'FURSTY' de 1974,S1 702,1010,130 cv,53%,RWD
+Mazda,2022 Mazda MX-5 Miata RF,B 509,1115,181 cv,52%,RWD
+Mazda,2017 Mazda MX-5 Cup,B 586,985,129 cv,50%,RWD
+Mazda,2016 Mazda MX-5,C 499,1058,155 cv,52%,RWD
+Mazda,2013 Mazda MX-5,C 432,1115,167 cv,52%,RWD
+Mazda,2011 Mazda RX-8 R3,B 508,1390,202 cv,58%,RWD
+Mazda,2010 Mazda Mazdaspeed 3,B 536,1460,263 cv,61%,FWD
+Mazda,2008 Mazda Furai,R 926,675,253 cv,47%,RWD
+Mazda,2005 Mazda Mazdaspeed MX-5,C 469,1100,178 cv,52%,RWD
+Mazda,1994 Mazda MX-5 Miata Forza Edition,S2 850,980,128 cv,52%,RWD
+Mazda,1994 Mazda MX-5 Miata,D 329,980,128 cv,52%,RWD
+Mazda,1992 Mazda RX-7 Type R,B 548,1260,252 cv,54%,RWD
+Mazda,1991 Mazda #55 Mazda 787B,R 988,830,700 cv,44%,RWD
+Mazda,1990 Mazda Savanna RX-7,C 451,1220,160 cv,54%,RWD
+Mazda,1985 Mazda RX-7 GSL-SE,D 357,1138,135 cv,53%,RWD
+McLaren,McLaren W1 2025,918 R,1399,1184 cv,44%,RWD
+McLaren,2023 McLaren Artura,S1 766,1498,671 cv,42%,RWD
+McLaren,2021 McLaren Sabre,S1 787,1410,824 cv,41%,RWD
+McLaren,2021 McLaren 765LT Coupé,S2 829,1339,755 cv,42%,RWD
+McLaren,2021 McLaren 620R,S1 773,1386,612 cv,42%,RWD
+McLaren,2019 McLaren Speedtail,S2 835,1430,1036 cv,41%,RWD
+McLaren,2018 McLaren 600LT Coupé,S1 780,1356,592 cv,42%,RWD
+McLaren,2015 McLaren 570S Coupé,S1 721,1440,562 cv,42%,RWD
+McLaren,2014 McLaren 650S Spider,S1 765,1370,641 cv,42%,RWD
+McLaren,2013 McLaren P1,S2 848,1490,903 cv,42%,RWD
+McLaren,2011 McLaren 12C Coupé,S1 727,1434,592 cv,42%,RWD
+McLaren,1997 McLaren F1 GT,S1 769,1120,618 cv,42%,RWD
+McLaren,1993 McLaren F1,S1 713,1140,618 cv,42%,RWD
+Mercedes-AMG,2021 Mercedes-AMG SL 63,A 690,1970,582 cv,51%,AWD
+Mercedes-AMG,2021 Mercedes-AMG Mercedes-AMG ONE,S2 900,1695,1001 cv,48%,AWD
+Mercedes-AMG,Mercedes-AMG SLC 43 Edição Final 2020,A 620,1535,385 cv,51%,RWD
+Mercedes-AMG,Pacote de Boas-Vindas da Mercedes-AMG GT Black Series 2020,S2 900,1540,720 cv,50%,RWD
+Mercedes-AMG,Mercedes-AMG GT Black Series 2020,S1 782,1540,720 cv,50%,RWD
+Mercedes-AMG,Mercedes-AMG GT Coupé 4 Portas 2018,A 664,2045,630 cv,54%,AWD
+Mercedes-AMG,Mercedes-AMG E 63 S 2018,A 674,1980,603 cv,54%,AWD
+Mercedes-AMG,Mercedes-AMG GT R 2017,S1 764,1630,577 cv,50%,RWD
+Mercedes-AMG,Mercedes-AMG C 63 S Coupé 2016,A 645,1725,503 cv,54%,RWD
+Mercedes-AMG,Mercedes-AMG GT S 2015,A 691,1645,503 cv,50%,RWD
+Mercedes-Benz,Mercedes-Benz 300 SLR de 1955,B 599,901,296 cv,47%,RWD
+Mercedes-Benz,Mercedes-Benz 300 SL Coupé 1954,D 388,1295,215 cv,47%,RWD
+Mercedes-Benz,Mercedes-Benz X-Class 2018,D 258,2230,255 cv,55%,AWD
+Mercedes-Benz,Mercedes-Benz Unimog U5023 2014,D 100,6000,494 cv,50%,AWD
+Mercedes-Benz,Mercedes-Benz G 63 AMG 6x6 2014,C 489,3850,550 cv,55%,AWD
+Mercedes-Benz,Mercedes-Benz G 65 AMG 2013,B 530,2580,621 cv,55%,AWD
+Mercedes-Benz,Mercedes-Benz A 45 AMG 2013,B 582,1555,355 cv,60%,AWD
+Mercedes-Benz,Mercedes-Benz C 63 AMG Coupé Black Series 2012,A 654,1710,510 cv,54%,RWD
+Mercedes-Benz,Mercedes-Benz SL 65 AMG Série Preta 2009,A 699,1870,662 cv,54%,RWD
+Mercedes-Benz,Mercedes-Benz AMG CLK GTR 1998,S1 713,1440,622 cv,41%,RWD
+Mercedes-Benz,Mercedes-Benz 190 E 2.5-16 Evolution II Forza Edition 1990,A 700,1340,235 cv,55%,RWD
+Mercedes-Benz,Mercedes-Benz 190 E 2.5-16 Evolution II de 1990,C 460,1340,235 cv,55%,RWD
+Mercedes-Benz,Mercedes-Benz AMG Hammer Coupe 1987,B 565,1640,396 cv,54%,RWD
+Meyers,Meyers Manx de 1971,D 201,560,57 cv,39%,RWD
+Meyers,2023 Meyers Manx 2.0,B 540,750,200 cv,35%,RWD
+Mitsubishi,Mitsubishi Lancer Evolution X GSR 2008,B 534,1560,291 cv,60%,AWD
+Mitsubishi,Mitsubishi Lancer Evolution IX MR 2006,B 521,1410,286 cv,60%,AWD
+Mitsubishi,2005 Mitsubishi #1 Sierra Sierra Enterprises Lancer Evolution Time Attack,R 962,1111,700 cv,52%,AWD
+Mitsubishi,Pacote de Boas-Vindas do Mitsubishi Lancer Evolution VIII MR 2004,A 700,1410,276 cv,60%,AWD
+Mitsubishi,Mitsubishi Lancer Evolution VIII MR 2004,B 555,1410,276 cv,60%,AWD
+Mitsubishi,Mitsubishi Lancer Evolution VI GSR TM Edition 2001,B 574,1360,276 cv,60%,AWD
+Mitsubishi,Mitsubishi Montero Evolution 1997,D 346,1950,280 cv,55%,AWD
+Mitsubishi,Mitsubishi GTO 1997,C 495,1680,276 cv,58%,AWD
+Mitsubishi,Mitsubishi Montero de 1995 Ultrapassa 2800 TDs,D 190,1950,123 cv,55%,AWD
+Mitsubishi,Mitsubishi Lancer Evolution III GSR 1995,B 518,1260,207 cv,60%,AWD
+Mitsubishi,Mitsubishi Eclipse GSX 1995,C 436,1435,276 cv,60%,AWD
+Mitsubishi,Mitsubishi Galant VR-4 de 1992,C 431,1440,160 cv,60%,AWD
+Mitsubishi,1990 Mitsubishi #269 Atacando o Relógio Racing Minicab Contra-Relógio,D 166,700,112 cv,55%,AWD
+Mitsubishi,Mitsubishi Starion ESI-R 1988,C 446,1325,135 cv,54%,RWD
+Nissan,Patrulha Nissan de 1972,D 157,1550,160 cv,55%,AWD
+Nissan,Nissan Skyline H/T 2000GT-R 1973,C 407,1145,155 cv,54%,RWD
+Nissan,Nissan Skyline 2000GT-R 1971,D 380,1100,228 cv,54%,RWD
+Nissan,Nissan Skyline 2000 Turbo RS 1983,C 414,1170,158 cv,54%,RWD
+Nissan,Nissan Fairlady Z 432 1969,D 369,1040,570 cv,55%,RWD
+Nissan,Nissan #11 Tomica Skyline Turbo Super Silhouette 1983,S2 847,1005,350 cv,53%,RWD
+Nissan,Nissan Z NISMO 2024,A 652,1680,710 cv,54%,RWD
+Nissan,Nissan GT-R Nismo 2024,S1 741,1720,710 cv,54%,AWD
+Nissan,Nissan GT-R NISMO 2020 (R35),S1 736,1720,328 cv,55%,AWD
+Nissan,Nissan 370Z Nismo 2019,A 603,1515,600 cv,55%,RWD
+Nissan,Nissan GT-R (R35) 2017,S1 709,1752,542 cv,55%,AWD
+Nissan,Nissan GT-R Edição Preta 2012 (R35) Edição Forza,S2 850,1740,542 cv,55%,AWD
+Nissan,Nissan GT-R Edição Preta 2012 (R35),S1 703,1740,332 cv,55%,AWD
+Nissan,Nissan 370Z 2010,B 568,1466,287 cv,54%,RWD
+Nissan,Nissan Fairlady Z 2003,B 534,1447,200 cv,60%,RWD
+Nissan,Nissan Silvia Spec-R 2002,B 551,1240,276 cv,55%,RWD
+Nissan,Nissan Skyline GT-R V Spec II 2000,B 590,1560,700 cv,55%,AWD
+Nissan,Nissan #36 Dream Project S15 WTAC 2000,R 996,1100,276 cv,55%,RWD
+Nissan,40º aniversário do Nissan Skyline GT-R 1998,B 547,1560,200 cv,55%,AWD
+Nissan,Nissan Silvia K's Aero 1998,C 494,1260,390 cv,40%,RWD
+Nissan,Nissan R390 (GT1) 1998,S1 774,1020,450 cv,55%,RWD
+Nissan,Nissan #23 Pennzoil NISMO Skyline GT-R 1998,S2 848,1200,276 cv,58%,AWD
+Nissan,Nissan Stagea RS Four V 1997,C 439,1620,276 cv,55%,AWD
+Nissan,Nissan Skyline GT-R V-Spec 1997,B 555,1530,276 cv,54%,AWD
+Nissan,Nissan NISMO GT-R LM 1995,B 545,1150,99 cv,55%,RWD
+Nissan,Nissan Gloria Gran Turismo de 1995,C 498,1580,200 cv,60%,RWD
+Nissan,Nissan Silvia K's 1994,C 499,1230,222 cv,56%,RWD
+Nissan,Nissan Fairlady Z Versão S Twin Turbo 1994,C 497,1570,155 cv,60%,RWD
+Nissan,Nissan 240SX 1993,D 339,1225,700 cv,55%,RWD
+Nissan,Nissan #32 Skyline WTAC 'Xtreme GTR' 1993,R 923,1150,276 cv,55%,AWD
+Nissan,Nissan Skyline GT-R 1992,B 541,1430,75 cv,53%,AWD
+Nissan,Nissan Figaro 1991,D 234,810,227 cv,60%,FWD
+Nissan,Nissan Pulsar GTI-R 1990,C 486,1220,592 cv,55%,AWD
+Nissan,Nissan #12 Skyline GT-R 1990 (BNR32 Gr.A) JTC,S2 858,1260,173 cv,60%,AWD
+Nissan,Nissan Silvia K's 1989,C 455,1140,75 cv,53%,RWD
+Nissan,Nissan S-Cargo Forza Edition 1989,S1 800,970,75 cv,53%,FWD
+Nissan,Nissan S-Cargo 1989,D 131,970,67 cv,53%,FWD
+Nissan,Nissan PAO 1989,D 145,730,202 cv,55%,FWD
+Nissan,Nissan Skyline GTS-R 1987,C 432,1340,51 cv,53%,RWD
+Nissan,Nissan Be-1 de 1987,D 175,680,170 cv,55%,FWD
+Nissan,Nissan Safari Turbo 1985,D 123,2080,150 cv,55%,AWD
+Nobre,Noble M600 2010,S1 793,1250,650 cv,42%,RWD
+Opel,Opel Manta 400 de 1984,B 576,960,271 cv,55%,RWD
+Pagani,2021 Pagani Huayra R,R 954,1050,600 cv,42%,RWD
+Pagani,Pagani Huayra BC Coupe 2016,S2 851,1218,740 cv,43%,RWD
+Pagani,Pagani Zonda Cinque Roadster 2010,S2 812,1210,661 cv,42%,RWD
+Pagani,2009 Pagani Zonda R,R 918,1070,738 cv,43%,RWD
+Peel,Edição Trolli Peel P50 de 1962,D 100,59,4.5 cv,38%,RWD
+Peel,1962 Peel P50,D 100,59,4.5 cv,38%,RWD
+Penhall,2011 Penhall The Cholla,B 541,1134,190 cv,42%,RWD
+Peugeot,2007 Peugeot 207 Super 2000,A 632,1150,270 cv,58%,AWD
+Peugeot,Rali Peugeot 205 de 1991,D 350,810,150 cv,55%,FWD
+Peugeot,Peugeot 205 Turbo 16 de 1984,C 500,1145,197 cv,55%,AWD
+Plymouth,Plymouth Fury de 1958,D 361,1610,305 cv,56%,RWD
+Plymouth,Plymouth Cuda 426 HEMI de 1971,C 441,1585,425 cv,56%,RWD
+Plymouth,Plymouth Barracuda Fórmula S de 1968,C 445,1380,340 cv,56%,RWD
+Polaris,Polaris RZR Pro XP Ultimate 2021,C 496,814,168 cv,53%,AWD
+Polaris,Polaris RZR Pro XP Edição Limitada de Corrida de Fábrica 2021,C 439,814,168 cv,53%,AWD
+Pontiac,Pontiac Firebird Trans Am de 1977,D 312,1650,200 cv,55%,RWD
+Pontiac,Pontiac Firebird Trans Am GTA 1987,D 382,1575,225 cv,55%,RWD
+Porsche,Porsche 911 Turbo 3.3 de 1982,B 550,1300,143 cv,35%,RWD
+Porsche,Porsche 911 Carrera RS de 1973,C 490,1075,143 cv,35%,RWD
+Porsche,Porsche #3 917 LH de 1970,S1 777,800,690 cv,50%,RWD
+Porsche,Porsche #3 917 LH Forza Edition 1970,R 998,800,148 cv,54%,RWD
+Porsche,Porsche 911 Turbo S 2023,S1 774,1640,450 cv,40%,AWD
+Porsche,Rali Porsche 911 2023,A 700,1450,450 cv,40%,AWD
+Porsche,Porsche 911 GT3 RS 2023,S1 758,1450,641 cv,50%,RWD
+Porsche,Porsche 718 Cayman GT4 RS 2022,S1 737,1415,134 cv,50%,RWD
+Porsche,Porsche Mission R 2021,S2 865,1500,500 cv,50%,AWD
+Porsche,Porsche 911 GT3 2021,S1 752,1435,493 cv,50%,RWD
+Porsche,Porsche Taycan Turbo S 2020,S1 725,2295,500 cv,37%,AWD
+Porsche,Porsche 911 GT3 RS 2019,S1 760,1430,503 cv,50%,RWD
+Porsche,Porsche 911 Carrera S 2019,S1 714,1515,750 cv,52%,RWD
+Porsche,Porsche #70 Porsche Motorsport 935 2019,S2 853,1380,513 cv,50%,RWD
+Porsche,Porsche Macan LPR Rally Raid 2018,B 528,1850,394 cv,50%,AWD
+Porsche,Porsche Cayenne Turbo 2018,A 638,2175,750 cv,40%,AWD
+Porsche,Porsche 911 GT2 RS 2018,S2 803,1470,180 cv,55%,RWD
+Porsche,Porsche 718 Cayman GTS 2018,A 675,1375,440 cv,52%,RWD
+Porsche,Porsche 918 Spyder 2014,S2 858,1634,691 cv,50%,AWD
+Porsche,Porsche 911 GT3 RS 4.0 2012,S1 726,1360,395 cv,50%,RWD
+Porsche,Porsche Cayman GT3 WTAC 2005,S2 856,1150,875 cv,41%,RWD
+Porsche,Porsche 911 GT3 2004,A 674,1380,493 cv,50%,RWD
+Porsche,Porsche Carrera GT 2003,S1 758,1380,500 cv,40%,RWD
+Porsche,Porsche 911 GT1 Strassenversion de 1997,S1 746,1150,375 cv,50%,RWD
+Porsche,Porsche 911 GT2 de 1995,A 644,1295,604 cv,48%,RWD
+Porsche,Porsche 968 Turbo S de 1993,B 594,1300,542 cv,43%,RWD
+Porsche,Porsche 928 GTS de 1993,B 563,1620,444 cv,43%,RWD
+Porsche,Porsche 911 Turbo S Leichtbau de 1993,A 652,1290,316 cv,50%,RWD
+Porsche,Porsche 944 Turbo de 1989,B 539,1350,322 cv,50%,RWD
+Porsche,Porsche 959 de 1987,A 661,1450,376 cv,50%,AWD
+Porsche,Porsche #203 Porsche 961 de 1987,S2 840,1150,247 cv,50%,AWD
+Porsche,Porsche #185 959 Prodrive Rally Raid de 1985,A 623,1250,444 cv,40%,AWD
+RJ Anderson,Truck RJ Anderson #37 Polaris RZR Pro 4 2021,A 677,1600,641 cv,42%,AWD
+RJ Anderson,Truck RJ Anderson #37 Polaris RZR Pro 2 2016,A 674,1451,390 cv,42%,RWD
+Radical,Radical RXC Turbo 2015,S2 842,935,1600 cv,52%,RWD
+Ram,Ram 1500 TRX 2024,B 514,2880,1451 cv,52%,AWD
+Reliant,Reliant Supervan III de 1972,D 100,535,654 cv,41%,RWD
+Renault,Renault 8 Gordini de 1967,D 322,850,702 cv,58%,RWD
+Renault,Renault 5 Turbo de 1980,C 417,970,16 cv,38%,RWD
+Renault,Renault Megane R.S. 2018,B 547,1407,108 cv,53%,FWD
+Renault,Renault Megane RS 250 2010,B 538,1387,158 cv,54%,FWD
+Renault,Renault Mégane R26 2008. R,B 561,1230,272 cv,60%,FWD
+Renault,Renault Clio Williams 1993,D 400,990,246 cv,60%,FWD
+Rimac,Rimac Nevera 2021,R 913,2150,227 cv,60%,AWD
+Rivian,Rivian R1T 2022,A 607,3243,98 cv,61%,AWD
+SIERRA Cars,SIERRA Cars RX3 2021,A 635,340,1914 cv,48%,RWD
+SIERRA Cars,SIERRA Cars 700R 2021,D 346,313,835 cv,52%,RWD
+SIERRA Cars,2020 SIERRA Cars #23 Yokohama ALPHA,R 926,340,105 cv,39%,AWD
+SRT,SRT Viper GTS 2013,S1 707,1521,105 cv,39%,RWD
+Saleen,2017 Saleen S7 LM,S2 835,1250,200 cv,39%,RWD
+Schuppan,Schuppan 962CR de 1993,S1 764,1050,640 cv,48%,RWD
+Shelby,Shelby Cobra Daytona Coupe 1965,B 515,1043,1000 cv,40%,RWD
+Shelby,Shelby Cobra 427 S/C 1965,B 582,1066,600 cv,41%,RWD
+Subaru,Subaru BRAT GL 1980,D 159,1000,385 cv,47%,AWD
+Subaru,Subaru WRX 2022,B 538,1540,425 cv,47%,AWD
+Subaru,Subaru BRZ Forza Edition 2022,A 700,1270,97 cv,58%,RWD
+Subaru,Subaru BRZ 2022,B 551,1270,271 cv,58%,RWD
+Subaru,Subaru STI S209 2019,B 574,1580,228 cv,53%,AWD
+Subaru,Subaru WRX STI ARX Supercar 2018,S1 757,1325,228 cv,53%,AWD
+Subaru,Subaru WRX STI 2015,B 555,1537,341 cv,56%,AWD
+Subaru,Subaru BRZ 2013,C 463,1250,310 cv,58%,RWD
+Subaru,Subaru WRX STI 2011,B 547,1505,305 cv,58%,AWD
+Subaru,2008 Subaru IMPREZA WRX STI,B 539,1505,200 cv,53%,AWD
+Subaru,Subaru LEGACY B4 2.0 GT 2005,B 549,1370,261 cv,58%,AWD
+Subaru,2005 Subaru IMPREZA WRX STI,B 570,1490,300 cv,58%,AWD
+Subaru,2004 Subaru IMPREZA WRX STI,B 552,1470,280 cv,56%,AWD
+Subaru,Versão Subaru Impreza 22B-STi de 1998,B 600,1270,280 cv,58%,AWD
+Subaru,Subaru SVX de 1996,C 466,1600,276 cv,58%,AWD
+Subaru,Subaru Vivio RX-R Forza Edition 1994,S2 900,700,276 cv,56%,AWD
+Subaru,Subaru Vivio RX-R 1994,D 281,700,230 cv,56%,AWD
+Subaru,1990 Subaru LEGACY RS,C 406,1340,64 cv,60%,AWD
+TVR,TVR Griffith 2018,S1 729,1250,64 cv,60%,RWD
+TVR,TVR Sagaris 2005,A 672,1078,217 cv,56%,RWD
+TVR,TVR Cerbera Speed 12 de 1998,S1 770,1000,500 cv,52%,RWD
+Toyota,Toyota Sports 800 de 1965,D 141,580,45 cv,53%,RWD
+Toyota,Toyota Sports 800 Edição Fanta de 1965,D 141,580,45 cv,53%,RWD
+Toyota,Toyota FJ40 de 1979,D 157,1720,135 cv,51%,AWD
+Toyota,Toyota Corolla SR5 de 1974,D 197,880,96 cv,55%,RWD
+Toyota,Toyota Celica GT 1974,D 287,1040,96 cv,55%,RWD
+Toyota,Toyota 2000GT de 1969,D 377,1120,150 cv,49%,RWD
+Toyota,Toyota Land Cruiser 2025,C 456,2300,409 cv,52%,AWD
+Toyota,Toyota Prius Prime XSE Premium 2024,C 472,1570,220 cv,61%,FWD
+Toyota,Toyota GR Corolla 2023,B 596,1475,300 cv,57%,AWD
+Toyota,Toyota Camry TRD 2023,B 525,1620,301 cv,60%,FWD
+Toyota,Toyota GR86 2022,B 556,1275,228 cv,53%,RWD
+Toyota,Toyota GR Yaris 2021,B 558,1280,257 cv,55%,AWD
+Toyota,Toyota GR Supra 2020,A 616,1540,382 cv,52%,RWD
+Toyota,Toyota Tacoma TRD Pro Forza Edition 2019,R 998,2015,278 cv,54%,AWD
+Toyota,Toyota Tacoma TRD Pro 2019,C 409,2015,278 cv,54%,AWD
+Toyota,Toyota 4Runner TRD Pro 2019,C 421,2150,270 cv,54%,AWD
+Toyota,Toyota JPN Taxi 2017,D 248,1410,93 cv,44%,RWD
+Toyota,Toyota Land Cruiser Arctic Trucks AT37 2016,D 332,2700,370 cv,51%,AWD
+Toyota,Stories of the 2013 Toyota 86,A 685,1250,200 cv,53%,RWD
+Toyota,Toyota 86 2013,C 460,1250,200 cv,53%,RWD
+Toyota,Toyota Crown Super Deluxe Taxi 2005,D 181,1450,160 cv,55%,RWD
+Toyota,Toyota Celica Sport Specialty II 2003,C 433,1140,140 cv,60%,FWD
+Toyota,Toyota Altezza RS200 Z EDITION 1999,C 461,1340,207 cv,53%,RWD
+Toyota,Toyota Supra RZ 1998,B 529,1490,326 cv,53%,RWD
+Toyota,Toyota Soarer 2.5 GT-T 1997,C 491,1560,276 cv,53%,RWD
+Toyota,Toyota Chaser 2.5 Tourer V 1997,B 504,1470,276 cv,56%,RWD
+Toyota,Toyota Starlet Glanza V 1996,C 435,950,133 cv,61%,FWD
+Toyota,Toyota MR2 GT 1995,B 522,1270,242 cv,43%,RWD
+Toyota,Toyota J&J Motorsport Supra WTAC 1995,S2 828,1180,500 cv,52%,RWD
+Toyota,Toyota Celica GT-Four ST205 de 1994,C 479,1390,252 cv,58%,AWD
+Toyota,Toyota #1 T100 Baja Truck 1993,B 584,1542,350 cv,53%,RWD
+Toyota,Toyota Supra 2.0 GT 1992,C 453,1520,207 cv,54%,RWD
+Toyota,Toyota Celica GT-Four RC ST185 de 1992,C 438,1460,227 cv,58%,AWD
+Toyota,Toyota Sera 1991,D 344,890,108 cv,59%,FWD
+Toyota,Toyota Chaser GT Twin Turbo 1991,C 484,1450,207 cv,56%,RWD
+Toyota,Toyota MR2 SC de 1989,D 397,1130,145 cv,43%,RWD
+Toyota,Toyota Sprinter Trueno GT Apex Forza Edition 1985,B 600,960,130 cv,57%,RWD
+Toyota,Toyota Sprinter Trueno GT Apex 1985,D 376,960,130 cv,57%,RWD
+Ultima,Ultima Evolution Coupe 1020 2015,R 925,950,1020 cv,37%,RWD
+Volkswagen,Volkswagen Tipo 2 De Luxe de 1963,D 100,1100,53 cv,48%,RWD
+Volkswagen,Volkswagen Pickup LX 1982,D 100,875,75 cv,41%,FWD
+Volkswagen,Volkswagen Golf GTI 1983,D 314,840,110 cv,61%,FWD
+Volkswagen,Volkswagen Fusca 1963,D 100,730,34 cv,42%,RWD
+Volkswagen,Volkswagen Classe 5/1600 Baja Bug de 1969,D 260,980,160 cv,55%,RWD
+Volkswagen,Volkswagen Golf R 2022,B 548,1480,315 cv,59%,AWD
+Volkswagen,Volkswagen Golf R 2021,B 546,1480,315 cv,59%,AWD
+Volkswagen,Volkswagen #34 Andretti Rally Cross Fusca 2017,S1 764,1210,542 cv,41%,AWD
+Volkswagen,Volkswagen Golf R 2014,B 536,1476,270 cv,59%,AWD
+Volkswagen,Volkswagen Scirocco R 2011,B 548,1330,265 cv,58%,FWD
+Volkswagen,Volkswagen Golf R 2010,B 526,1520,252 cv,59%,AWD
+Volkswagen,Volkswagen Corrado VR6 1995,C 426,1240,188 cv,62%,FWD
+Volkswagen,Volkswagen Golf Gti 16v Mk2 1992,D 308,960,148 cv,61%,FWD
+Volkswagen,Volkswagen Rallye Golf de 1989,C 440,1195,207 cv,58%,AWD
+Volvo,Volvo 242 Turbo Evolution de 1983,C 435,1280,147 cv,59%,RWD
+Wuling,Wuling Hongguang Mini EV 2022,D 100,665,200 cv,53%,RWD
+Wuling,2013 Wuling Sunshine S Forza Edition,S1 800,985,27 cv,41%,RWD
+Wuling,2013 Wuling Sunshine S,D 107,985,64 cv,41%,RWD
+Zenvo,Zenvo TSR-S 2019,R 906,1495,1177 cv,42%,RWD
