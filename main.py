@@ -63,6 +63,17 @@ def inicializar_banco():
 # Executa a inicialização e importação assim que o script roda
 inicializar_banco()
 
+def carregar_lista_veiculos():
+    try:
+        conn = conectar_banco()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, marca, modelo FROM veiculos ORDER BY marca, modelo")
+        rows = cursor.fetchall()
+        conn.close()
+        return rows
+    except Exception:
+        return []
+
 def carregar_garagem():
     try:
         conn = conectar_banco()
@@ -116,11 +127,55 @@ def main(page: ft.Page):
     # ---------------------------------------------------------
     # CAMPOS DE ENTRADA (CALCULADORA)
     # ---------------------------------------------------------
-    car_name = ft.TextField(label="Nome do Carro / Projeto (Opcional)", width=320, border_radius=8)
+    car_name = ft.TextField(label="Nome do Carro / Projeto", width=320, border_radius=8)
     weight_input = ft.TextField(label="Peso Total (kg)", value="1350", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
     power_input = ft.TextField(label="Potência (CV/HP)", value="450", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
     front_bias_input = ft.TextField(label="Distribuição Dianteira (%)", value="52.00", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
     
+    # Dropdown de Seleção de Veículos do Banco Offline
+    veiculos_db = carregar_lista_veiculos()
+    opcoes_veiculos = [ft.dropdown.Option(key=str(row[0]), text=f"{row[1]} - {row[2]}") for row in veiculos_db]
+    
+    def on_veiculo_change(e):
+        v_id = veiculo_dropdown.value
+        if v_id:
+            conn = conectar_banco()
+            cursor = conn.cursor()
+            cursor.execute("SELECT marca, modelo, peso_fabrica, potencia, distribuicao_dianteira, tracao FROM veiculos WHERE id = ?", (v_id,))
+            row = cursor.fetchone()
+            conn.close()
+            if row:
+                marca, modelo, peso, potencia, distribuicao, tracao = row
+                car_name.value = f"{marca} {modelo}"
+                
+                # Limpa e converte os valores do banco para preencher os inputs numéricos
+                import re
+                w_clean = re.sub(r'[^0-9.]', '', str(peso))
+                p_clean = re.sub(r'[^0-9.]', '', str(potencia))
+                d_clean = re.sub(r'[^0-9.]', '', str(distribuicao))
+                
+                if w_clean: weight_input.value = w_clean
+                if p_clean: power_input.value = p_clean
+                if d_clean: front_bias_input.value = d_clean
+                
+                if tracao:
+                    if "Traseira" in str(tracao) or "RWD" in str(tracao):
+                        drivetrain_dd.value = "RWD (Traseira)"
+                    elif "Dianteira" in str(tracao) or "FWD" in str(tracao):
+                        drivetrain_dd.value = "FWD (Dianteira)"
+                    elif "Integral" in str(tracao) or "AWD" in str(tracao):
+                        drivetrain_dd.value = "AWD (Integral)"
+                page.update()
+
+    veiculo_dropdown = ft.Dropdown(
+        label="🔍 Selecionar Carro da Planilha",
+        width=320,
+        border_radius=8,
+        options=opcoes_veiculos,
+        on_change=on_veiculo_change,
+        max_menu_height=300
+    )
+
     modality_dd = ft.Dropdown(
         label="Modalidade",
         value="Pista / Asfalto (Grip)",
@@ -219,7 +274,7 @@ def main(page: ft.Page):
     # EXIBIÇÃO DE RESULTADOS & BOTÕES
     # ---------------------------------------------------------
     result_title = ft.Text(value="💾 Setup Calculado: Aguardando cálculo...", size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300)
-    result_details = ft.Text(value="Preencha os dados acima e clique em Calcular Tunagem.", size=13, color=ft.Colors.WHITE_70)
+    result_details = ft.Text(value="Selecione um carro ou preencha os dados acima e clique em Calcular Tunagem.", size=13, color=ft.Colors.WHITE_70)
 
     garagem_list_view = ft.ListView(expand=True, spacing=10, padding=10)
 
@@ -288,11 +343,8 @@ def main(page: ft.Page):
             pneu_diant = 1.95
             pneu_tras = 1.90 if "RWD" in drivetrain_dd.value else 1.95
 
-            # ---------------------------------------------------------
-            # CÁLCULO DE TRANSMISSÃO E ESCALONAMENTO DE MARCHAS
-            # ---------------------------------------------------------
+            # Transmissão e Escalonamento
             trans_val = transmission_dd.value
-            
             if relacao_peso_pot < 2.0:
                 final_drive = 3.20
             elif relacao_peso_pot < 3.0:
@@ -324,21 +376,12 @@ def main(page: ft.Page):
 
                 gears = []
                 for i in range(num_marchas):
-                    if num_marchas > 1:
-                        ratio = first_gear - (i * (first_gear - last_gear) / (num_marchas - 1))
-                    else:
-                        ratio = first_gear
+                    ratio = first_gear - (i * (first_gear - last_gear) / (num_marchas - 1)) if num_marchas > 1 else first_gear
                     gears.append(f"{i+1}ª: {ratio:.2f}")
 
-                gears_str = " | ".join(gears)
-                gear_setting = (
-                    f"Marcha Final (Final Drive): {final_drive:.2f}\n"
-                    f"    - Escalonamento ({num_marchas} Marchas): {gears_str}"
-                )
+                gear_setting = f"Marcha Final: {final_drive:.2f}\n    - Escalonamento: {' | '.join(gears)}"
 
-            # ---------------------------------------------------------
-            # OUTROS CÁLCULOS DE TUNAGEM & ALTURA DO CARRO
-            # ---------------------------------------------------------
+            # Alinhamento e Suspensão
             if "Drift" in mod:
                 cambagem = "Dianteira: -5.0° | Traseira: -1.0°"
                 convergencia = "Dianteira: 0.2° (Out) | Traseira: -0.1° (In)"
@@ -348,17 +391,17 @@ def main(page: ft.Page):
                 cambagem = "Dianteira: -1.0° | Traseira: -0.8°"
                 convergencia = "Dianteira: 0.0° | Traseira: 0.0°"
                 caster = "6.0°"
-                altura_carro = "Dianteira: Alta | Traseira: Alta (Máximo curso de suspensão)"
+                altura_carro = "Dianteira: Alta | Traseira: Alta"
             elif "Arrancada" in mod:
                 cambagem = "Dianteira: 0.0° | Traseira: 0.0°"
                 convergencia = "Dianteira: 0.0° | Traseira: 0.0°"
                 caster = "5.0°"
-                altura_carro = "Dianteira: Baixa | Traseira: Média (Transferência de peso)"
+                altura_carro = "Dianteira: Baixa | Traseira: Média"
             else:
                 cambagem = "Dianteira: -2.0° | Traseira: -1.5°"
                 convergencia = "Dianteira: 0.0° | Traseira: -0.1° (In)"
                 caster = "6.0°"
-                altura_carro = "Dianteira: Baixa | Traseira: Baixa (Menor centro de gravidade)"
+                altura_carro = "Dianteira: Baixa | Traseira: Baixa"
 
             arb_diant = 1.0 + (64.0 * bias)
             arb_tras = 1.0 + (64.0 * bias_tras)
@@ -381,7 +424,7 @@ def main(page: ft.Page):
                 aero_summary = f"Dianteira [{f_val}] | Traseira [{r_val}]"
                 aero_setting = f"Dianteira: {f_val} | Traseira: {r_val}"
             else:
-                aero_summary = "🔒 Bloqueado (Sem Kit Aerodinâmico instalado)"
+                aero_summary = "🔒 Bloqueado (Sem Kit Aerodinâmico)"
                 aero_setting = "Dianteira: 🔒 Bloqueado | Traseira: 🔒 Bloqueado"
 
             freio_bal = pct_dian
@@ -392,7 +435,7 @@ def main(page: ft.Page):
             elif "FWD" in drivetrain_dd.value:
                 diff_text = "Aceleração: 45% | Desaceleração: 10%"
             else:
-                diff_text = "Dianteira (Acc: 30% / Desacc: 0%) | Traseira (Acc: 50% / Desacc: 10%) | Balanço Central: 65% Traseira"
+                diff_text = "Dianteira (Acc: 30% / Desacc: 0%) | Traseira (Acc: 50% / Desacc: 10%)"
 
             car_label = car_name.value if car_name.value else "Carro sem nome"
             result_title.value = f"💾 Setup Calculado: {car_label} ({peso}kg)"
@@ -400,23 +443,17 @@ def main(page: ft.Page):
             detalhes_str = (
                 f"📊 RESUMO DE PERFORMANCE:\n"
                 f"• Relação Peso/Potência: {relacao_peso_pot:.2f} kg/CV | Tração: {drivetrain_dd.value}\n"
-                f"• Aerodinâmica (Downforce): {aero_summary}\n\n"
-                f"⚙️ AJUSTES RECOMENDADOS DE TUNAGEM:\n"
+                f"• Aerodinâmica: {aero_summary}\n\n"
+                f"⚙️ AJUSTES RECOMENDADOS:\n"
                 f"------------------------------------------------------------------------\n"
-                f"🔹 Pressão dos Pneus: Dianteira {pneu_diant:.2f} bar | Traseira {pneu_tras:.2f} bar\n"
-                f"🔹 Transmissão:\n"
-                f"    - {gear_setting}\n"
-                f"🔹 Alinhamento:\n"
-                f"    - Cambagem: {cambagem}\n"
-                f"    - Convergência: {convergencia}\n"
-                f"    - Caster Dianteiro: {caster}\n"
+                f"🔹 Pressão Pneus: Dianteira {pneu_diant:.2f} bar | Traseira {pneu_tras:.2f} bar\n"
+                f"🔹 Transmissão:\n    - {gear_setting}\n"
+                f"🔹 Alinhamento:\n    - Cambagem: {cambagem}\n    - Convergência: {convergencia}\n    - Caster: {caster}\n"
                 f"🔹 Barras Estabilizadoras: Dianteira {arb_diant:.2f} | Traseira {arb_tras:.2f}\n"
-                f"🔹 Molas:\n"
-                f"    - Rigidez: Dianteira {mola_diant:.1f} kgf/mm | Traseira {mola_tras:.1f} kgf/mm\n"
-                f"    - Altura do Carro: {altura_carro}\n"
+                f"🔹 Molas e Altura:\n    - Rigidez: Dianteira {mola_diant:.1f} | Traseira {mola_tras:.1f} kgf/mm\n    - Altura: {altura_carro}\n"
                 f"🔹 Amortecimento (Rebound): Dianteira {rebound_diant:.1f} | Traseira {rebound_tras:.1f}\n"
-                f"🔹 Amortecimento (Bump/Carga): Dianteira {bump_diant:.1f} | Traseira {bump_tras:.1f}\n"
-                f"🔹 Aerodinâmica (Downforce): {aero_setting}\n"
+                f"🔹 Amortecimento (Bump): Dianteira {bump_diant:.1f} | Traseira {bump_tras:.1f}\n"
+                f"🔹 Aerodinâmica: {aero_setting}\n"
                 f"🔹 Freios: Balanço {freio_bal:.1f}% | Pressão {freio_press}%\n"
                 f"🔹 Diferencial: {diff_text}"
             )
@@ -434,7 +471,7 @@ def main(page: ft.Page):
 
         except ValueError:
             result_title.value = "⚠️ Erro no Cálculo"
-            result_details.value = "Por favor, insira valores numéricos válidos para Peso, Potência e Distribuição."
+            result_details.value = "Por favor, verifique os valores numéricos de Peso, Potência e Distribuição."
             result_title.color = ft.Colors.RED_400
             save_btn.visible = False
         
@@ -455,6 +492,7 @@ def main(page: ft.Page):
     left_column = ft.Column(
         controls=[
             ft.Text("📋 Dados do Veículo", size=15, weight=ft.FontWeight.BOLD),
+            veiculo_dropdown,  # <-- O Dropdown de busca/seleção dos 638 carros entrou aqui!
             car_name, weight_input, power_input, front_bias_input, modality_dd, aero_kit_dd, front_bumper_dd, rear_wing_dd
         ],
         spacing=10
@@ -462,7 +500,7 @@ def main(page: ft.Page):
 
     right_column = ft.Column(
         controls=[
-            ft.Container(height=25),
+            ft.Container(height=35),
             drivetrain_dd, transmission_dd, brakes_dd, suspension_dd
         ],
         spacing=10
