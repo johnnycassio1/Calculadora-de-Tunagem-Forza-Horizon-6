@@ -148,7 +148,6 @@ def main(page: ft.Page):
                 marca, modelo, peso, potencia, distribuicao, tracao = row
                 car_name.value = f"{marca} {modelo}"
                 
-                # Limpa e converte os valores do banco para preencher os inputs numéricos
                 import re
                 w_clean = re.sub(r'[^0-9.]', '', str(peso))
                 p_clean = re.sub(r'[^0-9.]', '', str(potencia))
@@ -172,9 +171,9 @@ def main(page: ft.Page):
         width=320,
         border_radius=8,
         options=opcoes_veiculos,
-        on_change=on_veiculo_change,
         max_menu_height=300
     )
+    veiculo_dropdown.on_change = on_veiculo_change  # Atribuído corretamente aqui fora
 
     modality_dd = ft.Dropdown(
         label="Modalidade",
@@ -343,7 +342,6 @@ def main(page: ft.Page):
             pneu_diant = 1.95
             pneu_tras = 1.90 if "RWD" in drivetrain_dd.value else 1.95
 
-            # Transmissão e Escalonamento
             trans_val = transmission_dd.value
             if relacao_peso_pot < 2.0:
                 final_drive = 3.20
@@ -381,7 +379,6 @@ def main(page: ft.Page):
 
                 gear_setting = f"Marcha Final: {final_drive:.2f}\n    - Escalonamento: {' | '.join(gears)}"
 
-            # Alinhamento e Suspensão
             if "Drift" in mod:
                 cambagem = "Dianteira: -5.0° | Traseira: -1.0°"
                 convergencia = "Dianteira: 0.2° (Out) | Traseira: -0.1° (In)"
@@ -492,7 +489,7 @@ def main(page: ft.Page):
     left_column = ft.Column(
         controls=[
             ft.Text("📋 Dados do Veículo", size=15, weight=ft.FontWeight.BOLD),
-            veiculo_dropdown,  # <-- O Dropdown de busca/seleção dos 638 carros entrou aqui!
+            veiculo_dropdown,
             car_name, weight_input, power_input, front_bias_input, modality_dd, aero_kit_dd, front_bumper_dd, rear_wing_dd
         ],
         spacing=10
