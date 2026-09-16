@@ -250,24 +250,28 @@ def main(page: ft.Page):
                 )
 
             # ---------------------------------------------------------
-            # OUTROS CÁLCULOS DE TUNAGEM
+            # OUTROS CÁLCULOS DE TUNAGEM & ALTURA DO CARRO
             # ---------------------------------------------------------
             if "Drift" in mod:
                 cambagem = "Dianteira: -5.0° | Traseira: -1.0°"
                 convergencia = "Dianteira: 0.2° (Out) | Traseira: -0.1° (In)"
                 caster = "7.0°"
+                altura_carro = "Dianteira: Baixa | Traseira: Média-Baixa"
             elif "Rally" in mod:
                 cambagem = "Dianteira: -1.0° | Traseira: -0.8°"
                 convergencia = "Dianteira: 0.0° | Traseira: 0.0°"
                 caster = "6.0°"
+                altura_carro = "Dianteira: Alta | Traseira: Alta (Máximo curso de suspensão)"
             elif "Arrancada" in mod:
                 cambagem = "Dianteira: 0.0° | Traseira: 0.0°"
                 convergencia = "Dianteira: 0.0° | Traseira: 0.0°"
                 caster = "5.0°"
+                altura_carro = "Dianteira: Baixa | Traseira: Média (Transferência de peso)"
             else:
                 cambagem = "Dianteira: -2.0° | Traseira: -1.5°"
                 convergencia = "Dianteira: 0.0° | Traseira: -0.1° (In)"
                 caster = "6.0°"
+                altura_carro = "Dianteira: Baixa | Traseira: Baixa (Menor centro de gravidade)"
 
             arb_diant = 1.0 + (64.0 * bias)
             arb_tras = 1.0 + (64.0 * bias_tras)
@@ -320,7 +324,9 @@ def main(page: ft.Page):
                 f"    - Convergência: {convergencia}\n"
                 f"    - Caster Dianteiro: {caster}\n"
                 f"🔹 Barras Estabilizadoras: Dianteira {arb_diant:.2f} | Traseira {arb_tras:.2f}\n"
-                f"🔹 Molas: Dianteira {mola_diant:.1f} kgf/mm | Traseira {mola_tras:.1f} kgf/mm\n"
+                f"🔹 Molas:\n"
+                f"    - Rigidez: Dianteira {mola_diant:.1f} kgf/mm | Traseira {mola_tras:.1f} kgf/mm\n"
+                f"    - Altura do Carro: {altura_carro}\n"
                 f"🔹 Amortecimento (Rebound): Dianteira {rebound_diant:.1f} | Traseira {rebound_tras:.1f}\n"
                 f"🔹 Amortecimento (Bump/Carga): Dianteira {bump_diant:.1f} | Traseira {bump_tras:.1f}\n"
                 f"🔹 Aerodinâmica (Downforce): {aero_setting}\n"
