@@ -182,9 +182,9 @@ def main(page: ft.Page):
         on_click=salvar_na_garagem_click,
         bgcolor=ft.Colors.GREEN_600,
         border_radius=20,
-        padding=ft.padding.symmetric(horizontal=20, vertical=12),
+        padding=ft.Padding(20, 12, 20, 12),
         visible=False,
-        alignment=ft.alignment.center
+        alignment=ft.Alignment(0, 0)
     )
 
     def calcular_tunagem(e):
@@ -351,8 +351,8 @@ def main(page: ft.Page):
         on_click=calcular_tunagem,
         bgcolor=ft.Colors.RED_ACCENT_400,
         border_radius=20,
-        padding=ft.padding.symmetric(horizontal=30, vertical=15),
-        alignment=ft.alignment.center
+        padding=ft.Padding(30, 15, 30, 15),
+        alignment=ft.Alignment(0, 0)
     )
 
     # ---------------------------------------------------------
@@ -409,8 +409,8 @@ def main(page: ft.Page):
         on_click=lambda e: trocar_view(0),
         bgcolor=ft.Colors.CYAN_800,
         border_radius=10,
-        padding=ft.padding.symmetric(horizontal=15, vertical=10),
-        alignment=ft.alignment.center
+        padding=ft.Padding(15, 10, 15, 10),
+        alignment=ft.Alignment(0, 0)
     )
 
     btn_garagem = ft.Container(
@@ -418,8 +418,8 @@ def main(page: ft.Page):
         on_click=lambda e: trocar_view(1),
         bgcolor=ft.Colors.TRANSPARENT,
         border_radius=10,
-        padding=ft.padding.symmetric(horizontal=15, vertical=10),
-        alignment=ft.alignment.center
+        padding=ft.Padding(15, 10, 15, 10),
+        alignment=ft.Alignment(0, 0)
     )
 
     def trocar_view(index):
