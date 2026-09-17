@@ -2,13 +2,89 @@ import flet as ft
 import os
 import sqlite3
 import csv
+import io
+import re
 
 # ---------------------------------------------------------
-# CAMINHO ABSOLUTO PARA O ANDROID / APK ENCONTRAR OS ARQUIVOS
+# CAMINHOS & DADOS EMBUTIDOS EM MEMÓRIA (FALLBACK PARA APK)
 # ---------------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_NAME = os.path.join(BASE_DIR, "veiculos.db")
 CSV_PATH = os.path.join(BASE_DIR, "veiculos.csv")
+
+# Base de dados embutida diretamente no código para garantir que o APK carregue offline
+DADOS_CSV_EMBUTIDOS = """Marca,Modelo / Ano,Classe & IP Original,Peso de Fábrica (kg),Potência de Fábrica (CV/HP),Distribuição Dianteira (%),Tração
+Abarth,Abarth Fiat 131 de 1980,D 399,1010,140 cv,53%,RWD
+Abarth,Abarth 695 Biposto 2016,B 540,997,190 cv,64%,FWD
+Abarth,Abarth 124 Spider 2017,C 450,1060,170 cv,51%,RWD
+Abarth,1968 Abarth 595 esseesse,D 100,535,32 cv,38%,RWD
+Acura,Acura RSX Type S 2002,C 462,1256,200 cv,61%,FWD
+Acura,Acura NSX Tipo S 2022,S1 734,1754,600 cv,42%,AWD
+Acura,Acura Integra Type R 2001,C 471,1180,195 cv,62%,FWD
+Acura,Acura Integra A-Spec 2023,C 484,1394,200 cv,60%,FWD
+Alfa Romeo,Alfa Romeo SE 048SP de 1990,R 978,820,600 cv,43%,RWD
+Alfa Romeo,Alfa Romeo Giulia TZ2 de 1965,B 532,620,170 cv,48%,RWD
+Alfa Romeo,Alfa Romeo Giulia Sprint GTA Stradale 1965,D 379,740,113 cv,53%,RWD
+Alfa Romeo,Alfa Romeo Giulia Quadrifoglio 2017,A 667,1580,505 cv,53%,RWD
+Alfa Romeo,Alfa Romeo Giulia GTAm 2021,S1 711,1520,532 cv,50%,RWD
+Alfa Romeo,Alfa Romeo Autodelta Tipo 33/2 Daytona 1968,A 696,580,270 cv,42%,RWD
+Alfa Romeo,Alfa Romeo 4C 2014,A 644,1020,237 cv,41%,RWD
+Alfa Romeo,Alfa Romeo 33 Stradale 1968,B 593,700,230 cv,48%,RWD
+Alfa Romeo,Alfa Romeo 155 Q4 de 1992,C 439,1370,187 cv,60%,AWD
+Alfa Romeo,2007 Alfa Romeo 8C Competizione,A 635,1585,444 cv,52%,RWD
+Alumicraft,Carro de Corrida Alumicraft Classe 10 2015,B 532,975,195 cv,42%,RWD
+Alumicraft,Caminhonete Trucada Alumicraft #6165 2022,C 485,2155,525 cv,45%,RWD
+Alumicraft,Alumicraft #122 Buggy Classe 1 2021,B 571,1588,625 cv,38%,RWD
+Apollo,2019 Apollo Intensa Emozione,R 916,1250,780 cv,43%,RWD
+Ariel,Ariel Atom 500 V8 2013,S2 825,650,475 cv,42%,RWD
+Ariel,2016 Ariel Nomad,A 601,670,235 cv,39%,RWD
+Aston Martin,Aston Martin Vulcan AMR Pro 2017,S2 898,1350,820 cv,49%,RWD
+Aston Martin,Aston Martin Vulcan 2016,S2 884,1350,820 cv,49%,RWD
+Aston Martin,Aston Martin Vantage 2019,A 696,1530,503 cv,50%,RWD
+Aston Martin,Aston Martin Valkyrie AMR Pro 2022,R 989,1000,1000 cv,45%,RWD
+Aston Martin,Aston Martin Valkyrie 2023,R 924,1095,1139 cv,44%,RWD
+Aston Martin,Aston Martin Valhalla Concept Car 2019,R 960,1550,986 cv,42%,AWD
+Aston Martin,Aston Martin DBX 2021,A 618,2245,542 cv,54%,AWD
+Aston Martin,Aston Martin DBS Superleggera 2019,S1 736,1693,715 cv,51%,RWD
+Aston Martin,Aston Martin DB7 GT 2003,B 566,1780,435 cv,54%,RWD
+Aston Martin,Aston Martin DB5 de 1964,C 416,1502,282 cv,50%,RWD
+Aston Martin,Aston Martin DB11 2017,A 679,1770,600 cv,51%,RWD
+Audi,Audi R8 V10 Performance 2020,S1 738,1595,612 cv,43%,AWD
+Audi,Audi TT RS Coupé 2010,B 593,1450,335 cv,60%,AWD
+Audi,Audi Sport quattro de 1984,B 526,1298,302 cv,56%,AWD
+Audi,Audi S1 2015,B 527,1315,228 cv,60%,AWD
+Audi,Audi RS e-tron GT 2021,A 677,2347,637 cv,50%,AWD
+Audi,Audi RS 7 Sportback 2021,A 655,2065,591 cv,56%,AWD
+Audi,Audi RS 7 Sportback 2013,A 619,1930,552 cv,56%,AWD
+Audi,Audi RS 6 Avant 2021,A 650,2075,591 cv,56%,AWD
+Audi,Audi RS 6 Avant 2015,A 640,1950,552 cv,56%,AWD
+Audi,Audi RS 6 2009,B 598,1985,572 cv,58%,AWD
+Audi,Audi RS 6 2003,B 556,1840,444 cv,59%,AWD
+Audi,Audi RS 5 Coupé 2011,A 613,1715,444 cv,57%,AWD
+Audi,Audi RS 4 Avant 2018,A 637,1715,444 cv,56%,AWD
+Audi,Audi RS 4 Avant 2013,A 607,1795,444 cv,56%,AWD
+Audi,Audi RS 4 Avant 2001,B 544,1620,375 cv,60%,AWD
+Audi,Audi RS 4 2006,B 593,1650,414 cv,58%,AWD
+Audi,Audi RS 3 Sportback 2011,B 565,1575,335 cv,60%,AWD
+Audi,Audi RS 3 Sedã 2020,A 617,1570,394 cv,59%,AWD
+Audi,Audi R8 V10 Plus 2016,S1 731,1555,602 cv,43%,AWD
+BMW,BMW M4 Competition Coupé 2021,A 666,1725,503 cv,52%,RWD
+BMW,BMW M3 2008,A 608,1600,414 cv,52%,RWD
+BMW,BMW M2 Coupé 2020,A 656,1575,405 cv,52%,RWD
+Chevrolet,Chevrolet Corvette Z06 2023,S1 763,1561,670 cv,40%,RWD
+Chevrolet,Chevrolet Camaro ZL1 2024,S1 718,1761,650 cv,54%,RWD
+Dodge,Dodge Challenger SRT Demon 2018,A 678,1941,840 cv,58%,RWD
+Ferrari,Ferrari SF90 Stradale 2020,S2 851,1570,986 cv,45%,AWD
+Ferrari,Ferrari 488 Pista 2019,S2 803,1385,710 cv,42%,RWD
+Ford,Ford GT 2017,S1 757,1385,647 cv,43%,RWD
+Ford,Ford Mustang GT 2024,A 628,1735,486 cv,54%,RWD
+Honda,Honda Civic Type R 2023,A 620,1447,315 cv,62%,FWD
+Lamborghini,Lamborghini Revuelto 2024,S2 829,1772,1001 cv,44%,AWD
+Lamborghini,Lamborghini Huracán STO 2020,S1 783,1339,631 cv,42%,RWD
+Nissan,Nissan GT-R Nismo 2020,S1 780,1720,600 cv,54%,AWD
+Porsche,Porsche 911 GT3 RS 2023,S1 785,1450,525 cv,39%,RWD
+Toyota,Toyota GR Supra 2020,A 680,1540,335 cv,52%,RWD
+"""
 
 def conectar_banco():
     return sqlite3.connect(DB_NAME)
@@ -44,24 +120,48 @@ def inicializar_banco():
     """)
     conn.commit()
     
-    # Importação automática do CSV usando caminho absoluto
+    # Garante a limpeza do banco antigo caso ele tenha ficado vazio anteriormente
     cursor.execute("SELECT COUNT(*) FROM veiculos")
-    if cursor.fetchone()[0] == 0:
+    total = cursor.fetchone()[0]
+    
+    if total == 0:
+        linhas = []
+        # Tenta ler do arquivo local se ele existir no APK
         if os.path.exists(CSV_PATH):
-            with open(CSV_PATH, mode="r", encoding="utf-8") as file:
-                reader = csv.reader(file)
-                next(reader, None)  # Pula o cabeçalho
-                for linha in reader:
-                    if len(linha) >= 8:
-                        cursor.execute("""
-                            INSERT INTO veiculos (marca, modelo, classe, pi_original, peso_fabrica, potencia, distribuicao_dianteira, tracao)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                        """, (linha[0], linha[1], linha[2], linha[3], linha[4], linha[5], linha[6], linha[7]))
-            conn.commit()
-            
+            try:
+                with open(CSV_PATH, mode="r", encoding="utf-8") as file:
+                    reader = list(csv.reader(file))
+                    if len(reader) > 1:
+                        linhas = reader[1:]
+            except Exception:
+                linhas = []
+        
+        # Se não achou arquivo no disco, lê os dados da memória embutida
+        if not linhas:
+            stream = io.StringIO(DADOS_CSV_EMBUTIDOS.strip())
+            reader = list(csv.reader(stream))
+            if len(reader) > 1:
+                linhas = reader[1:]
+        
+        for linha in linhas:
+            if len(linha) >= 6:
+                marca = linha[0].strip()
+                modelo = linha[1].strip()
+                classe = linha[2].strip()
+                peso = linha[3].strip()
+                potencia = linha[4].strip()
+                distribuicao = linha[5].strip()
+                tracao = linha[6].strip() if len(linha) > 6 else "RWD"
+                
+                cursor.execute("""
+                    INSERT INTO veiculos (marca, modelo, classe, pi_original, peso_fabrica, potencia, distribuicao_dianteira, tracao)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """, (marca, modelo, classe, 0, peso, potencia, distribuicao, tracao))
+        conn.commit()
+        
     conn.close()
 
-# Executa a inicialização
+# Executa a inicialização do banco
 inicializar_banco()
 
 def carregar_lista_veiculos():
@@ -133,16 +233,13 @@ def main(page: ft.Page):
     power_input = ft.TextField(label="Potência (CV/HP)", value="450", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
     front_bias_input = ft.TextField(label="Distribuição Dianteira (%)", value="52.00", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
     
-    # Dropdown de Seleção de Veículos com Fallback
+    # Carrega os carros cadastrados no SQLite
     veiculos_db = carregar_lista_veiculos()
-    if veiculos_db:
-        opcoes_veiculos = [ft.dropdown.Option(key=str(row[0]), text=f"{row[1]} - {row[2]}") for row in veiculos_db]
-    else:
-        opcoes_veiculos = [ft.dropdown.Option(key="0", text="⚠️ NENHUM CARRO ENCONTRADO NO CSV")]
+    opcoes_veiculos = [ft.dropdown.Option(key=str(row[0]), text=f"{row[1]} - {row[2]}") for row in veiculos_db]
 
     def on_veiculo_change(e):
         v_id = veiculo_dropdown.value
-        if v_id and v_id != "0":
+        if v_id:
             conn = conectar_banco()
             cursor = conn.cursor()
             cursor.execute("SELECT marca, modelo, peso_fabrica, potencia, distribuicao_dianteira, tracao FROM veiculos WHERE id = ?", (v_id,))
@@ -152,7 +249,6 @@ def main(page: ft.Page):
                 marca, modelo, peso, potencia, distribuicao, tracao = row
                 car_name.value = f"{marca} {modelo}"
                 
-                import re
                 w_clean = re.sub(r'[^0-9.]', '', str(peso))
                 p_clean = re.sub(r'[^0-9.]', '', str(potencia))
                 d_clean = re.sub(r'[^0-9.]', '', str(distribuicao))
