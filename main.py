@@ -12,45 +12,44 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_NAME = os.path.join(BASE_DIR, "veiculos.db")
 CSV_PATH = os.path.join(BASE_DIR, "veiculos.csv")
 
-DADOS_CSV_EMBUTIDOS = """Marca,Modelo / Ano,Classe & IP Original,Peso de Fábrica (kg),Potência de Fábrica (CV/HP),Distribuição Dianteira (%),Tração
-Abarth,Abarth Fiat 131 de 1980,D 399,1010,140 cv,53%,RWD
-Abarth,Abarth 695 Biposto 2016,B 540,997,190 cv,64%,FWD
-Abarth,Abarth 124 Spider 2017,C 450,1060,170 cv,51%,RWD
-Abarth,1968 Abarth 595 esseesse,D 100,535,32 cv,38%,RWD
-Acura,Acura RSX Type S 2002,C 462,1256,200 cv,61%,FWD
-Acura,Acura NSX Tipo S 2022,S1 734,1754,600 cv,42%,AWD
-Acura,Acura Integra Type R 2001,C 471,1180,195 cv,62%,FWD
-Acura,Acura Integra A-Spec 2023,C 484,1394,200 cv,60%,FWD
-Alfa Romeo,Alfa Romeo SE 048SP de 1990,R 978,820,600 cv,43%,RWD
-Alfa Romeo,Alfa Romeo Giulia TZ2 de 1965,B 532,620,170 cv,48%,RWD
-Alfa Romeo,Alfa Romeo Giulia Sprint GTA Stradale 1965,D 379,740,113 cv,53%,RWD
-Alfa Romeo,Alfa Romeo Giulia Quadrifoglio 2017,A 667,1580,505 cv,53%,RWD
-Alfa Romeo,Alfa Romeo Giulia GTAm 2021,S1 711,1520,532 cv,50%,RWD
-Alfa Romeo,Alfa Romeo Autodelta Tipo 33/2 Daytona 1968,A 696,580,270 cv,42%,RWD
-Alfa Romeo,Alfa Romeo 4C 2014,A 644,1020,237 cv,41%,RWD
-Alfa Romeo,Alfa Romeo 33 Stradale 1968,B 593,700,230 cv,48%,RWD
-Alfa Romeo,Alfa Romeo 155 Q4 de 1992,C 439,1370,187 cv,60%,AWD
-Alfa Romeo,2007 Alfa Romeo 8C Competizione,A 635,1585,444 cv,52%,RWD
-Aston Martin,Aston Martin Vantage 2019,A 696,1530,503 cv,50%,RWD
-Audi,Audi R8 V10 Performance 2020,S1 738,1595,612 cv,43%,AWD
-BMW,BMW M4 Competition Coupé 2021,A 666,1725,503 cv,52%,RWD
-Chevrolet,Chevrolet Corvette Z06 2023,S1 763,1561,670 cv,40%,RWD
-Dodge,Dodge Challenger SRT Demon 2018,A 678,1941,840 cv,58%,RWD
-Ferrari,Ferrari SF90 Stradale 2020,S2 851,1570,986 cv,45%,AWD
-Ford,Ford Mustang GT 2024,A 628,1735,486 cv,54%,RWD
-Honda,Honda Civic Type R 2023,A 620,1447,315 cv,62%,FWD
-Lamborghini,Lamborghini Revuelto 2024,S2 829,1772,1001 cv,44%,AWD
-Nissan,Nissan GT-R Nismo 2020,S1 780,1720,600 cv,54%,AWD
-Porsche,Porsche 911 GT3 RS 2023,S1 785,1450,525 cv,39%,RWD
-Toyota,Toyota GR Supra 2020,A 680,1540,335 cv,52%,RWD
-"""
-
 def conectar_banco():
     return sqlite3.connect(DB_NAME)
+
+def ler_arquivo_csv_inteligente(caminho):
+    """
+    Lê qualquer formato de CSV (vírgula ou ponto e vírgula, UTF-8 ou ANSI/Excel)
+    para garantir o carregamento de todos os 638 veículos sem falhar.
+    """
+    if not os.path.exists(caminho):
+        return []
+
+    encodings = ['utf-8-sig', 'utf-8', 'latin-1', 'cp1252']
+    
+    for enc in encodings:
+        try:
+            with open(caminho, mode="r", encoding=enc) as file:
+                conteudo = file.read()
+                if not conteudo.strip():
+                    continue
+                
+                # Detecta se o separador é ponto e vírgula (;) ou vírgula (,)
+                primeira_linha = conteudo.splitlines()[0]
+                delimitador = ';' if ';' in primeira_linha else ','
+                
+                stream = io.StringIO(conteudo)
+                reader = list(csv.reader(stream, delimiter=delimitador))
+                
+                if len(reader) > 1:
+                    return reader[1:]  # Retorna pulando o cabeçalho
+        except Exception:
+            continue
+    return []
 
 def inicializar_banco():
     conn = conectar_banco()
     cursor = conn.cursor()
+    
+    # Tabela principal para os veículos
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS veiculos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -64,6 +63,8 @@ def inicializar_banco():
             tracao TEXT
         )
     """)
+    
+    # Tabela para a Garagem de Setups Salvos
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS garagem_setups (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -75,20 +76,33 @@ def inicializar_banco():
     """)
     conn.commit()
 
+    # Se a tabela estiver vazia, recarrega todos os carros da planilha
     cursor.execute("SELECT COUNT(*) FROM veiculos")
-    if cursor.fetchone()[0] == 0:
-        stream = io.StringIO(DADOS_CSV_EMBUTIDOS.strip())
-        reader = list(csv.reader(stream))
-        if len(reader) > 1:
-            for linha in reader[1:]:
+    total = cursor.fetchone()[0]
+    
+    if total < 50:  # Garante repopular se tiver apenas a amostra anterior
+        cursor.execute("DELETE FROM veiculos")  # Limpa versão antiga
+        linhas = ler_arquivo_csv_inteligente(CSV_PATH)
+        
+        if linhas:
+            for linha in linhas:
                 if len(linha) >= 6:
+                    marca = linha[0].strip()
+                    modelo = linha[1].strip()
+                    classe = linha[2].strip() if len(linha) > 2 else ""
+                    peso = linha[3].strip() if len(linha) > 3 else "1350"
+                    potencia = linha[4].strip() if len(linha) > 4 else "450"
+                    distribuicao = linha[5].strip() if len(linha) > 5 else "50"
+                    tracao = linha[6].strip() if len(linha) > 6 else "RWD"
+                    
                     cursor.execute("""
                         INSERT INTO veiculos (marca, modelo, classe, pi_original, peso_fabrica, potencia, distribuicao_dianteira, tracao)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                    """, (linha[0].strip(), linha[1].strip(), linha[2].strip(), 0, linha[3].strip(), linha[4].strip(), linha[5].strip(), linha[6].strip() if len(linha) > 6 else "RWD"))
+                    """, (marca, modelo, classe, 0, peso, potencia, distribuicao, tracao))
             conn.commit()
     conn.close()
 
+# Executa a inicialização do banco
 inicializar_banco()
 
 def carregar_lista_veiculos():
@@ -163,7 +177,6 @@ def main(page: ft.Page):
                 marca, modelo, peso, potencia, distribuicao, tracao = row
                 car_name.value = f"{marca} {modelo}"
 
-                # Extração direta de números
                 w_match = re.search(r'\d+', str(peso))
                 p_match = re.search(r'\d+', str(potencia))
                 d_match = re.search(r'\d+(\.\d+)?', str(distribuicao))
@@ -184,7 +197,7 @@ def main(page: ft.Page):
                 page.update()
 
     veiculo_dropdown = ft.Dropdown(
-        label="🔍 1. Escolha o Carro Base",
+        label=f"🔍 Escolha o Carro ({len(opcoes_veiculos)} disponíveis)",
         width=320,
         border_radius=8,
         options=opcoes_veiculos
@@ -452,7 +465,7 @@ def main(page: ft.Page):
     )
 
     # ---------------------------------------------------------
-    # LAYOUT DAS TELAS (ETAPAS)
+    # LAYOUT DAS TELAS
     # ---------------------------------------------------------
     left_column = ft.Column(
         controls=[
