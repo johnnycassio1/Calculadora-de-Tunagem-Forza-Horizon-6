@@ -220,7 +220,7 @@ def main(page: ft.Page):
     veiculo_dropdown.on_change = on_veiculo_change
 
     # ---------------------------------------------------------
-    # PAINEL 2: CONFIGURAÇÃO DO KIT DE TUNAGEM & MARCHAS
+    # PAINEL 2: CONFIGURAÇÃO DO KIT DE TUNAGEM
     # ---------------------------------------------------------
     modality_dd = ft.Dropdown(
         label="Modalidade de Corrida",
@@ -335,7 +335,7 @@ def main(page: ft.Page):
     # EXIBIÇÃO DE RESULTADOS & AJUSTES FINOS
     # ---------------------------------------------------------
     result_title = ft.Text(value="⚙️ Status: Monte o kit de peças e clique em Gerar Tunagem.", size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300)
-    result_details = ft.Text(value="Os cálculos finos de suspensão, alinhamento, marchas e diferencial aparecerão aqui.", size=13, color=ft.Colors.WHITE_70)
+    result_details = ft.Text(value="Os cálculos finos de suspensão, alinhamento, marchas, diferencial e aerodinâmica aparecerão aqui.", size=13, color=ft.Colors.WHITE_70)
 
     garagem_list_view = ft.ListView(expand=True, spacing=10, padding=10)
 
@@ -442,13 +442,25 @@ def main(page: ft.Page):
             rebound_diant, rebound_tras = 3.0 + (10.0 * bias), 3.0 + (10.0 * bias_tras)
             bump_diant, bump_tras = rebound_diant * 0.6, rebound_tras * 0.6
 
+            # ---------------------------------------------------------
+            # AERODINÂMICA INTELIGENTE BASEADA NA POSIÇÃO DO SLIDER (%)
+            # ---------------------------------------------------------
             if aero_kit_dd.value == "Sim":
-                f_val = f"{peso * 0.08:.1f} kgf" if front_bumper_dd.value == "Sim" else "Bloqueado"
-                r_val = f"{peso * 0.12:.1f} kgf" if rear_wing_dd.value == "Sim" else "Bloqueado"
-                aero_setting = f"Dianteira: {f_val} | Traseira: {r_val}"
+                if "Drift" in mod or "Arrancada" in mod:
+                    f_aero_text = "Dianteira: 10% (Esquerda / Velocidade) — Mínimo arrasto aerodinâmico" if front_bumper_dd.value == "Sim" else "Dianteira: 🔒 Bloqueado"
+                    r_aero_text = "Traseira: 10% (Esquerda / Velocidade) — Libera a traseira do carro" if rear_wing_dd.value == "Sim" else "Traseira: 🔒 Bloqueado"
+                elif "Rally" in mod:
+                    f_aero_text = "Dianteira: 65% (Direita / Curva) — Garante resposta rápida na terra" if front_bumper_dd.value == "Sim" else "Dianteira: 🔒 Bloqueado"
+                    r_aero_text = "Traseira: 50% (Centro / Equilibrado) — Estabilidade em saltos/relevos" if rear_wing_dd.value == "Sim" else "Traseira: 🔒 Bloqueado"
+                else: # Grip / Asfalto
+                    f_aero_text = "Dianteira: 80% (Direita / Curva) — Aumenta a aderência e entrada de curva" if front_bumper_dd.value == "Sim" else "Dianteira: 🔒 Bloqueado"
+                    r_aero_text = "Traseira: 45% (Centro / Equilibrado) — Dá firmeza sem deixar o carro duro" if rear_wing_dd.value == "Sim" else "Traseira: 🔒 Bloqueado"
+                
+                aero_setting = f"• {f_aero_text}\n• {r_aero_text}"
             else:
-                aero_setting = "Sem kit aerodinâmico ajustável"
+                aero_setting = "Sem kit aerodinâmico ajustável (🔒 Padrão do Veículo)"
 
+            # Diferencial por tração
             tracao_tipo = drivetrain_dd.value
             if "AWD" in tracao_tipo:
                 if "Drift" in mod:
@@ -490,7 +502,7 @@ def main(page: ft.Page):
                 f"🔹 Molas: Dianteira {mola_diant:.1f} kgf/mm | Traseira {mola_tras:.1f} kgf/mm (Altura: {altura_carro})\n"
                 f"🔹 Amortecimento Rebound: Dianteira {rebound_diant:.1f} | Traseira {rebound_tras:.1f}\n"
                 f"🔹 Amortecimento Bump: Dianteira {bump_diant:.1f} | Traseira {bump_tras:.1f}\n"
-                f"🔹 Aerodinâmica Downforce: {aero_setting}\n"
+                f"🔹 Aerodinâmica (Posição dos Sliders no Forza):\n{aero_setting}\n"
                 f"🔹 Freios: Balanço {pct_dian:.1f}% | Pressão 100%\n"
                 f"🔹 Diferencial de Corrida ({drivetrain_dd.value}):\n{diff_text}"
             )
@@ -524,7 +536,7 @@ def main(page: ft.Page):
     )
 
     # ---------------------------------------------------------
-    # LAYOUT DAS TELAS (RESPONSIVIDADE COM WRAP E SCROLL HABILITADO)
+    # LAYOUT DAS TELAS
     # ---------------------------------------------------------
     left_column = ft.Column(
         controls=[
@@ -544,7 +556,6 @@ def main(page: ft.Page):
         spacing=10
     )
 
-    # AQUI ESTÁ O AJUSTE DA ROLAGEM E RESPONSIVIDADE:
     container_calculadora = ft.Container(
         padding=10,
         content=ft.Column([
@@ -552,8 +563,8 @@ def main(page: ft.Page):
                 alignment=ft.MainAxisAlignment.START,
                 vertical_alignment=ft.CrossAxisAlignment.START,
                 spacing=20,
-                wrap=True,                      # Faz a Etapa 2 descer abaixo da Etapa 1 em telas estreitas
-                scroll=ft.ScrollMode.AUTO,      # Permite rolagem horizontal/vertical livre
+                wrap=True,
+                scroll=ft.ScrollMode.AUTO,
                 controls=[left_column, right_column]
             ),
             ft.Container(height=15),
