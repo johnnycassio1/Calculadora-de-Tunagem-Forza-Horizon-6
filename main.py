@@ -143,6 +143,13 @@ def deletar_setup_banco(index):
         conn.commit()
     conn.close()
 
+def gerar_barra_aero(pct):
+    # Gera uma barra visual de 10 blocos estilo [ Velocidade | █ █ █ █ ░ ░ ░ ░ ░ ░ | Curva ] (40%)
+    pct_normalizado = max(0, min(100, pct))
+    blocos = int(pct_normalizado / 10)
+    barra = "█ " * blocos + "░ " * (10 - blocos)
+    return f"[ Velocidade | {barra}| Curva ] ({pct_normalizado}%)"
+
 def main(page: ft.Page):
     page.title = "Calculadora de Tunagem Forza - Safira Spec"
     page.theme_mode = ft.ThemeMode.DARK
@@ -266,7 +273,7 @@ def main(page: ft.Page):
 
     gear_profile_dd = ft.Dropdown(
         label="Perfil do Escalonamento",
-        value="Safe / Equilibrado",
+        value="Agressivo (Aceleração Rápida)",
         width=320,
         border_radius=8,
         options=[
@@ -398,20 +405,35 @@ def main(page: ft.Page):
             pneu_diant = 1.95
             pneu_tras = 1.90 if "RWD" in drivetrain_dd.value else 1.95
 
+            # ---------------------------------------------------------
+            # CÁLCULO DE TRANSMISSÃO AGRESSIVA & DINÂMICA
+            # ---------------------------------------------------------
             trans_val = transmission_dd.value
-            final_drive = 3.20 if relacao_peso_pot < 2.0 else (3.55 if relacao_peso_pot < 3.0 else (3.80 if relacao_peso_pot < 4.0 else 4.10))
             mod = modality_dd.value
-            if "Arrancada" in mod: final_drive -= 0.30
-            elif "Drift" in mod: final_drive += 0.20
+
+            if relacao_peso_pot < 1.8:
+                final_drive_base = 3.70
+            elif relacao_peso_pot < 2.5:
+                final_drive_base = 3.90
+            elif relacao_peso_pot < 3.5:
+                final_drive_base = 4.10
+            else:
+                final_drive_base = 4.30
+
+            if "Arrancada" in mod:
+                final_drive_base -= 0.30
+            elif "Drift" in mod:
+                final_drive_base += 0.25
 
             perfil_marcha = gear_profile_dd.value
             if "Agressivo" in perfil_marcha:
-                final_drive += 0.35
-                first_gear = 3.60
-                last_gear = 0.85
+                final_drive = final_drive_base + 0.40
+                first_gear = 3.70
+                last_gear = 0.88
             else:
+                final_drive = final_drive_base
                 first_gear = 3.30
-                last_gear = 0.75
+                last_gear = 0.78
 
             if trans_val in ["Original", "Rua"]:
                 gear_setting = "🔒 Bloqueado"
@@ -427,6 +449,9 @@ def main(page: ft.Page):
                 gears = [f"{i+1}ª: {first_gear - (i * (first_gear - last_gear) / (num_marchas - 1)):.2f}" for i in range(num_marchas)]
                 gear_setting = f"Final Drive: {final_drive:.2f} [{perfil_marcha}]\n    - Escalonamento: {' | '.join(gears)}"
 
+            # ---------------------------------------------------------
+            # ALINHAMENTO & SUSPENSÃO
+            # ---------------------------------------------------------
             if "Drift" in mod:
                 cambagem, convergencia, caster, altura_carro = "Dianteira: -5.0° | Traseira: -1.0°", "Dianteira: 0.2° | Traseira: -0.1°", "7.0°", "Baixa / Média-Baixa"
             elif "Rally" in mod:
@@ -443,24 +468,51 @@ def main(page: ft.Page):
             bump_diant, bump_tras = rebound_diant * 0.6, rebound_tras * 0.6
 
             # ---------------------------------------------------------
-            # AERODINÂMICA INTELIGENTE BASEADA NA POSIÇÃO DO SLIDER (%)
+            # AERODINÂMICA DINÂMICA COM BARRINHA VISUAL DE SLIDER
             # ---------------------------------------------------------
             if aero_kit_dd.value == "Sim":
+                tracao_tipo = drivetrain_dd.value
+
                 if "Drift" in mod or "Arrancada" in mod:
-                    f_aero_text = "Dianteira: 10% (Esquerda / Velocidade) — Mínimo arrasto aerodinâmico" if front_bumper_dd.value == "Sim" else "Dianteira: 🔒 Bloqueado"
-                    r_aero_text = "Traseira: 10% (Esquerda / Velocidade) — Libera a traseira do carro" if rear_wing_dd.value == "Sim" else "Traseira: 🔒 Bloqueado"
+                    pct_front_aero = 10
+                    pct_rear_aero = 10
+                    exp_front = "Mínimo arrasto para velocidade / deslizamento"
+                    exp_rear = "Libera a traseira para o movimento do veículo"
                 elif "Rally" in mod:
-                    f_aero_text = "Dianteira: 65% (Direita / Curva) — Garante resposta rápida na terra" if front_bumper_dd.value == "Sim" else "Dianteira: 🔒 Bloqueado"
-                    r_aero_text = "Traseira: 50% (Centro / Equilibrado) — Estabilidade em saltos/relevos" if rear_wing_dd.value == "Sim" else "Traseira: 🔒 Bloqueado"
+                    pct_front_aero = 65
+                    pct_rear_aero = 50
+                    exp_front = "Garanta resposta de direção rápida no piso de terra"
+                    exp_rear = "Mantém o equilíbrio do veículo em saltos e relevos"
                 else: # Grip / Asfalto
-                    f_aero_text = "Dianteira: 80% (Direita / Curva) — Aumenta a aderência e entrada de curva" if front_bumper_dd.value == "Sim" else "Dianteira: 🔒 Bloqueado"
-                    r_aero_text = "Traseira: 45% (Centro / Equilibrado) — Dá firmeza sem deixar o carro duro" if rear_wing_dd.value == "Sim" else "Traseira: 🔒 Bloqueado"
-                
+                    if peso >= 1500 or pct_dian >= 54:
+                        pct_front_aero = min(95, int(75 + ((peso - 1300) / 20)))
+                        pct_rear_aero = min(65, int(45 + ((peso - 1300) / 30)))
+                        exp_front = f"Ajustado para Vencer Inércia de Chassi Pesado ({peso:.0f}kg)"
+                        exp_rear = "Sustentação do Eixo Traseiro sob forte Torque"
+                    elif peso < 1100 or "FWD" in tracao_tipo:
+                        pct_front_aero = max(65, int(75 - ((1200 - peso) / 20)))
+                        pct_rear_aero = max(30, int(40 - ((1200 - peso) / 30)))
+                        exp_front = "Aderência dianteira na medida sem sobrecarregar pneus"
+                        exp_rear = "Traseira solta para facilitar a rotação"
+                    else:
+                        pct_front_aero = 80
+                        pct_rear_aero = 45
+                        exp_front = "Equilíbrio ideal entre entrada de curva e arrasto"
+                        exp_rear = "Firmeza de traseira sem travar a rotação"
+
+                barra_front = gerar_barra_aero(pct_front_aero)
+                barra_rear = gerar_barra_aero(pct_rear_aero)
+
+                f_aero_text = f"Dianteira: {barra_front}\n    - Dica: {exp_front}" if front_bumper_dd.value == "Sim" else "Dianteira: 🔒 Bloqueado"
+                r_aero_text = f"Traseira:  {barra_rear}\n    - Dica: {exp_rear}" if rear_wing_dd.value == "Sim" else "Traseira: 🔒 Bloqueado"
+
                 aero_setting = f"• {f_aero_text}\n• {r_aero_text}"
             else:
-                aero_setting = "Sem kit aerodinâmico ajustável (🔒 Padrão do Veículo)"
+                aero_setting = "Sem kit aerodinâmico ajustável (🔒 Padrão de Fábrica)"
 
-            # Diferencial por tração
+            # ---------------------------------------------------------
+            # DIFERENCIAL DE CORRIDA
+            # ---------------------------------------------------------
             tracao_tipo = drivetrain_dd.value
             if "AWD" in tracao_tipo:
                 if "Drift" in mod:
@@ -502,7 +554,7 @@ def main(page: ft.Page):
                 f"🔹 Molas: Dianteira {mola_diant:.1f} kgf/mm | Traseira {mola_tras:.1f} kgf/mm (Altura: {altura_carro})\n"
                 f"🔹 Amortecimento Rebound: Dianteira {rebound_diant:.1f} | Traseira {rebound_tras:.1f}\n"
                 f"🔹 Amortecimento Bump: Dianteira {bump_diant:.1f} | Traseira {bump_tras:.1f}\n"
-                f"🔹 Aerodinâmica (Posição dos Sliders no Forza):\n{aero_setting}\n"
+                f"🔹 Aerodinâmica (Posição do Slider no Forza):\n{aero_setting}\n"
                 f"🔹 Freios: Balanço {pct_dian:.1f}% | Pressão 100%\n"
                 f"🔹 Diferencial de Corrida ({drivetrain_dd.value}):\n{diff_text}"
             )
