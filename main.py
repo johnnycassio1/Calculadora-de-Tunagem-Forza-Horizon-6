@@ -146,7 +146,7 @@ def deletar_setup_banco(index):
 def main(page: ft.Page):
     page.title = "Calculadora de Tunagem Forza - Safira Spec"
     page.theme_mode = ft.ThemeMode.DARK
-    page.padding = 20
+    page.padding = 15
     page.scroll = ft.ScrollMode.AUTO
 
     setups_salvos = carregar_garagem()
@@ -449,9 +449,6 @@ def main(page: ft.Page):
             else:
                 aero_setting = "Sem kit aerodinâmico ajustável"
 
-            # ---------------------------------------------------------
-            # REGRA AVANÇADA DE DIFERENCIAIS (FWD, RWD, AWD)
-            # ---------------------------------------------------------
             tracao_tipo = drivetrain_dd.value
             if "AWD" in tracao_tipo:
                 if "Drift" in mod:
@@ -460,21 +457,21 @@ def main(page: ft.Page):
                     diff_text = "• Dianteira: Aceleração 50% | Desaceleração 0%\n• Traseira: Aceleração 75% | Desaceleração 50%\n• Torque Central: 60% (Traseira)"
                 elif "Arrancada" in mod:
                     diff_text = "• Dianteira: Aceleração 100% | Desaceleração 0%\n• Traseira: Aceleração 100% | Desaceleração 0%\n• Torque Central: 50% (Neutro)"
-                else: # Grip / Asfalto
+                else:
                     diff_text = "• Dianteira: Aceleração 30% | Desaceleração 0%\n• Traseira: Aceleração 50% | Desaceleração 10%\n• Torque Central: 65% (Foco Traseira)"
             elif "FWD" in tracao_tipo:
                 if "Arrancada" in mod:
                     diff_text = "• Aceleração: 100% | Desaceleração: 0%"
                 else:
                     diff_text = "• Aceleração: 45% | Desaceleração: 0%"
-            else: # RWD
+            else:
                 if "Drift" in mod:
                     diff_text = "• Aceleração: 100% | Desaceleração: 100%"
                 elif "Arrancada" in mod:
                     diff_text = "• Aceleração: 100% | Desaceleração: 0%"
                 elif "Rally" in mod:
                     diff_text = "• Aceleração: 75% | Desaceleração: 25%"
-                else: # Grip / Asfalto
+                else:
                     diff_text = "• Aceleração: 65% | Desaceleração: 15%"
 
             car_label = car_name.value if car_name.value else "Projeto Sem Nome"
@@ -527,7 +524,7 @@ def main(page: ft.Page):
     )
 
     # ---------------------------------------------------------
-    # LAYOUT DAS TELAS
+    # LAYOUT DAS TELAS (RESPONSIVIDADE COM WRAP E SCROLL HABILITADO)
     # ---------------------------------------------------------
     left_column = ft.Column(
         controls=[
@@ -547,22 +544,25 @@ def main(page: ft.Page):
         spacing=10
     )
 
+    # AQUI ESTÁ O AJUSTE DA ROLAGEM E RESPONSIVIDADE:
     container_calculadora = ft.Container(
         padding=10,
         content=ft.Column([
             ft.Row(
                 alignment=ft.MainAxisAlignment.START,
                 vertical_alignment=ft.CrossAxisAlignment.START,
-                spacing=40,
+                spacing=20,
+                wrap=True,                      # Faz a Etapa 2 descer abaixo da Etapa 1 em telas estreitas
+                scroll=ft.ScrollMode.AUTO,      # Permite rolagem horizontal/vertical livre
                 controls=[left_column, right_column]
             ),
             ft.Container(height=15),
-            ft.Row([calc_btn, save_btn], alignment=ft.MainAxisAlignment.CENTER, spacing=20),
+            ft.Row([calc_btn, save_btn], alignment=ft.MainAxisAlignment.CENTER, spacing=20, wrap=True),
             ft.Container(height=15),
             ft.Divider(color=ft.Colors.WHITE_24),
             result_title,
             result_details
-        ])
+        ], scroll=ft.ScrollMode.AUTO)
     )
 
     atualizar_view_garagem()
@@ -609,7 +609,7 @@ def main(page: ft.Page):
 
     page.add(
         ft.Column([
-            ft.Text("⚡ Calculadora de Tunagem Forza - Safira Spec", size=22, weight=ft.FontWeight.BOLD),
+            ft.Text("⚡ Calculadora de Tunagem Forza - Safira Spec", size=20, weight=ft.FontWeight.BOLD),
             ft.Text("Simule peças e gere os ajustes finos para seu veículo", size=12, color=ft.Colors.WHITE_54),
             ft.Container(height=10),
             ft.Row([btn_calc, btn_garagem], spacing=10),
