@@ -32,7 +32,6 @@ def ler_arquivo_csv_inteligente(caminho):
                 if not conteudo.strip():
                     continue
                 
-                # Detecta se o separador é ponto e vírgula (;) ou vírgula (,)
                 primeira_linha = conteudo.splitlines()[0]
                 delimitador = ';' if ';' in primeira_linha else ','
                 
@@ -76,12 +75,12 @@ def inicializar_banco():
     """)
     conn.commit()
 
-    # Se a tabela estiver vazia, recarrega todos os carros da planilha
+    # Se a tabela tiver menos de 50 registros, recarrega o CSV completo
     cursor.execute("SELECT COUNT(*) FROM veiculos")
     total = cursor.fetchone()[0]
     
-    if total < 50:  # Garante repopular se tiver apenas a amostra anterior
-        cursor.execute("DELETE FROM veiculos")  # Limpa versão antiga
+    if total < 50:
+        cursor.execute("DELETE FROM veiculos")
         linhas = ler_arquivo_csv_inteligente(CSV_PATH)
         
         if linhas:
@@ -105,11 +104,18 @@ def inicializar_banco():
 # Executa a inicialização do banco
 inicializar_banco()
 
-def carregar_lista_veiculos():
+def buscar_veiculos_filtrados(termo=""):
     try:
         conn = conectar_banco()
         cursor = conn.cursor()
-        cursor.execute("SELECT id, marca, modelo FROM veiculos ORDER BY marca, modelo")
+        termo_limpo = f"%{termo.strip().lower()}%"
+        if termo.strip():
+            cursor.execute(
+                "SELECT id, marca, modelo FROM veiculos WHERE LOWER(marca) LIKE ? OR LOWER(modelo) LIKE ? ORDER BY marca, modelo",
+                (termo_limpo, termo_limpo)
+            )
+        else:
+            cursor.execute("SELECT id, marca, modelo FROM veiculos ORDER BY marca, modelo")
         rows = cursor.fetchall()
         conn.close()
         return rows
@@ -155,18 +161,42 @@ def main(page: ft.Page):
     ultimo_setup_calculado = {}
 
     # ---------------------------------------------------------
-    # PAINEL 1: SIMULAÇÃO DO VEÍCULO & PEÇAS
+    # PAINEL 1: PESQUISA E SELEÇÃO DE VEÍCULO
     # ---------------------------------------------------------
     car_name = ft.TextField(label="Projeto / Nome do Carro", width=320, border_radius=8)
     weight_input = ft.TextField(label="Peso Final com Peças (kg)", value="1350", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
     power_input = ft.TextField(label="Potência Final com Peças (CV/HP)", value="450", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
     front_bias_input = ft.TextField(label="Distribuição Dianteira (%)", value="52.00", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
 
-    veiculos_db = carregar_lista_veiculos()
+    # Carrega a lista inicial de veículos
+    veiculos_db = buscar_veiculos_filtrados("")
     opcoes_veiculos = [ft.dropdown.Option(key=str(row[0]), text=f"{row[1]} - {row[2]}") for row in veiculos_db]
 
+    veiculo_dropdown = ft.Dropdown(
+        label=f"🚗 Carros Encontrados ({len(opcoes_veiculos)})",
+        width=320,
+        border_radius=8,
+        options=opcoes_veiculos
+    )
+
+    search_input = ft.TextField(
+        label="🔍 Pesquisar por Marca ou Modelo",
+        hint_text="Ex: Skyline, Ferrari, Civic...",
+        width=320,
+        border_radius=8
+    )
+
+    def on_search_change(e):
+        termo = search_input.value
+        filtrados = buscar_veiculos_filtrados(termo)
+        veiculo_dropdown.options = [ft.dropdown.Option(key=str(row[0]), text=f"{row[1]} - {row[2]}") for row in filtrados]
+        veiculo_dropdown.label = f"🚗 Carros Encontrados ({len(filtrados)})"
+        page.update()
+
+    search_input.on_change = on_search_change
+
     def on_veiculo_change(e):
-        v_id = e.control.value
+        v_id = veiculo_dropdown.value
         if v_id:
             conn = conectar_banco()
             cursor = conn.cursor()
@@ -196,12 +226,6 @@ def main(page: ft.Page):
 
                 page.update()
 
-    veiculo_dropdown = ft.Dropdown(
-        label=f"🔍 Escolha o Carro ({len(opcoes_veiculos)} disponíveis)",
-        width=320,
-        border_radius=8,
-        options=opcoes_veiculos
-    )
     veiculo_dropdown.on_change = on_veiculo_change
 
     # ---------------------------------------------------------
@@ -470,7 +494,9 @@ def main(page: ft.Page):
     left_column = ft.Column(
         controls=[
             ft.Text("🏎️ Etapa 1: Carro & Simulação de Peças", size=15, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300),
-            veiculo_dropdown, car_name, weight_input, power_input, front_bias_input
+            search_input,          # Campo de pesquisa por texto
+            veiculo_dropdown,      # Lista suspensa filtrada dinamicamente
+            car_name, weight_input, power_input, front_bias_input
         ],
         spacing=10
     )
