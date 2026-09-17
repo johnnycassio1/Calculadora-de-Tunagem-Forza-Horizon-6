@@ -16,10 +16,6 @@ def conectar_banco():
     return sqlite3.connect(DB_NAME)
 
 def ler_arquivo_csv_inteligente(caminho):
-    """
-    Lê qualquer formato de CSV (vírgula ou ponto e vírgula, UTF-8 ou ANSI/Excel)
-    para garantir o carregamento de todos os 638 veículos sem falhar.
-    """
     if not os.path.exists(caminho):
         return []
 
@@ -39,7 +35,7 @@ def ler_arquivo_csv_inteligente(caminho):
                 reader = list(csv.reader(stream, delimiter=delimitador))
                 
                 if len(reader) > 1:
-                    return reader[1:]  # Retorna pulando o cabeçalho
+                    return reader[1:]
         except Exception:
             continue
     return []
@@ -48,7 +44,6 @@ def inicializar_banco():
     conn = conectar_banco()
     cursor = conn.cursor()
     
-    # Tabela principal para os veículos
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS veiculos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,7 +58,6 @@ def inicializar_banco():
         )
     """)
     
-    # Tabela para a Garagem de Setups Salvos
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS garagem_setups (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -75,7 +69,6 @@ def inicializar_banco():
     """)
     conn.commit()
 
-    # Se a tabela tiver menos de 50 registros, recarrega o CSV completo
     cursor.execute("SELECT COUNT(*) FROM veiculos")
     total = cursor.fetchone()[0]
     
@@ -101,7 +94,6 @@ def inicializar_banco():
             conn.commit()
     conn.close()
 
-# Executa a inicialização do banco
 inicializar_banco()
 
 def buscar_veiculos_filtrados(termo=""):
@@ -168,7 +160,6 @@ def main(page: ft.Page):
     power_input = ft.TextField(label="Potência Final com Peças (CV/HP)", value="450", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
     front_bias_input = ft.TextField(label="Distribuição Dianteira (%)", value="52.00", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
 
-    # Carrega a lista inicial de veículos
     veiculos_db = buscar_veiculos_filtrados("")
     opcoes_veiculos = [ft.dropdown.Option(key=str(row[0]), text=f"{row[1]} - {row[2]}") for row in veiculos_db]
 
@@ -229,7 +220,7 @@ def main(page: ft.Page):
     veiculo_dropdown.on_change = on_veiculo_change
 
     # ---------------------------------------------------------
-    # PAINEL 2: CONFIGURAÇÃO DO KIT DE TUNAGEM
+    # PAINEL 2: CONFIGURAÇÃO DO KIT DE TUNAGEM & MARCHAS
     # ---------------------------------------------------------
     modality_dd = ft.Dropdown(
         label="Modalidade de Corrida",
@@ -270,6 +261,17 @@ def main(page: ft.Page):
             ft.dropdown.Option("Corrida (8V)"),
             ft.dropdown.Option("Corrida (9V)"),
             ft.dropdown.Option("Corrida (10V)")
+        ]
+    )
+
+    gear_profile_dd = ft.Dropdown(
+        label="Perfil do Escalonamento",
+        value="Safe / Equilibrado",
+        width=320,
+        border_radius=8,
+        options=[
+            ft.dropdown.Option("Safe / Equilibrado"),
+            ft.dropdown.Option("Agressivo (Aceleração Rápida)")
         ]
     )
 
@@ -333,7 +335,7 @@ def main(page: ft.Page):
     # EXIBIÇÃO DE RESULTADOS & AJUSTES FINOS
     # ---------------------------------------------------------
     result_title = ft.Text(value="⚙️ Status: Monte o kit de peças e clique em Gerar Tunagem.", size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300)
-    result_details = ft.Text(value="Os cálculos finos de suspensão, alinhamento e marchas aparecerão aqui.", size=13, color=ft.Colors.WHITE_70)
+    result_details = ft.Text(value="Os cálculos finos de suspensão, alinhamento, marchas e diferencial aparecerão aqui.", size=13, color=ft.Colors.WHITE_70)
 
     garagem_list_view = ft.ListView(expand=True, spacing=10, padding=10)
 
@@ -402,10 +404,19 @@ def main(page: ft.Page):
             if "Arrancada" in mod: final_drive -= 0.30
             elif "Drift" in mod: final_drive += 0.20
 
+            perfil_marcha = gear_profile_dd.value
+            if "Agressivo" in perfil_marcha:
+                final_drive += 0.35
+                first_gear = 3.60
+                last_gear = 0.85
+            else:
+                first_gear = 3.30
+                last_gear = 0.75
+
             if trans_val in ["Original", "Rua"]:
                 gear_setting = "🔒 Bloqueado"
             elif trans_val == "Esporte":
-                gear_setting = f"Final Drive: {final_drive:.2f} | Marchas: Bloqueadas"
+                gear_setting = f"Final Drive: {final_drive:.2f} ({perfil_marcha}) | Marchas: Bloqueadas"
             else:
                 num_marchas = 6
                 if "7V" in trans_val: num_marchas = 7
@@ -413,9 +424,8 @@ def main(page: ft.Page):
                 elif "9V" in trans_val: num_marchas = 9
                 elif "10V" in trans_val: num_marchas = 10
 
-                first_gear, last_gear = 3.30, (0.75 if num_marchas <= 7 else 0.65)
                 gears = [f"{i+1}ª: {first_gear - (i * (first_gear - last_gear) / (num_marchas - 1)):.2f}" for i in range(num_marchas)]
-                gear_setting = f"Final Drive: {final_drive:.2f}\n    - Escalonamento: {' | '.join(gears)}"
+                gear_setting = f"Final Drive: {final_drive:.2f} [{perfil_marcha}]\n    - Escalonamento: {' | '.join(gears)}"
 
             if "Drift" in mod:
                 cambagem, convergencia, caster, altura_carro = "Dianteira: -5.0° | Traseira: -1.0°", "Dianteira: 0.2° | Traseira: -0.1°", "7.0°", "Baixa / Média-Baixa"
@@ -439,6 +449,34 @@ def main(page: ft.Page):
             else:
                 aero_setting = "Sem kit aerodinâmico ajustável"
 
+            # ---------------------------------------------------------
+            # REGRA AVANÇADA DE DIFERENCIAIS (FWD, RWD, AWD)
+            # ---------------------------------------------------------
+            tracao_tipo = drivetrain_dd.value
+            if "AWD" in tracao_tipo:
+                if "Drift" in mod:
+                    diff_text = "• Dianteira: Aceleração 100% | Desaceleração 0%\n• Traseira: Aceleração 100% | Desaceleração 100%\n• Torque Central: 85% (Foco Traseira)"
+                elif "Rally" in mod:
+                    diff_text = "• Dianteira: Aceleração 50% | Desaceleração 0%\n• Traseira: Aceleração 75% | Desaceleração 50%\n• Torque Central: 60% (Traseira)"
+                elif "Arrancada" in mod:
+                    diff_text = "• Dianteira: Aceleração 100% | Desaceleração 0%\n• Traseira: Aceleração 100% | Desaceleração 0%\n• Torque Central: 50% (Neutro)"
+                else: # Grip / Asfalto
+                    diff_text = "• Dianteira: Aceleração 30% | Desaceleração 0%\n• Traseira: Aceleração 50% | Desaceleração 10%\n• Torque Central: 65% (Foco Traseira)"
+            elif "FWD" in tracao_tipo:
+                if "Arrancada" in mod:
+                    diff_text = "• Aceleração: 100% | Desaceleração: 0%"
+                else:
+                    diff_text = "• Aceleração: 45% | Desaceleração: 0%"
+            else: # RWD
+                if "Drift" in mod:
+                    diff_text = "• Aceleração: 100% | Desaceleração: 100%"
+                elif "Arrancada" in mod:
+                    diff_text = "• Aceleração: 100% | Desaceleração: 0%"
+                elif "Rally" in mod:
+                    diff_text = "• Aceleração: 75% | Desaceleração: 25%"
+                else: # Grip / Asfalto
+                    diff_text = "• Aceleração: 65% | Desaceleração: 15%"
+
             car_label = car_name.value if car_name.value else "Projeto Sem Nome"
             result_title.value = f"✅ TUNAGEM FINA GERADA: {car_label} ({peso}kg)"
 
@@ -449,7 +487,7 @@ def main(page: ft.Page):
                 f"⚙️ AJUSTES FINOS CALCULADOS:\n"
                 f"------------------------------------------------------------------------\n"
                 f"🔹 Pressão Pneus: Dianteira {pneu_diant:.2f} bar | Traseira {pneu_tras:.2f} bar\n"
-                f"🔹 Transmissão:\n    - {gear_setting}\n"
+                f"🔹 Transmissão ({perfil_marcha}):\n    - {gear_setting}\n"
                 f"🔹 Alinhamento:\n    - Cambagem: {cambagem}\n    - Convergência: {convergencia}\n    - Caster: {caster}\n"
                 f"🔹 Barras Estabilizadoras: Dianteira {arb_diant:.2f} | Traseira {arb_tras:.2f}\n"
                 f"🔹 Molas: Dianteira {mola_diant:.1f} kgf/mm | Traseira {mola_tras:.1f} kgf/mm (Altura: {altura_carro})\n"
@@ -457,7 +495,7 @@ def main(page: ft.Page):
                 f"🔹 Amortecimento Bump: Dianteira {bump_diant:.1f} | Traseira {bump_tras:.1f}\n"
                 f"🔹 Aerodinâmica Downforce: {aero_setting}\n"
                 f"🔹 Freios: Balanço {pct_dian:.1f}% | Pressão 100%\n"
-                f"🔹 Diferencial: Aceleração 65% / Desaceleração 15%"
+                f"🔹 Diferencial de Corrida ({drivetrain_dd.value}):\n{diff_text}"
             )
 
             result_details.value = detalhes_str
@@ -494,8 +532,8 @@ def main(page: ft.Page):
     left_column = ft.Column(
         controls=[
             ft.Text("🏎️ Etapa 1: Carro & Simulação de Peças", size=15, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300),
-            search_input,          # Campo de pesquisa por texto
-            veiculo_dropdown,      # Lista suspensa filtrada dinamicamente
+            search_input,
+            veiculo_dropdown,
             car_name, weight_input, power_input, front_bias_input
         ],
         spacing=10
@@ -504,7 +542,7 @@ def main(page: ft.Page):
     right_column = ft.Column(
         controls=[
             ft.Text("🔧 Etapa 2: Peças & Upgrades Instalados", size=15, weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN_300),
-            modality_dd, drivetrain_dd, transmission_dd, brakes_dd, suspension_dd, aero_kit_dd, front_bumper_dd, rear_wing_dd
+            modality_dd, drivetrain_dd, transmission_dd, gear_profile_dd, brakes_dd, suspension_dd, aero_kit_dd, front_bumper_dd, rear_wing_dd
         ],
         spacing=10
     )
