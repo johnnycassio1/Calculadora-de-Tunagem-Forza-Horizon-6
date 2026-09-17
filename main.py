@@ -155,7 +155,8 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.DARK
     page.padding = 15
     page.scroll = ft.ScrollMode.AUTO
-
+    page.window.icon = "icon.png"  
+    
     setups_salvos = carregar_garagem()
     ultimo_setup_calculado = {}
 
