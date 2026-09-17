@@ -4,9 +4,11 @@ import sqlite3
 import csv
 
 # ---------------------------------------------------------
-# CONFIGURAÇÃO DO BANCO DE DADOS SQLite & IMPORTAÇÃO DO CSV
+# CAMINHO ABSOLUTO PARA O ANDROID / APK ENCONTRAR OS ARQUIVOS
 # ---------------------------------------------------------
-DB_NAME = "veiculos.db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_NAME = os.path.join(BASE_DIR, "veiculos.db")
+CSV_PATH = os.path.join(BASE_DIR, "veiculos.csv")
 
 def conectar_banco():
     return sqlite3.connect(DB_NAME)
@@ -15,7 +17,7 @@ def inicializar_banco():
     conn = conectar_banco()
     cursor = conn.cursor()
     
-    # Tabela principal para os 638 veículos
+    # Tabela principal para os veículos
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS veiculos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,7 +32,7 @@ def inicializar_banco():
         )
     """)
     
-    # Tabela para a Garagem de Setups Salvos pelo usuário
+    # Tabela para a Garagem de Setups Salvos
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS garagem_setups (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,14 +44,13 @@ def inicializar_banco():
     """)
     conn.commit()
     
-    # Importação automática do CSV se a tabela de veículos estiver vazia
+    # Importação automática do CSV usando caminho absoluto
     cursor.execute("SELECT COUNT(*) FROM veiculos")
     if cursor.fetchone()[0] == 0:
-        csv_path = "veiculos.csv"
-        if os.path.exists(csv_path):
-            with open(csv_path, mode="r", encoding="utf-8") as file:
+        if os.path.exists(CSV_PATH):
+            with open(CSV_PATH, mode="r", encoding="utf-8") as file:
                 reader = csv.reader(file)
-                next(reader, None)  # Pula o cabeçalho se houver
+                next(reader, None)  # Pula o cabeçalho
                 for linha in reader:
                     if len(linha) >= 8:
                         cursor.execute("""
@@ -60,7 +61,7 @@ def inicializar_banco():
             
     conn.close()
 
-# Executa a inicialização e importação assim que o script roda
+# Executa a inicialização
 inicializar_banco()
 
 def carregar_lista_veiculos():
@@ -132,13 +133,16 @@ def main(page: ft.Page):
     power_input = ft.TextField(label="Potência (CV/HP)", value="450", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
     front_bias_input = ft.TextField(label="Distribuição Dianteira (%)", value="52.00", width=320, border_radius=8, keyboard_type=ft.KeyboardType.NUMBER)
     
-    # Dropdown de Seleção de Veículos do Banco Offline
+    # Dropdown de Seleção de Veículos com Fallback
     veiculos_db = carregar_lista_veiculos()
-    opcoes_veiculos = [ft.dropdown.Option(key=str(row[0]), text=f"{row[1]} - {row[2]}") for row in veiculos_db]
-    
+    if veiculos_db:
+        opcoes_veiculos = [ft.dropdown.Option(key=str(row[0]), text=f"{row[1]} - {row[2]}") for row in veiculos_db]
+    else:
+        opcoes_veiculos = [ft.dropdown.Option(key="0", text="⚠️ NENHUM CARRO ENCONTRADO NO CSV")]
+
     def on_veiculo_change(e):
         v_id = veiculo_dropdown.value
-        if v_id:
+        if v_id and v_id != "0":
             conn = conectar_banco()
             cursor = conn.cursor()
             cursor.execute("SELECT marca, modelo, peso_fabrica, potencia, distribuicao_dianteira, tracao FROM veiculos WHERE id = ?", (v_id,))
@@ -166,7 +170,6 @@ def main(page: ft.Page):
                         drivetrain_dd.value = "AWD (Integral)"
                 page.update()
 
-    # MAX MENU HEIGHT REMOVIDO DAQUI
     veiculo_dropdown = ft.Dropdown(
         label="🔍 Selecionar Carro da Planilha",
         width=320,
