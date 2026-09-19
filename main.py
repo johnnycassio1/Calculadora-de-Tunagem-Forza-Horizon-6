@@ -48,7 +48,7 @@ def calcular_marchas(num_marchas, modo="safe"):
         10: [3.80, 2.70, 2.00, 1.60, 1.30, 1.08, 0.90, 0.77, 0.65, 0.55]
     }
 
-    # Transmissões Finais exatas do PapaiZão
+    # Transmissões Finais exatas enviadas pelo PapaiZão
     finais = {
         6: {"safe": 3.50, "agressivo": 3.80},
         7: {"safe": 3.70, "agressivo": 4.10},
@@ -69,10 +69,19 @@ def calcular_marchas(num_marchas, modo="safe"):
         return 3.70, [2.80, 1.90, 1.40, 1.10, 0.92][:num]
 
 def criar_aba(titulo, icone, conteudo):
+    aba = ft.Tab()
     try:
-        return ft.Tab(label=titulo, icon=icone, content=conteudo)
-    except TypeError:
-        return ft.Tab(text=titulo, icon=icone, content=conteudo)
+        aba.label = titulo
+    except Exception:
+        pass
+    try:
+        aba.text = titulo
+    except Exception:
+        pass
+    
+    aba.icon = icone
+    aba.content = conteudo
+    return aba
 
 def main(page: ft.Page):
     page.title = "Calculadora de Tunagem Forza - Safira Spec"
