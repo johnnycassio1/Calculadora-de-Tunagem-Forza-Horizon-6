@@ -343,12 +343,18 @@ def main(page: ft.Page):
         )
     )
 
-    tabs = ft.Tabs(
-        selected_index=0,
-        animation_duration=300,
-        tabs=[tab_calculadora, tab_garagem],
-        expand=True
-    )
+    tabs = ft.Tabs()
+    tabs.selected_index = 0
+    tabs.animation_duration = 300
+    tabs.expand = True
+
+    try:
+        tabs.tabs = [tab_calculadora, tab_garagem]
+    except Exception:
+        try:
+            tabs.controls = [tab_calculadora, tab_garagem]
+        except Exception:
+            pass
 
     page.add(tabs)
 
