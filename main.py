@@ -48,7 +48,7 @@ def calcular_marchas(num_marchas, modo="safe"):
         10: [3.80, 2.70, 2.00, 1.60, 1.30, 1.08, 0.90, 0.77, 0.65, 0.55]
     }
 
-    # Transmissões Finais exatas enviadas pelo PapaiZão
+    # Transmissões Finais exatas do PapaiZão
     finais = {
         6: {"safe": 3.50, "agressivo": 3.80},
         7: {"safe": 3.70, "agressivo": 4.10},
@@ -68,21 +68,6 @@ def calcular_marchas(num_marchas, modo="safe"):
         # Padrão de segurança para caixas de velocidades menores
         return 3.70, [2.80, 1.90, 1.40, 1.10, 0.92][:num]
 
-def criar_aba(titulo, icone, conteudo):
-    aba = ft.Tab()
-    try:
-        aba.label = titulo
-    except Exception:
-        pass
-    try:
-        aba.text = titulo
-    except Exception:
-        pass
-    
-    aba.icon = icone
-    aba.content = conteudo
-    return aba
-
 def main(page: ft.Page):
     page.title = "Calculadora de Tunagem Forza - Safira Spec"
     page.theme_mode = ft.ThemeMode.DARK
@@ -93,6 +78,19 @@ def main(page: ft.Page):
     ultimo_setup_calculado = {}
 
     lista_veiculos = carregar_veiculos_csv()
+
+    # Função auxiliar para apresentar notificações de forma segura
+    def mostrar_snack(mensagem):
+        try:
+            snack = ft.SnackBar(ft.Text(mensagem))
+            page.snack_bar = snack
+            snack.open = True
+        except Exception:
+            try:
+                page.open(ft.SnackBar(ft.Text(mensagem)))
+            except Exception:
+                pass
+        page.update()
 
     # Campos do formulário
     txt_nome = ft.TextField(label="Nome / Veículo", hint_text="Ex: Mustang GT 2018", expand=True)
@@ -138,7 +136,7 @@ def main(page: ft.Page):
         label="{value}% (Velocidade vs Curva)"
     )
 
-    lbl_aero_status = ft.Text("[ Velocidade | █ █ █ ░ ░ | Curva ]", weight=ft.FontWeight.BOLD, color="cyan")
+    lbl_aero_status = ft.Text("[ Velocidade | █ █ █ ░ ░ | Curva ]", weight="bold", color="cyan")
 
     def on_aero_change(e):
         val = int(slider_aero.value)
@@ -195,9 +193,7 @@ def main(page: ft.Page):
             modo_m = dd_modo_marchas.value
             aero_pct = slider_aero.value
         except ValueError:
-            page.snack_bar = ft.SnackBar(ft.Text("Por favor, preencha peso e distribuição com números válidos!"))
-            page.snack_bar.open = True
-            page.update()
+            mostrar_snack("Por favor, preencha peso e distribuição com números válidos!")
             return
 
         dist_traseira = 100.0 - dist_diant
@@ -253,7 +249,7 @@ def main(page: ft.Page):
                 content=ft.Container(
                     padding=15,
                     content=ft.Column([
-                        ft.Text(f"🏁 Setup Calculado: {ultimo_setup_calculado['nome']}", size=18, weight=ft.FontWeight.BOLD, color="greenAccent"),
+                        ft.Text(f"🏁 Setup Calculado: {ultimo_setup_calculado['nome']}", size=18, weight="bold", color="greenAccent"),
                         ft.Divider(),
                         ft.Text(f"⚙️ Molas: {ultimo_setup_calculado['molas']}"),
                         ft.Text(f"STB (ARBs): {ultimo_setup_calculado['arbs']}"),
@@ -273,9 +269,7 @@ def main(page: ft.Page):
             setups_salvos.append(ultimo_setup_calculado)
             salvar_garagem(setups_salvos)
             atualizar_view_garagem()
-            page.snack_bar = ft.SnackBar(ft.Text("Setup salvo na garagem com sucesso!"))
-            page.snack_bar.open = True
-            page.update()
+            mostrar_snack("Setup salvo na garagem com sucesso!")
 
     # View da Garagem
     garagem_list_view = ft.Column(spacing=10)
@@ -298,7 +292,7 @@ def main(page: ft.Page):
                             padding=10,
                             content=ft.Column([
                                 ft.Row([
-                                    ft.Text(f"🚗 {item['nome']}", size=16, weight=ft.FontWeight.BOLD),
+                                    ft.Text(f"🚗 {item['nome']}", size=16, weight="bold"),
                                     ft.IconButton(icon="delete", icon_color="red", on_click=deletar_item)
                                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                                 ft.Text(f"Molas: {item['molas']}", size=12),
@@ -310,53 +304,74 @@ def main(page: ft.Page):
 
     atualizar_view_garagem()
 
-    # Layout com Abas usando a função adaptativa
-    tab_calculadora = criar_aba(
+    # Vistas de conteúdos
+    conteudo_calculadora = ft.Container(
+        padding=10,
+        content=ft.Column([
+            ft.Row([dd_busca_carro]),
+            ft.Row([txt_nome]),
+            ft.Row([txt_peso, txt_distribuicao]),
+            ft.Row([dd_tracao, dd_marchas, dd_modo_marchas]),
+            ft.Text("Equilíbrio Aerodinâmico:", weight="bold"),
+            slider_aero,
+            lbl_aero_status,
+            ElevatedButton("Calcular Tunagem", icon="speed", on_click=calcular_tunagem, style=ft.ButtonStyle(color="white", bgcolor="blueAccent")),
+            ft.Divider(),
+            container_resultados
+        ])
+    )
+
+    conteudo_garagem = ft.Container(
+        padding=10,
+        visible=False,
+        content=ft.Column([
+            ft.Text("🏎️ Minha Garagem de Setups", size=18, weight="bold"),
+            garagem_list_view
+        ])
+    )
+
+    # Navegação por botões (sem dependência de ft.Tabs)
+    def alternar_aba(e):
+        if e.control.data == "calc":
+            conteudo_calculadora.visible = True
+            conteudo_garagem.visible = False
+            btn_aba_calc.style = ft.ButtonStyle(color="white", bgcolor="blueAccent")
+            btn_aba_garagem.style = ft.ButtonStyle(color="white", bgcolor="grey800")
+        else:
+            conteudo_calculadora.visible = False
+            conteudo_garagem.visible = True
+            btn_aba_calc.style = ft.ButtonStyle(color="white", bgcolor="grey800")
+            btn_aba_garagem.style = ft.ButtonStyle(color="white", bgcolor="blueAccent")
+        page.update()
+
+    btn_aba_calc = ElevatedButton(
         "Calculadora",
-        "calculate",
-        ft.Container(
-            padding=10,
-            content=ft.Column([
-                ft.Row([dd_busca_carro]),
-                ft.Row([txt_nome]),
-                ft.Row([txt_peso, txt_distribuicao]),
-                ft.Row([dd_tracao, dd_marchas, dd_modo_marchas]),
-                ft.Text("Equilíbrio Aerodinâmico:", weight=ft.FontWeight.BOLD),
-                slider_aero,
-                lbl_aero_status,
-                ElevatedButton("Calcular Tunagem", icon="speed", on_click=calcular_tunagem, style=ft.ButtonStyle(color="white", bgcolor="blueAccent")),
-                ft.Divider(),
-                container_resultados
-            ])
-        )
+        icon="calculate",
+        data="calc",
+        on_click=alternar_aba,
+        style=ft.ButtonStyle(color="white", bgcolor="blueAccent")
     )
 
-    tab_garagem = criar_aba(
+    btn_aba_garagem = ElevatedButton(
         "Garagem",
-        "directions_car",
-        ft.Container(
-            padding=10,
-            content=ft.Column([
-                ft.Text("🏎️ Minha Garagem de Setups", size=18, weight=ft.FontWeight.BOLD),
-                garagem_list_view
-            ])
-        )
+        icon="directions_car",
+        data="garagem",
+        on_click=alternar_aba,
+        style=ft.ButtonStyle(color="white", bgcolor="grey800")
     )
 
-    tabs = ft.Tabs()
-    tabs.selected_index = 0
-    tabs.animation_duration = 300
-    tabs.expand = True
+    barra_navegacao = ft.Row(
+        [btn_aba_calc, btn_aba_garagem],
+        alignment=ft.MainAxisAlignment.CENTER,
+        spacing=10
+    )
 
-    try:
-        tabs.tabs = [tab_calculadora, tab_garagem]
-    except Exception:
-        try:
-            tabs.controls = [tab_calculadora, tab_garagem]
-        except Exception:
-            pass
-
-    page.add(tabs)
+    page.add(
+        barra_navegacao,
+        ft.Divider(),
+        conteudo_calculadora,
+        conteudo_garagem
+    )
 
 if hasattr(ft, "run"):
     ft.run(main)
