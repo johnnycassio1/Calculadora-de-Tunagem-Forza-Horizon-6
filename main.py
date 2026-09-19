@@ -68,6 +68,12 @@ def calcular_marchas(num_marchas, modo="safe"):
         # Padrão de segurança para caixas de velocidades menores
         return 3.70, [2.80, 1.90, 1.40, 1.10, 0.92][:num]
 
+def criar_aba(titulo, icone, conteudo):
+    try:
+        return ft.Tab(label=titulo, icon=icone, content=conteudo)
+    except TypeError:
+        return ft.Tab(text=titulo, icon=icone, content=conteudo)
+
 def main(page: ft.Page):
     page.title = "Calculadora de Tunagem Forza - Safira Spec"
     page.theme_mode = ft.ThemeMode.DARK
@@ -295,42 +301,43 @@ def main(page: ft.Page):
 
     atualizar_view_garagem()
 
-    # Layout com Abas
+    # Layout com Abas usando a função adaptativa
+    tab_calculadora = criar_aba(
+        "Calculadora",
+        "calculate",
+        ft.Container(
+            padding=10,
+            content=ft.Column([
+                ft.Row([dd_busca_carro]),
+                ft.Row([txt_nome]),
+                ft.Row([txt_peso, txt_distribuicao]),
+                ft.Row([dd_tracao, dd_marchas, dd_modo_marchas]),
+                ft.Text("Equilíbrio Aerodinâmico:", weight=ft.FontWeight.BOLD),
+                slider_aero,
+                lbl_aero_status,
+                ElevatedButton("Calcular Tunagem", icon="speed", on_click=calcular_tunagem, style=ft.ButtonStyle(color="white", bgcolor="blueAccent")),
+                ft.Divider(),
+                container_resultados
+            ])
+        )
+    )
+
+    tab_garagem = criar_aba(
+        "Garagem",
+        "directions_car",
+        ft.Container(
+            padding=10,
+            content=ft.Column([
+                ft.Text("🏎️ Minha Garagem de Setups", size=18, weight=ft.FontWeight.BOLD),
+                garagem_list_view
+            ])
+        )
+    )
+
     tabs = ft.Tabs(
         selected_index=0,
         animation_duration=300,
-        tabs=[
-            ft.Tab(
-                text="Calculadora",
-                icon="calculate",
-                content=ft.Container(
-                    padding=10,
-                    content=ft.Column([
-                        ft.Row([dd_busca_carro]),
-                        ft.Row([txt_nome]),
-                        ft.Row([txt_peso, txt_distribuicao]),
-                        ft.Row([dd_tracao, dd_marchas, dd_modo_marchas]),
-                        ft.Text("Equilíbrio Aerodinâmico:", weight=ft.FontWeight.BOLD),
-                        slider_aero,
-                        lbl_aero_status,
-                        ElevatedButton("Calcular Tunagem", icon="speed", on_click=calcular_tunagem, style=ft.ButtonStyle(color="white", bgcolor="blueAccent")),
-                        ft.Divider(),
-                        container_resultados
-                    ])
-                )
-            ),
-            ft.Tab(
-                text="Garagem",
-                icon="directions_car",
-                content=ft.Container(
-                    padding=10,
-                    content=ft.Column([
-                        ft.Text("🏎️ Minha Garagem de Setups", size=18, weight=ft.FontWeight.BOLD),
-                        garagem_list_view
-                    ])
-                )
-            )
-        ],
+        tabs=[tab_calculadora, tab_garagem],
         expand=True
     )
 
