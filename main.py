@@ -140,15 +140,12 @@ def main(page: ft.Page):
                 nome_completo = f"{v.get('Marca','')} {v.get('Modelo / Ano','')}".strip()
                 if nome_completo == dd_busca_carro.value:
                     txt_nome.value = nome_completo
-                    # Trata o peso
                     p_str = v.get("Peso de Fábrica (kg)", "1500").replace("kg", "").replace(".", "").strip()
                     txt_peso.value = p_str if p_str else "1500"
                     
-                    # Trata a distribuição
                     d_str = v.get("Distribuição Dianteira (%)", "54").replace("%", "").strip()
                     txt_distribuicao.value = d_str if d_str else "54"
                     
-                    # Trata a tração
                     tr = v.get("opção 2", "AWD").upper().strip()
                     if tr in ["AWD", "RWD", "FWD"]:
                         dd_tracao.value = tr
@@ -337,5 +334,4 @@ def main(page: ft.Page):
 
     page.add(tabs)
 
-if __name__ == "__main__":
-    ft.app(target=main)
+ft.app(main)
