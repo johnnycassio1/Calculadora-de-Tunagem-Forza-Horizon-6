@@ -120,7 +120,7 @@ def main(page: ft.Page):
         label="{value}% (Velocidade vs Curva)"
     )
 
-    lbl_aero_status = ft.Text("[ Velocidade | █ █ █ ░ ░ | Curva ]", weight=ft.FontWeight.BOLD, color=ft.Colors.CYAN)
+    lbl_aero_status = ft.Text("[ Velocidade | █ █ █ ░ ░ | Curva ]", weight=ft.FontWeight.BOLD, color="cyan")
 
     def on_aero_change(e):
         val = int(slider_aero.value)
@@ -160,9 +160,9 @@ def main(page: ft.Page):
     dd_busca_carro = ft.Dropdown(
         label="Carregar Veículo da Base de Dados (Opcional)",
         options=opcoes_carros,
-        on_change=selecionar_veiculo,
         expand=True
     )
+    dd_busca_carro.on_change = selecionar_veiculo
 
     # Área de resultados
     container_resultados = ft.Column(spacing=10)
@@ -235,7 +235,7 @@ def main(page: ft.Page):
                 content=ft.Container(
                     padding=15,
                     content=ft.Column([
-                        ft.Text(f"🏁 Setup Calculado: {ultimo_setup_calculado['nome']}", size=18, weight=ft.FontWeight.BOLD, color=ft.Colors.GREEN_ACCENT),
+                        ft.Text(f"🏁 Setup Calculado: {ultimo_setup_calculado['nome']}", size=18, weight=ft.FontWeight.BOLD, color="greenAccent"),
                         ft.Divider(),
                         ft.Text(f"⚙️ Molas: {ultimo_setup_calculado['molas']}"),
                         ft.Text(f"STB (ARBs): {ultimo_setup_calculado['arbs']}"),
@@ -243,7 +243,7 @@ def main(page: ft.Page):
                         ft.Text(f"🎯 Diferencial ({tracao}):\n{diff_str}"),
                         ft.Text(f"🚦 Escalonamento de Marchas ({num_m} Marchas - {modo_m}):\n{marchas_txt.strip()}"),
                         ft.Text(f"✈️ Aerodinâmica: {aero_str}"),
-                        ft.ElevatedButton("Salvar Setup na Garagem", icon=ft.Icons.SAVE, on_click=salvar_na_garagem_click)
+                        ft.ElevatedButton("Salvar Setup na Garagem", icon="save", on_click=salvar_na_garagem_click)
                     ])
                 )
             )
@@ -281,7 +281,7 @@ def main(page: ft.Page):
                             content=ft.Column([
                                 ft.Row([
                                     ft.Text(f"🚗 {item['nome']}", size=16, weight=ft.FontWeight.BOLD),
-                                    ft.IconButton(icon=ft.Icons.DELETE, icon_color=ft.Colors.RED, on_click=deletar_item)
+                                    ft.IconButton(icon="delete", icon_color="red", on_click=deletar_item)
                                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                                 ft.Text(f"Molas: {item['molas']}", size=12),
                                 ft.Text(f"Marchas:\n{item['marchas']}", size=12),
@@ -299,7 +299,7 @@ def main(page: ft.Page):
         tabs=[
             ft.Tab(
                 text="Calculadora",
-                icon=ft.Icons.CALCULATE,
+                icon="calculate",
                 content=ft.Container(
                     padding=10,
                     content=ft.Column([
@@ -310,7 +310,7 @@ def main(page: ft.Page):
                         ft.Text("Equilíbrio Aerodinâmico:", weight=ft.FontWeight.BOLD),
                         slider_aero,
                         lbl_aero_status,
-                        ft.ElevatedButton("Calcular Tunagem", icon=ft.Icons.SPEED, on_click=calcular_tunagem, style=ft.ButtonStyle(color=ft.Colors.WHITE, bgcolor=ft.Colors.BLUE_ACCENT)),
+                        ft.ElevatedButton("Calcular Tunagem", icon="speed", on_click=calcular_tunagem, style=ft.ButtonStyle(color="white", bgcolor="blueAccent")),
                         ft.Divider(),
                         container_resultados
                     ])
@@ -318,7 +318,7 @@ def main(page: ft.Page):
             ),
             ft.Tab(
                 text="Garagem",
-                icon=ft.Icons.DIRECTIONS_CAR,
+                icon="directions_car",
                 content=ft.Container(
                     padding=10,
                     content=ft.Column([
@@ -333,7 +333,6 @@ def main(page: ft.Page):
 
     page.add(tabs)
 
-# Execução compatível com Flet 1.0+ / 0.86+ e versões anteriores
 if hasattr(ft, "run"):
     ft.run(main)
 elif hasattr(ft, "app") and callable(getattr(ft, "app")):
