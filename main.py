@@ -1,10 +1,9 @@
 import flet as ft
-from flet import app
 import csv
 import json
 import os
 
-# Arquivo para persistência de garage local
+# Ficheiro para persistência de garagem local
 GARAGEM_FILE = "garagem.json"
 
 def carregar_garagem():
@@ -63,7 +62,7 @@ def calcular_marchas(num_marchas, modo="safe"):
         marchas = tabelas_marchas[num]
         return final_drive, marchas
     else:
-        # Padrão de segurança para câmbios menores
+        # Padrão de segurança para caixas de velocidades menores
         return 3.70, [2.80, 1.90, 1.40, 1.10, 0.92][:num]
 
 def main(page: ft.Page):
@@ -334,7 +333,8 @@ def main(page: ft.Page):
 
     page.add(tabs)
 
-if __name__ == "__main__":
-    app(target=main)
-else:
-    app(target=main)
+# Execução compatível com Flet 1.0+ / 0.86+ e versões anteriores
+if hasattr(ft, "run"):
+    ft.run(main)
+elif hasattr(ft, "app") and callable(getattr(ft, "app")):
+    ft.app(target=main)
