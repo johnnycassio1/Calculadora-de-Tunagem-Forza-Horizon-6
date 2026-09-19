@@ -1,4 +1,5 @@
 import flet as ft
+from flet import app
 import csv
 import json
 import os
@@ -70,7 +71,6 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.DARK
     page.padding = 15
     page.scroll = ft.ScrollMode.AUTO
-    page.window.icon = "icon.png"
 
     setups_salvos = carregar_garagem()
     ultimo_setup_calculado = {}
@@ -334,4 +334,7 @@ def main(page: ft.Page):
 
     page.add(tabs)
 
-ft.app(main)
+if __name__ == "__main__":
+    app(target=main)
+else:
+    app(target=main)
