@@ -48,7 +48,7 @@ def calcular_marchas(num_marchas, modo="safe"):
         10: [3.80, 2.70, 2.00, 1.60, 1.30, 1.08, 0.90, 0.77, 0.65, 0.55]
     }
 
-    # Transmissões Finais exatas enviadas pelo PapaiZão
+    # Transmissões Finais exatas do PapaiZão
     finais = {
         6: {"safe": 3.50, "agressivo": 3.80},
         7: {"safe": 3.70, "agressivo": 4.10},
