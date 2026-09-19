@@ -3,6 +3,9 @@ import csv
 import json
 import os
 
+# Compatibilidade de botões para Flet 0.x e Flet 1.0+
+ElevatedButton = getattr(ft, "ElevatedButton", getattr(ft, "Button", None))
+
 # Ficheiro para persistência de garagem local
 GARAGEM_FILE = "garagem.json"
 
@@ -243,7 +246,7 @@ def main(page: ft.Page):
                         ft.Text(f"🎯 Diferencial ({tracao}):\n{diff_str}"),
                         ft.Text(f"🚦 Escalonamento de Marchas ({num_m} Marchas - {modo_m}):\n{marchas_txt.strip()}"),
                         ft.Text(f"✈️ Aerodinâmica: {aero_str}"),
-                        ft.ElevatedButton("Salvar Setup na Garagem", icon="save", on_click=salvar_na_garagem_click)
+                        ElevatedButton("Salvar Setup na Garagem", icon="save", on_click=salvar_na_garagem_click)
                     ])
                 )
             )
@@ -310,7 +313,7 @@ def main(page: ft.Page):
                         ft.Text("Equilíbrio Aerodinâmico:", weight=ft.FontWeight.BOLD),
                         slider_aero,
                         lbl_aero_status,
-                        ft.ElevatedButton("Calcular Tunagem", icon="speed", on_click=calcular_tunagem, style=ft.ButtonStyle(color="white", bgcolor="blueAccent")),
+                        ElevatedButton("Calcular Tunagem", icon="speed", on_click=calcular_tunagem, style=ft.ButtonStyle(color="white", bgcolor="blueAccent")),
                         ft.Divider(),
                         container_resultados
                     ])
