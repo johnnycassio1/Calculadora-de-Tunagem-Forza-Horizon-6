@@ -27,7 +27,6 @@ def salvar_garagem(garagem):
 
 def carregar_veiculos_csv():
     veiculos = []
-    # Busca por qualquer arquivo .csv no diretório atual
     files_to_check = [f for f in os.listdir(".") if f.lower().endswith(".csv")]
     if not files_to_check:
         files_to_check = ["veiculos.csv", "veiculos_fh6.csv", "dados_carros.csv"]
@@ -149,25 +148,21 @@ def main(page: ft.Page):
                 if nome_completo == dd_busca_carro.value:
                     txt_nome.value = nome_completo
                     
-                    # Peso
                     p_str = get_value_from_row(v, ["peso"])
                     p_str = p_str.replace("kg", "").replace(".", "").replace(",", "").strip()
                     if p_str:
                         txt_peso.value = p_str
                     
-                    # Potência
                     pot_str = get_value_from_row(v, ["potencia", "potên", "hp", "cv", "power"])
                     pot_str = pot_str.lower().replace("cv", "").replace("hp", "").replace(".", "").replace(",", "").strip()
                     if pot_str:
                         txt_potencia.value = pot_str
 
-                    # Distribuição
                     d_str = get_value_from_row(v, ["distribui", "distr"])
                     d_str = d_str.replace("%", "").replace(",", ".").strip()
                     if d_str:
                         txt_distribuicao.value = d_str
                     
-                    # Tração
                     tr = get_value_from_row(v, ["trac", "traç", "drivetrain", "opção2", "opcao2"]).upper().strip()
                     if "AWD" in tr:
                         dd_tracao.value = "AWD"
@@ -234,15 +229,22 @@ def main(page: ft.Page):
         expand=True
     )
 
+    # Lista completa dos 10 Compostos de Pneus do Forza
     dd_pneus = ft.Dropdown(
         label="Composto de Pneus",
         options=[
-            ft.dropdown.Option("Corrida / Slick"),
+            ft.dropdown.Option("Original"),
+            ft.dropdown.Option("Pneu de Rua"),
+            ft.dropdown.Option("Pneu Esportivo"),
             ft.dropdown.Option("Semi-Slick"),
-            ft.dropdown.Option("Rali / Offroad"),
-            ft.dropdown.Option("Rua / Original"),
+            ft.dropdown.Option("Pneu Slick (Corrida)"),
+            ft.dropdown.Option("Pneu de Rally"),
+            ft.dropdown.Option("Pneu de Drift"),
+            ft.dropdown.Option("Pneu de Arrancada (Drag)"),
+            ft.dropdown.Option("Pneu Off-Road"),
+            ft.dropdown.Option("Pneu de Neve / Lama"),
         ],
-        value="Corrida / Slick",
+        value="Pneu Slick (Corrida)",
         expand=True
     )
 
@@ -323,12 +325,19 @@ def main(page: ft.Page):
         dist_traseira = 100.0 - dist_diant
 
         # 1. PRESSÃO DOS PNEUS
-        if "Rali" in pneu_tipo or "Offroad" in pneu_tipo or "Rali" in modalidade:
+        if "Rally" in pneu_tipo or "Off-Road" in pneu_tipo or "Neve" in pneu_tipo or "Rali" in modalidade:
             pneu_d, pneu_t = 1.7, 1.7
+        elif "Arrancada" in pneu_tipo or "Drag" in pneu_tipo:
+            pneu_d, pneu_t = 1.9, 1.0  # Pressão baixa no eixo motriz para largada
+        elif "Drift" in pneu_tipo:
+            pneu_d, pneu_t = 2.2, 2.2  # Pressão alta para deslize controlado
         elif "Rua" in pneu_tipo or "Original" in pneu_tipo:
             pneu_d, pneu_t = 2.1, 2.0
-        else: # Slick / Corrida / Semi-Slick
+        elif "Esportivo" in pneu_tipo or "Semi-Slick" in pneu_tipo:
+            pneu_d, pneu_t = 2.0, 1.95
+        else: # Slick / Corrida
             pneu_d, pneu_t = 1.9, 1.9
+
         pneu_d_psi, pneu_t_psi = round(pneu_d * 14.5038, 1), round(pneu_t * 14.5038, 1)
         pneus_str = f"Dianteira: {pneu_d:.1f} bar ({pneu_d_psi} psi) | Traseira: {pneu_t:.1f} bar ({pneu_t_psi} psi) [{pneu_tipo}]"
 
@@ -339,11 +348,11 @@ def main(page: ft.Page):
             transmissao_str += f" - {idx}ª Marcha: {m_val:.2f}\n"
 
         # 3. ALINHAMENTO
-        if "Rali" in susp_tipo or "Offroad" in susp_tipo or "Rali" in modalidade or "Offroad" in modalidade:
+        if "Rally" in pneu_tipo or "Off-Road" in pneu_tipo or "Rali" in susp_tipo or "Offroad" in susp_tipo:
             camber_d, camber_t = -1.0, -0.5
             toe_d, toe_t = 0.0, 0.0
             caster = 6.0
-        elif "Drift" in susp_tipo or "Drift" in modalidade:
+        elif "Drift" in pneu_tipo or "Drift" in susp_tipo or "Drift" in modalidade:
             camber_d, camber_t = -3.0, -1.0
             toe_d, toe_t = 0.2, -0.1
             caster = 7.0
@@ -364,7 +373,7 @@ def main(page: ft.Page):
         molas_str = f"Dianteira: {mola_diant} kgf/mm | Traseira: {mola_tras} kgf/mm"
 
         # 6. ALTURA DO CARRO
-        if "Rali" in susp_tipo or "Offroad" in susp_tipo or "Rali" in modalidade or "Offroad" in modalidade:
+        if "Rally" in pneu_tipo or "Off-Road" in pneu_tipo or "Rali" in susp_tipo or "Offroad" in susp_tipo:
             altura_str = "Elevada / Média (A critério do usuário conforme o terreno)"
         else:
             altura_str = "Mínima / Baixa (A critério do usuário conforme a pista)"
@@ -449,9 +458,9 @@ def main(page: ft.Page):
             setups_salvos.append(ultimo_setup_calculado)
             salvar_garagem(setups_salvos)
             atualizar_view_garagem()
-            mostrar_snack("Setup salvo na garagem com sucesso!")
+            mostrar_snack("Setup completo salvo na garagem com sucesso!")
 
-    # View da Garagem
+    # View da Garagem (Mostra todas as 10 categorias calculadas)
     garagem_list_view = ft.Column(spacing=10)
 
     def atualizar_view_garagem():
@@ -469,20 +478,29 @@ def main(page: ft.Page):
                 garagem_list_view.controls.append(
                     ft.Card(
                         content=ft.Container(
-                            padding=12,
+                            padding=15,
                             content=ft.Column([
                                 ft.Row([
-                                    ft.Text(f"🚗 {item['nome']}", size=16, weight="bold"),
+                                    ft.Text(f"🚗 {item.get('nome', 'Carro sem nome')}", size=16, weight="bold", color="greenAccent"),
                                     ft.IconButton(
                                         icon=getattr(ft.Icons, "DELETE_OUTLINED", getattr(ft.Icons, "DELETE", None)),
                                         icon_color="red",
-                                        tooltip="Excluir",
+                                        tooltip="Excluir Setup",
                                         on_click=deletar_item
                                     )
                                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
-                                ft.Text(f"📊 {item.get('peso',1500)} kg | {item.get('potencia',450)} CV | Tração {item.get('tracao','AWD')}", size=12, color="white70"),
-                                ft.Text(f"⚙️ Molas: {item.get('molas','')}", size=12),
-                                ft.Text(f"🚦 Câmbio:\n{item.get('transmissao','')}", size=12),
+                                ft.Text(f"📊 {item.get('peso', 1500):.0f} kg | {item.get('potencia', 450):.0f} CV | {item.get('distribuicao', 54):.0f}% Dianteira | Tração {item.get('tracao', 'AWD')}", size=12, color="white70"),
+                                ft.Divider(),
+                                ft.Text(f"1. 🛞 Pneus: {item.get('pneus', 'N/A')}", size=12),
+                                ft.Text(f"2. 🚦 Transmissão:\n{item.get('transmissao', 'N/A')}", size=12),
+                                ft.Text(f"3. 📐 Alinhamento: {item.get('alinhamento', 'N/A')}", size=12),
+                                ft.Text(f"4. ⚖️ STB (ARBs): {item.get('arbs', 'N/A')}", size=12),
+                                ft.Text(f"5. ⚙️ Molas: {item.get('molas', 'N/A')}", size=12),
+                                ft.Text(f"6. 📏 Altura: {item.get('altura', 'N/A')}", size=12),
+                                ft.Text(f"7. 📉 Amortecimento:\n{item.get('amortecimento', 'N/A')}", size=12),
+                                ft.Text(f"8. ✈️ Aerodinâmica: {item.get('aerodinamica', 'N/A')}", size=12),
+                                ft.Text(f"9. 🛑 Freios: {item.get('freios', 'N/A')}", size=12),
+                                ft.Text(f"10. 🎯 Diferencial:\n{item.get('diferencial', 'N/A')}", size=12),
                             ])
                         )
                     )
@@ -519,7 +537,7 @@ def main(page: ft.Page):
         padding=10,
         visible=False,
         content=ft.Column([
-            ft.Text("🏎️ Minha Garagem de Setups", size=18, weight="bold"),
+            ft.Text("🏎️ Minha Garagem de Setups Salvos", size=18, weight="bold"),
             garagem_list_view
         ])
     )
